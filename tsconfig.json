@@ -15,15 +15,17 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
+    "allowJs": true,
     "baseUrl": "./",
     "paths": {
       "*": ["src/*", "node_modules/*"],
-      "@crowdlinker/navigation": ["./src/index"]
+      "@crowdlinker/navigation": ["./src/index"],
+      "@crowdlinker/react-native-pager": ["../pager/src"]
     },
     "jsx": "react",
     "esModuleInterop": true

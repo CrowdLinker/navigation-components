@@ -38,11 +38,7 @@ interface iScreenConfig {
   stackPresentation: 'push' | 'modal' | 'transparentModal';
 }
 
-function NativeStack({
-  children,
-  screenConfig = {},
-  headers = [],
-}: iNativeStack) {
+function NativeStack({ children, screenConfig = {} }: iNativeStack) {
   const navigator = useNavigator();
   const [activeIndex, onChange] = usePager();
 

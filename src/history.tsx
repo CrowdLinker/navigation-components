@@ -396,8 +396,6 @@ export interface iHistoryProvider {
 
 const history = createHistory();
 
-global.history = history;
-
 function navigate(to: string, from?: string) {
   history.navigate(to, from || history.location);
 }

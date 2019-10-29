@@ -1,18 +1,18 @@
 import { resolve, getNextRoute, getParams, pick } from '../src/history';
 
-jest.mock('react-native', () => {
-  return {
-    BackHandler: {
-      addEventListener: jest.fn,
-      removeEventListener: jest.fn,
-    },
-    Linking: {
-      getInitialURL: () => Promise.resolve(),
-      addEventListener: jest.fn,
-      removeEventListener: jest.fn,
-    },
-  };
-});
+// jest.mock('react-native', () => {
+//   return {
+//     BackHandler: {
+//       addEventListener: jest.fn,
+//       removeEventListener: jest.fn,
+//     },
+//     Linking: {
+//       getInitialURL: () => Promise.resolve(),
+//       addEventListener: jest.fn,
+//       removeEventListener: jest.fn,
+//     },
+//   };
+// });
 
 test('resolve() absolute routes', () => {
   const location = `/app/home/profile/one`;
@@ -134,7 +134,7 @@ test('pick()', () => {
   expect(pick(sad, m4)).toEqual(-1);
 });
 
-test('pick() w/ root route `/`', () => {
+test.skip('pick() w/ root route `/`', () => {
   const routes = ['/', 'profile'];
   const matchingRoute = `library/music`;
 

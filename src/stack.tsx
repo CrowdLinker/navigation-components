@@ -4,7 +4,6 @@ import {
   iPager,
   iPageInterpolation,
   usePager,
-  useAnimatedIndex,
 } from '@crowdlinker/react-native-pager';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history';
