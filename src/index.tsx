@@ -5,10 +5,5 @@ export * from './modal';
 export * from './navigator';
 export * from './switch';
 export * from './native-stack';
-export {
-  history,
-  createHistory,
-  History,
-  navigate,
-  useLocation,
-} from './history';
+export * from './history-component';
+export { history, createHistory, navigate, back } from './history';

@@ -6,7 +6,7 @@ import {
   iPager,
 } from '@crowdlinker/react-native-pager';
 import { useNavigator } from './navigator';
-import { BasepathProvider } from './history';
+import { BasepathProvider } from './history-component';
 import { AccessibleScreen } from './accessible-screen';
 
 const modalConfig: iPageInterpolation = {

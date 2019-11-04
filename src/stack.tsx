@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pager, iPager, usePager } from '@crowdlinker/react-native-pager';
 import { useNavigator } from './navigator';
-import { BasepathProvider } from './history';
+import { BasepathProvider } from './history-component';
 import { AccessibleScreen } from './accessible-screen';
 
 interface iStack extends iPager {

@@ -1,35 +1,24 @@
 // this is basically a simplified and worse version of @reach/router in-memory history implementation
-import React from 'react';
-import { BackHandler, Linking } from 'react-native';
-import { FocusProvider } from '@crowdlinker/react-native-pager';
-
-interface iHistory {
+export interface iHistory {
   init: (initialPath: string) => void;
-  navigate: (to: string, basepath: string, options?: NavigateOptions) => void;
+  navigate: (to: string, basepath: string) => void;
   back: (amount: number) => void;
   location: string;
   index: number;
-  changes: number[];
   listen: (listener: Listener) => () => void;
   reset: () => void;
 }
 
-type NavigateOptions = {
-  silent?: boolean;
-  latest?: boolean;
-};
-
-type Listener = (location: string, changes: number[]) => void;
+export type Listener = (location: string) => void;
 
 function createHistory(): iHistory {
   let paths: string[] = ['/'];
-  let changes: number[][] = [[]];
 
   let index = 0;
   let listeners: Listener[] = [];
 
   function notify() {
-    listeners.forEach(l => l(paths[index], changes[index]));
+    listeners.forEach(l => l(paths[index]));
   }
 
   return {
@@ -41,10 +30,6 @@ function createHistory(): iHistory {
       return paths[index];
     },
 
-    get changes() {
-      return changes[index];
-    },
-
     init: function(initialPath?: string) {
       paths[0] = initialPath || '/';
       notify();
@@ -53,14 +38,9 @@ function createHistory(): iHistory {
     reset: function() {
       index = 0;
       paths = ['/'];
-      changes = [[]];
     },
 
-    navigate: function(
-      to: string,
-      from: string,
-      options?: { latest?: boolean; silent?: boolean }
-    ) {
+    navigate: function(to: string, from: string) {
       const path = paths[index];
       let next = resolve(to, from, path);
 
@@ -72,19 +52,18 @@ function createHistory(): iHistory {
 
       // // find the most recent url that looks like the one being added
       // // and if there is one, push that instead
-      if (options && options.latest) {
-        if (paths.includes(next)) {
-          for (let i = paths.length - 1; i >= 0; i--) {
-            const path = paths[i];
-            if (path.includes(next)) {
-              next = path;
-              break;
-            }
-          }
-        }
-      }
+      // if (options && options.latest) {
+      //   if (paths.includes(next)) {
+      //     for (let i = paths.length - 1; i >= 0; i--) {
+      //       const path = paths[i];
+      //       if (path.includes(next)) {
+      //         next = path;
+      //         break;
+      //       }
+      //     }
+      //   }
+      // }
 
-      changes[index] = getChanges(path, next);
       paths[index] = next;
 
       notify();
@@ -223,21 +202,21 @@ function addQuery(pathname: string, query?: string) {
 // 1 indicates a change has occured
 // this is useful to determine if a navigator should update by evaluating
 // if it's relevant routes have changed
-function getChanges(current: string, next: string): number[] {
-  const changes = [];
-  const currentSegments = segmentize(current);
-  const nextSegments = segmentize(next);
+// function getChanges(current: string, next: string): number[] {
+//   const changes = [];
+//   const currentSegments = segmentize(current);
+//   const nextSegments = segmentize(next);
 
-  for (let i = 0; i < nextSegments.length; i++) {
-    const currentSegment = currentSegments[i];
-    const nextSegment = nextSegments[i];
+//   for (let i = 0; i < nextSegments.length; i++) {
+//     const currentSegment = currentSegments[i];
+//     const nextSegment = nextSegments[i];
 
-    const change = currentSegment === nextSegment ? 0 : 1;
-    changes.push(change);
-  }
+//     const change = currentSegment === nextSegment ? 0 : 1;
+//     changes.push(change);
+//   }
 
-  return changes;
-}
+//   return changes;
+// }
 
 // return the next segment of a basepath for a given location
 // location = '/app/settings/profile basepath = '/app/settings' -> 'profile'
@@ -365,43 +344,6 @@ function getParams<T>(path: string, location: string): T | undefined {
   return params as T;
 }
 
-const BasepathContext = React.createContext('/');
-
-function BasepathProvider({ children, value }: any) {
-  const basepath = useBasepath();
-  const _basepath = `${basepath}${value !== '/' ? `/${value}` : ''}`;
-
-  return (
-    <BasepathContext.Provider value={`${_basepath}`}>
-      {children}
-    </BasepathContext.Provider>
-  );
-}
-
-function useBasepath() {
-  const basepath = React.useContext(BasepathContext);
-
-  if (basepath === '/') {
-    return '';
-  }
-
-  return basepath;
-}
-
-export interface iHistoryContext {
-  location: string;
-  changes: number[];
-  navigate: (to: string, basepath: string, options?: NavigateOptions) => void;
-  back: (amount: number) => void;
-}
-
-export interface iHistoryProvider {
-  children: any;
-  initialPath?: string;
-  scheme?: string;
-  onChange?: (nextLocation: string) => void;
-}
-
 const history = createHistory();
 
 function navigate(to: string, from?: string) {
@@ -412,118 +354,15 @@ function back(amount?: number) {
   history.back(amount || 1);
 }
 
-function History({
-  initialPath = '/',
-  children,
-  onChange,
-  scheme = '',
-}: iHistoryProvider) {
-  const [location, setLocation] = React.useState(history.location);
-  const [changes, setChanges] = React.useState<number[]>([]);
-
-  // only register listener once
-  React.useEffect(() => {
-    const unlisten = history.listen((location: string, _changes: number[]) => {
-      setLocation(location);
-      setChanges(_changes);
-      onChange && onChange(location);
-    });
-
-    return () => {
-      unlisten();
-    };
-  }, []);
-
-  // update with any initial path provided to <History />
-  React.useEffect(() => {
-    history.init(initialPath);
-  }, [initialPath]);
-
-  // deep link listeners:
-  React.useEffect(() => {
-    Linking.getInitialURL().then(url => {
-      if (url) {
-        const [, path] = url.split(scheme);
-        if (path) {
-          history.navigate(path, history.location);
-        }
-      }
-    });
-
-    function listenForLink({ url }: { url?: string }) {
-      if (url) {
-        const [, path] = url.split(scheme);
-        if (path) {
-          history.navigate(path, history.location);
-        }
-      }
-    }
-
-    Linking.addEventListener('url', listenForLink);
-
-    return () => {
-      Linking.removeEventListener('url', listenForLink);
-    };
-  }, []);
-
-  // android back button listener:
-  React.useEffect(() => {
-    function handleBackPress() {
-      if (history.index !== 0) {
-        history.back(1);
-        return true;
-      }
-
-      return false;
-    }
-
-    BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
-    };
-  }, []);
-
-  return (
-    <LocationProvider location={location}>
-      <FocusProvider focused>{children}</FocusProvider>
-    </LocationProvider>
-  );
-}
-
-const LocationContext = React.createContext('/');
-
-interface iLocationProvider {
-  location: string;
-  children: React.ReactNode;
-}
-
-function LocationProvider({ location, children }: iLocationProvider) {
-  return (
-    <LocationContext.Provider value={location}>
-      {children}
-    </LocationContext.Provider>
-  );
-}
-
-function useLocation() {
-  const location = React.useContext(LocationContext);
-  return location;
-}
-
 export {
   createHistory,
-  resolve,
-  getParams,
-  getNextRoute,
-  History,
-  useBasepath,
-  pick,
-  segmentize,
-  resolveBasepath,
-  BasepathProvider,
   history,
   navigate,
   back,
-  useLocation,
+  resolve,
+  getParams,
+  getNextRoute,
+  pick,
+  segmentize,
+  resolveBasepath,
 };

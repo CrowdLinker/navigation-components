@@ -7,9 +7,7 @@ import {
   act,
 } from '@testing-library/react-native';
 import format from 'pretty-format';
-
-import { History, navigate as globalNavigate } from '../src';
-import { iHistoryProvider } from '../src/history';
+import { History, navigate as globalNavigate, iHistoryProvider } from '../src';
 
 function customRender(ui: any, options?: Partial<iHistoryProvider>) {
   const utils = render(<History {...options}>{ui}</History>);

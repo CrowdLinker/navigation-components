@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
 import { ScreenContainer, Screen } from 'react-native-screens';
 import {
   usePager,
@@ -6,8 +7,7 @@ import {
   IndexProvider,
 } from '@crowdlinker/react-native-pager';
 import { useNavigator } from './navigator';
-import { BasepathProvider } from './history';
-import { StyleSheet } from 'react-native';
+import { BasepathProvider } from './history-component';
 import { AccessibleScreen } from './accessible-screen';
 
 interface iSwitch {

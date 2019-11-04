@@ -16,7 +16,7 @@ import {
 } from 'react-native-screens';
 import { StyleSheet, View, Text, ViewStyle } from 'react-native';
 import { useNavigator } from './navigator';
-import { BasepathProvider } from './history';
+import { BasepathProvider } from './history-component';
 import { StackContext } from './stack';
 import {
   usePager,

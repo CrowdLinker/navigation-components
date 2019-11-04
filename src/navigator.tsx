@@ -3,13 +3,12 @@ import { PagerProvider, useFocus } from '@crowdlinker/react-native-pager';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
   getNextRoute,
-  useBasepath,
   pick,
   getParams,
   resolveBasepath,
-  useLocation,
   history,
 } from './history';
+import { useLocation, useBasepath } from './history-component';
 
 interface iNavigator {
   children: React.ReactNode;
