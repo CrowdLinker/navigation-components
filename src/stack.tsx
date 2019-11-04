@@ -1,16 +1,8 @@
 import React from 'react';
-import {
-  Pager,
-  iPager,
-  iPageInterpolation,
-  usePager,
-} from '@crowdlinker/react-native-pager';
+import { Pager, iPager, usePager } from '@crowdlinker/react-native-pager';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history';
-
-// const stackConfig: iPageInterpolation = {
-//   zIndex: offset => offset,
-// };
+import { AccessibleScreen } from './accessible-screen';
 
 interface iStack extends iPager {
   children: React.ReactNode[];
@@ -68,10 +60,14 @@ function Stack({ children, ...rest }: iStack) {
           const route = navigator.routes[index];
 
           if (route) {
-            return <BasepathProvider value={route}>{child}</BasepathProvider>;
+            return (
+              <BasepathProvider value={route}>
+                <AccessibleScreen>{child}</AccessibleScreen>
+              </BasepathProvider>
+            );
           }
 
-          return child;
+          return <AccessibleScreen>{child}</AccessibleScreen>;
         })}
       </Pager>
     </StackContext.Provider>

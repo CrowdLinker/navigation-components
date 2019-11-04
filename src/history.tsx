@@ -1,6 +1,7 @@
 // this is basically a simplified and worse version of @reach/router in-memory history implementation
 import React from 'react';
 import { BackHandler, Linking } from 'react-native';
+import { FocusProvider } from '@crowdlinker/react-native-pager';
 
 interface iHistory {
   init: (initialPath: string) => void;
@@ -9,7 +10,8 @@ interface iHistory {
   location: string;
   index: number;
   changes: number[];
-  listen: (listener: Listener) => void;
+  listen: (listener: Listener) => () => void;
+  reset: () => void;
 }
 
 type NavigateOptions = {
@@ -46,6 +48,12 @@ function createHistory(): iHistory {
     init: function(initialPath?: string) {
       paths[0] = initialPath || '/';
       notify();
+    },
+
+    reset: function() {
+      index = 0;
+      paths = ['/'];
+      changes = [[]];
     },
 
     navigate: function(
@@ -86,7 +94,7 @@ function createHistory(): iHistory {
       listeners.push(listener);
 
       return function() {
-        listeners.filter(l => l !== listener);
+        listeners = listeners.filter(l => l !== listener);
       };
     },
 
@@ -243,7 +251,7 @@ function getNextRoute(
   const basepathSegments = segmentize(basepath);
 
   // can't be a match if the basepath is longer than the location
-  if (basepathSegments.length >= locationSegments.length) {
+  if (basepathSegments.length > locationSegments.length) {
     return undefined;
   }
 
@@ -266,7 +274,7 @@ function getNextRoute(
     .slice(basepathSegments.length, end)
     .join('/');
 
-  return nextRoute;
+  return nextRoute || '/';
 }
 
 // ranks routes based on their similarity to the incoming route
@@ -282,9 +290,9 @@ function match(route: string, nextRoute: string): number {
     return rank;
   }
 
-  // if (route === '/') {
-  //   return 0
-  // }
+  if (route === '/') {
+    return 0;
+  }
 
   for (let i = 0; i < nextSegments.length; i++) {
     const routeSegment = routeSegments[i];
@@ -415,11 +423,15 @@ function History({
 
   // only register listener once
   React.useEffect(() => {
-    history.listen((location: string, _changes: number[]) => {
+    const unlisten = history.listen((location: string, _changes: number[]) => {
       setLocation(location);
       setChanges(_changes);
       onChange && onChange(location);
     });
+
+    return () => {
+      unlisten();
+    };
   }, []);
 
   // update with any initial path provided to <History />
@@ -474,7 +486,7 @@ function History({
 
   return (
     <LocationProvider location={location}>
-      <ChangesProvider changes={changes}>{children}</ChangesProvider>
+      <FocusProvider focused>{children}</FocusProvider>
     </LocationProvider>
   );
 }
@@ -499,25 +511,6 @@ function useLocation() {
   return location;
 }
 
-const ChangesContext = React.createContext<number[]>([]);
-interface iChangesContext {
-  changes: number[];
-  children: React.ReactNode;
-}
-
-function ChangesProvider({ children, changes }: iChangesContext) {
-  return (
-    <ChangesContext.Provider value={changes}>
-      {children}
-    </ChangesContext.Provider>
-  );
-}
-
-function useChanges() {
-  const changes = React.useContext(ChangesContext);
-  return changes;
-}
-
 export {
   createHistory,
   resolve,
@@ -533,5 +526,4 @@ export {
   navigate,
   back,
   useLocation,
-  useChanges,
 };

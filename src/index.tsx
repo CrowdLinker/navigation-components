@@ -12,4 +12,3 @@ export {
   navigate,
   useLocation,
 } from './history';
-export * from '@crowdlinker/react-native-pager';

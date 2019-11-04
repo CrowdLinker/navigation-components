@@ -4,6 +4,7 @@ import { useNavigator } from './navigator';
 import { BasepathProvider } from './history';
 import { Pager, iPager, usePager } from '@crowdlinker/react-native-pager';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { AccessibleScreen } from './accessible-screen';
 
 const MINIMUM_SWIPE_DISTANCE = 20;
 
@@ -36,10 +37,14 @@ function Tabs({ children, ...rest }: iTabs) {
         const route = navigator.routes[index];
 
         if (route) {
-          return <BasepathProvider value={route}>{child}</BasepathProvider>;
+          return (
+            <BasepathProvider value={route}>
+              <AccessibleScreen>{child}</AccessibleScreen>
+            </BasepathProvider>
+          );
         }
 
-        return child;
+        return <AccessibleScreen>{child}</AccessibleScreen>;
       })}
     </Pager>
   );

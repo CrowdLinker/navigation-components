@@ -14,7 +14,7 @@ import {
   ScreenStackHeaderTitleView,
   Screen,
 } from 'react-native-screens';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, ViewStyle } from 'react-native';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history';
 import { StackContext } from './stack';
@@ -25,11 +25,13 @@ import {
   // @ts-ignore
   IndexProvider,
 } from '@crowdlinker/react-native-pager';
+import { AccessibleScreen } from './accessible-screen';
 
 interface iNativeStack {
   children: React.ReactNode[];
   screenConfig?: Partial<iScreenConfig>;
   headers?: iHeader[];
+  style?: ViewStyle;
 }
 
 interface iScreenConfig {
@@ -38,7 +40,7 @@ interface iScreenConfig {
   stackPresentation: 'push' | 'modal' | 'transparentModal';
 }
 
-function NativeStack({ children, screenConfig = {} }: iNativeStack) {
+function NativeStack({ children, screenConfig = {}, style }: iNativeStack) {
   const navigator = useNavigator();
   const [activeIndex, onChange] = usePager();
 
@@ -73,7 +75,7 @@ function NativeStack({ children, screenConfig = {} }: iNativeStack) {
 
   return (
     <StackContext.Provider value={{ push, pop }}>
-      <ScreenStack style={{ flex: 1 }}>
+      <ScreenStack style={style || { flex: 1 }}>
         {React.Children.map(children, (child: any, index: number) => {
           if (index > activeIndex) {
             return null;
@@ -90,7 +92,9 @@ function NativeStack({ children, screenConfig = {} }: iNativeStack) {
               >
                 <BasepathProvider value={route}>
                   <FocusProvider focused={index === activeIndex}>
-                    <IndexProvider index={index}>{child}</IndexProvider>
+                    <IndexProvider index={index}>
+                      <AccessibleScreen>{child}</AccessibleScreen>
+                    </IndexProvider>
                   </FocusProvider>
                 </BasepathProvider>
               </Screen>
@@ -104,7 +108,9 @@ function NativeStack({ children, screenConfig = {} }: iNativeStack) {
               {...(screenConfig as any)}
             >
               <FocusProvider focused={index === activeIndex}>
-                <IndexProvider index={index}>{child}</IndexProvider>
+                <IndexProvider index={index}>
+                  <AccessibleScreen>{child}</AccessibleScreen>
+                </IndexProvider>
               </FocusProvider>
             </Screen>
           );

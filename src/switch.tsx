@@ -8,6 +8,7 @@ import {
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history';
 import { StyleSheet } from 'react-native';
+import { AccessibleScreen } from './accessible-screen';
 
 interface iSwitch {
   children: any;
@@ -28,7 +29,9 @@ function Switch({ children }: iSwitch) {
             <Screen active={active} style={StyleSheet.absoluteFill}>
               <BasepathProvider value={route}>
                 <FocusProvider focused={index === activeIndex}>
-                  <IndexProvider index={index}>{child}</IndexProvider>
+                  <IndexProvider index={index}>
+                    <AccessibleScreen>{child}</AccessibleScreen>
+                  </IndexProvider>
                 </FocusProvider>
               </BasepathProvider>
             </Screen>
@@ -38,7 +41,9 @@ function Switch({ children }: iSwitch) {
         return (
           <Screen active={active} style={StyleSheet.absoluteFill}>
             <FocusProvider focused={index === activeIndex}>
-              <IndexProvider index={index}>{child}</IndexProvider>
+              <IndexProvider index={index}>
+                <AccessibleScreen>{child}</AccessibleScreen>
+              </IndexProvider>
             </FocusProvider>
           </Screen>
         );

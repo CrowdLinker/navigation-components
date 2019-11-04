@@ -1,11 +1,10 @@
 {
-  "include": ["src", "types", "example"],
+  "include": ["src", "types"],
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
     "lib": ["dom", "esnext"],
     "importHelpers": true,
-    "declaration": true,
     "sourceMap": true,
     "rootDir": "./",
     "strict": true,
@@ -20,12 +19,11 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "allowJs": true,
     "baseUrl": "./",
     "paths": {
-      "*": ["src/*", "node_modules/*"],
-      "@crowdlinker/navigation": ["./src/index"],
-      "@crowdlinker/react-native-pager": ["../pager/src"]
+      "*": ["src/*", "node_modules/*", "test/*"],
+      "@crowdlinker/navigation": ["./src/index"]
+      // "@crowdlinker/react-native-pager": ["../pager/src"]
     },
     "jsx": "react",
     "esModuleInterop": true

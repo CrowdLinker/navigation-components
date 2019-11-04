@@ -3,29 +3,35 @@ import {
   Pager,
   iPageInterpolation,
   usePager,
+  iPager,
 } from '@crowdlinker/react-native-pager';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history';
+import { AccessibleScreen } from './accessible-screen';
 
 const modalConfig: iPageInterpolation = {
   zIndex: offset => offset,
 };
 
-interface iModal {
+interface iModal extends iPager {
   children: React.ReactNode[];
+  modalIndex?: number;
 }
 
-function Modal({ children }: iModal) {
+function Modal({ children, modalIndex: parentModalIndex, ...rest }: iModal) {
   const [activeIndex, onChange] = usePager();
   const navigator = useNavigator();
   const [previousIndex, setPreviousIndex] = React.useState(-1);
   const [state, setState] = React.useState({});
 
-  // override default index to be 0
-  const modalActiveIndex = activeIndex === -1 ? 0 : activeIndex;
+  // // override default index to be 0
+  // const modalActiveIndex = activeIndex === -1 ? 0 : activeIndex;
 
   // the last child will be the modal element
-  const modalIndex = React.Children.count(children) - 1;
+  const modalIndex =
+    parentModalIndex !== undefined
+      ? parentModalIndex
+      : React.Children.count(children) - 1;
 
   function show(_state?: Object) {
     setState({ ...state, ..._state });
@@ -42,21 +48,29 @@ function Modal({ children }: iModal) {
     <ModalContext.Provider value={{ show, hide, state }}>
       <Pager
         onChange={onChange}
-        activeIndex={modalActiveIndex}
+        activeIndex={activeIndex}
         type="vertical"
         pageInterpolation={modalConfig}
         clamp={{ prev: 0 }}
         clampDrag={{ next: 0 }}
         panProps={{ enabled: activeIndex === modalIndex }}
+        {...rest}
       >
         {React.Children.map(children, (child: any, index: number) => {
           const route = navigator.routes[index];
+          const isModal = index === modalIndex;
 
           if (route) {
-            return <BasepathProvider value={route}>{child}</BasepathProvider>;
+            return (
+              <BasepathProvider value={route}>
+                <AccessibleScreen accessibilityViewIsModal={isModal}>
+                  {child}
+                </AccessibleScreen>
+              </BasepathProvider>
+            );
           }
 
-          return child;
+          return <AccessibleScreen>{child}</AccessibleScreen>;
         })}
       </Pager>
     </ModalContext.Provider>

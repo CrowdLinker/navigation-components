@@ -22,6 +22,7 @@ interface iNavigatorContext {
   navigate: (to: string) => void;
   back: (amount?: number) => void;
   routes: string[];
+  activeIndex: number;
 }
 
 const NavigatorContext = React.createContext<undefined | iNavigatorContext>(
@@ -35,7 +36,6 @@ function Navigator({
   onChange: parentOnChange,
 }: iNavigator) {
   const basepath = useBasepath();
-
   const location = useLocation();
   const focused = useFocus();
 
@@ -44,7 +44,10 @@ function Navigator({
 
     if (matchingRoute) {
       const nextIndex = pick(routes, matchingRoute);
-      return nextIndex;
+
+      if (nextIndex !== -1) {
+        return nextIndex;
+      }
     }
 
     return initialIndex;
@@ -83,7 +86,7 @@ function Navigator({
       if (matchingRoute) {
         const nextIndex = pick(routes, matchingRoute);
 
-        if (nextIndex !== activeIndex) {
+        if (nextIndex !== activeIndex && nextIndex !== -1) {
           onChange(nextIndex);
           return;
         }
@@ -97,13 +100,12 @@ function Navigator({
     }
   }, [activeIndex, parentOnChange]);
 
-  const context = React.useMemo(() => {
-    return {
-      navigate,
-      back,
-      routes,
-    };
-  }, [routes, navigate, back]);
+  const context = {
+    navigate,
+    back,
+    routes,
+    activeIndex,
+  };
 
   return (
     <PagerProvider activeIndex={activeIndex} onChange={handleGestureChange}>

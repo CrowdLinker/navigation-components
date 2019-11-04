@@ -12,6 +12,7 @@
     "link:ios": "xcrun simctl openurl booted"
   },
   "dependencies": {
+    "@crowdlinker/react-native-pager": "^0.1.18-beta.1",
     "@types/react-native": "^0.60.17",
     "react": "16.8.6",
     "react-native": "^0.60.5",

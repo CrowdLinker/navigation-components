@@ -98,7 +98,13 @@ test('getNextRoute()', () => {
   // navigator has path the same length as location -- it's not a match
   // because we're looking for the `next route` which has to be defined
   const weird = `/:app/:home:/:settings/:profile`;
-  expect(getNextRoute(location, weird)).toEqual(undefined);
+  expect(getNextRoute(location, weird)).toEqual('/');
+
+  // root path
+  const lc = '/';
+  const bp = '';
+
+  expect(getNextRoute(lc, bp)).toEqual('/');
 });
 
 test('getParams()', () => {
@@ -134,7 +140,7 @@ test('pick()', () => {
   expect(pick(sad, m4)).toEqual(-1);
 });
 
-test.skip('pick() w/ root route `/`', () => {
+test('pick() w/ root route `/`', () => {
   const routes = ['/', 'profile'];
   const matchingRoute = `library/music`;
 

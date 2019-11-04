@@ -23,21 +23,21 @@ module.exports = {
   },
   watchFolders: [
     path.resolve(__dirname, '..'),
-    path.resolve(__dirname, '../../pager'),
+    // path.resolve(__dirname, '../../pager'),
   ],
   resolver: {
     blacklistRE: blacklist([
       new RegExp(
         `^${escape(path.resolve(__dirname, '..', 'node_modules'))}\/.*$`,
       ),
-      new RegExp(
-        `^${escape(
-          path.resolve(__dirname, '../../pager', 'node_modules'),
-        )}\/.*$`,
-      ),
-      new RegExp(
-        `^${escape(path.resolve(__dirname, '../../pager', 'example'))}\/.*$`,
-      ),
+      // new RegExp(
+      //   `^${escape(
+      //     path.resolve(__dirname, '../../pager', 'node_modules'),
+      //   )}\/.*$`,
+      // ),
+      // new RegExp(
+      //   `^${escape(path.resolve(__dirname, '../../pager', 'example'))}\/.*$`,
+      // ),
     ]),
     providesModuleNodeModules: [
       '@babel/runtime',

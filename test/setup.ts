@@ -6,11 +6,14 @@ jest.mock('react-native-reanimated', () => {
     };
   };
 
+  mock.default.useCode = function() {};
+
   return mock;
 });
 
 jest.mock('react-native-gesture-handler', () => {
   const View = require('react-native/Libraries/Components/View/View');
+  const TouchableOpacity = require('react-native/Libraries/Components/Touchable/TouchableOpacity');
   return {
     Swipeable: View,
     DrawerLayout: View,
@@ -36,6 +39,7 @@ jest.mock('react-native-gesture-handler', () => {
     BaseButton: View,
     RectButton: View,
     BorderlessButton: View,
+    TouchableOpacity: TouchableOpacity,
     /* Other */
     FlatList: View,
     gestureHandlerRootHOC: jest.fn(),
