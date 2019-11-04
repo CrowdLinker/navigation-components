@@ -10,6 +10,8 @@ import {
   NativeStack,
   Modal,
   Switch,
+  History,
+  createHistory,
 } from '../src';
 import { Text, View } from 'react-native';
 import { render, fireEvent, navigate } from './test-utils';
@@ -268,3 +270,31 @@ test('modal works', () => {
   getFocused().getByText('2');
   expect(getFocused().container).toHaveProp('accessibilityViewIsModal', true);
 });
+
+test('nested history does nothing', () => {
+  const fakeHistory = createHistory();
+
+  const listener = jest.fn();
+  fakeHistory.listen(listener);
+
+  const { getByText } = render(
+    <History history={history}>
+      <Navigator>
+        <Text>1</Text>
+        <Link to="blah">
+          <Text>test</Text>
+        </Link>
+      </Navigator>
+    </History>
+  );
+
+  fireEvent.press(getByText('test'));
+
+  expect(fakeHistory.location).toEqual('/');
+  expect(listener).not.toHaveBeenCalled();
+  expect(history.location).toEqual('/blah');
+});
+
+test.todo('handleOnGesture navigates');
+test.todo('onChange prop works');
+test.todo('useNavigator() throws when undefined');

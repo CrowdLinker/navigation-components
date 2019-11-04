@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ViewProps } from 'react-native';
-import { useFocus } from '@crowdlinker/react-native-pager';
+import { useFocus } from './pager';
 
 interface iAccessibleScreen extends ViewProps {
   children: React.ReactNode;
@@ -14,7 +14,7 @@ function AccessibleScreen({ children, ...rest }: iAccessibleScreen) {
       style={{ flex: 1 }}
       accessibilityRole="tab"
       accessibilityStates={[focused ? 'selected' : 'disabled']}
-      accessibilityLabel="screen"
+      accessibilityLabel="rnl-screen"
       {...rest}
     >
       {children}

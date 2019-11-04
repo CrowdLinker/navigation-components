@@ -9,7 +9,7 @@ import {
   useParams,
   navigate,
   Stack,
-} from '@crowdlinker/navigation';
+} from 'react-navigation-library';
 import {View, Text, Button} from 'react-native';
 import {colors, styles, Feed, FeedHeaders, Slide} from '../shared';
 
@@ -17,23 +17,11 @@ const mainRoutes = ['main', 'profile', 'details'];
 function Library() {
   return (
     <Navigator routes={mainRoutes}>
-      <NativeStack>
-        <>
-          <UserFeeds />
-        </>
-        <>
-          <Header title="Profiles">
-            <Header.Right>
-              <Text>Oh hi</Text>
-            </Header.Right>
-          </Header>
-          <Profiles />
-        </>
-        <>
-          <Header title="Details" />
-          <Details />
-        </>
-      </NativeStack>
+      <Stack>
+        <UserFeeds />
+        <Profiles />
+        <Details />
+      </Stack>
     </Navigator>
   );
 }

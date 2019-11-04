@@ -5,7 +5,7 @@ module.exports = {
       'module-resolver',
       {
         alias: {
-          '@crowdlinker/navigation': '../src/index',
+          'react-navigation-library': '../src/index',
           // '@crowdlinker/react-native-pager': '../../pager/src/index',
         },
       },

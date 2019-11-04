@@ -8,3 +8,4 @@ node_modules
 dist
 todo.txt
 coverage
+.vscode

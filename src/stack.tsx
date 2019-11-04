@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pager, iPager, usePager } from '@crowdlinker/react-native-pager';
+import { Pager, iPager, usePager } from './pager';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history-component';
 import { AccessibleScreen } from './accessible-screen';
@@ -48,7 +48,7 @@ function Stack({ children, ...rest }: iStack) {
   return (
     <StackContext.Provider value={{ push, pop }}>
       <Pager
-        style={{ flex: 1, overflow: 'hidden' }}
+        style={{ flex: 1, overflow: 'hidden', borderWidth: 1 }}
         clamp={{ prev: 0.6 }}
         panProps={{
           enabled: activeIndex > 0,

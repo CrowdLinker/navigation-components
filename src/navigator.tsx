@@ -1,6 +1,7 @@
 import React from 'react';
-import { PagerProvider, useFocus } from '@crowdlinker/react-native-pager';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
+import { PagerProvider, useFocus } from './pager';
 import {
   getNextRoute,
   pick,
@@ -9,6 +10,7 @@ import {
   history,
 } from './history';
 import { useLocation, useBasepath } from './history-component';
+import { ViewProps } from 'react-native';
 
 interface iNavigator {
   children: React.ReactNode;
@@ -23,6 +25,8 @@ interface iNavigatorContext {
   routes: string[];
   activeIndex: number;
 }
+
+const { Value } = Animated;
 
 const NavigatorContext = React.createContext<undefined | iNavigatorContext>(
   undefined
@@ -52,10 +56,12 @@ function Navigator({
     return initialIndex;
   });
 
+  const animatedIndex = React.useRef(new Value(activeIndex)).current;
+
   function handleGestureChange(nextIndex: number) {
     onChange(nextIndex);
 
-    const nextRoute = routes[nextIndex];
+    let nextRoute = routes[nextIndex];
 
     if (nextRoute) {
       if (nextRoute === '/') {
@@ -63,14 +69,15 @@ function Navigator({
         return;
       }
 
+      if (nextRoute.includes(':')) {
+        nextRoute = resolveBasepath(nextRoute, history.location);
+      }
+
       navigate(`${basepath}/${nextRoute}`);
     }
   }
 
   function navigate(to: string) {
-    if (to.includes(':')) {
-      to = resolveBasepath(to, history.location);
-    }
     history.navigate(to, basepath);
   }
 
@@ -115,13 +122,12 @@ function Navigator({
   );
 }
 
-interface iLink {
+interface iLink extends ViewProps {
   to: string;
   children: React.ReactNode;
-  style?: any;
 }
 
-function Link({ to, children, style }: iLink) {
+function Link({ to, children, ...rest }: iLink) {
   const navigator = useNavigator();
 
   function handlePress() {
@@ -129,7 +135,12 @@ function Link({ to, children, style }: iLink) {
   }
 
   return (
-    <TouchableOpacity style={style} onPress={handlePress}>
+    <TouchableOpacity
+      onPress={handlePress}
+      accessibilityRole="link"
+      accessibilityHint={`Go to ${to}`}
+      {...rest}
+    >
       {children}
     </TouchableOpacity>
   );

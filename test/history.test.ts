@@ -146,3 +146,9 @@ test('pick() w/ root route `/`', () => {
 
   expect(pick(routes, matchingRoute)).toEqual(0);
 });
+
+test.todo('index is available');
+test.todo('back() function works');
+test.todo(
+  'resolveBasepath replaces param values with corresponding location values'
+);

@@ -1,8 +1,8 @@
 // this is basically a simplified and worse version of @reach/router in-memory history implementation
 import React from 'react';
-import { history as globalHistory, iHistory, Listener } from './history';
+import { history as globalHistory, iHistory } from './history';
 import { BackHandler, Linking } from 'react-native';
-import { FocusProvider } from '@crowdlinker/react-native-pager';
+import { FocusProvider } from './pager';
 
 export interface iHistoryContext {
   location: string;
@@ -17,6 +17,18 @@ export interface iHistoryProvider {
   scheme?: string;
   onChange?: (nextLocation: string) => void;
   history?: iHistory;
+}
+
+const HistoryContext = React.createContext<iHistory | undefined>(undefined);
+
+function useHistory() {
+  const history = React.useContext(HistoryContext);
+
+  if (!history) {
+    throw new Error(`useHistory() must be used within a <History /> subtree`);
+  }
+
+  return history;
 }
 
 function History({
@@ -93,10 +105,19 @@ function History({
     };
   }, []);
 
+  // only have one <History /> component per tree
+  const context = React.useContext(HistoryContext);
+
+  if (context) {
+    return children;
+  }
+
   return (
-    <LocationProvider location={location}>
-      <FocusProvider focused>{children}</FocusProvider>
-    </LocationProvider>
+    <HistoryContext.Provider value={history}>
+      <LocationProvider location={location}>
+        <FocusProvider focused>{children}</FocusProvider>
+      </LocationProvider>
+    </HistoryContext.Provider>
   );
 }
 
