@@ -1,7 +1,7 @@
 import React from 'react';
 import {Library} from './library';
 import {View, Text, StyleSheet} from 'react-native';
-import {Modal, useModal, Navigator} from '@crowdlinker/navigation';
+import {Modal, useModal, Navigator} from 'react-navigation-library';
 import {Slide, styles} from '../shared';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import SafeAreaView from 'react-native-safe-area-view';
@@ -15,7 +15,6 @@ function SpotifyApp() {
             <Library />
             <PlayerPreview title="This is the title" />
           </View>
-
           <Player />
         </Modal>
       </Navigator>

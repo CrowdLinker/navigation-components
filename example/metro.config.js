@@ -39,10 +39,6 @@ module.exports = {
       //   `^${escape(path.resolve(__dirname, '../../pager', 'example'))}\/.*$`,
       // ),
     ]),
-    providesModuleNodeModules: [
-      '@babel/runtime',
-      ...peerDependencies,
-      '@crowdlinker/react-native-pager',
-    ],
+    providesModuleNodeModules: ['@babel/runtime', ...peerDependencies],
   },
 };

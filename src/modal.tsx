@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Pager,
-  iPageInterpolation,
-  usePager,
-  iPager,
-} from '@crowdlinker/react-native-pager';
+import { Pager, iPageInterpolation, usePager, iPager } from './pager';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history-component';
 import { AccessibleScreen } from './accessible-screen';
@@ -50,10 +45,14 @@ function Modal({ children, modalIndex: parentModalIndex, ...rest }: iModal) {
         onChange={onChange}
         activeIndex={activeIndex}
         type="vertical"
+        clamp={{
+          prev: 0,
+        }}
+        clampDrag={{
+          prev: activeIndex === modalIndex ? 1 : 0,
+          next: 0,
+        }}
         pageInterpolation={modalConfig}
-        clamp={{ prev: 0 }}
-        clampDrag={{ next: 0 }}
-        panProps={{ enabled: activeIndex === modalIndex }}
         {...rest}
       >
         {React.Children.map(children, (child: any, index: number) => {

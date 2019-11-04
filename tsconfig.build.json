@@ -1,5 +1,5 @@
 {
-  "include": ["src", "types", "example"],
+  "include": ["src"],
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
@@ -14,15 +14,14 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-    "noUnusedLocals": false,
+    "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-      "*": ["src/*", "node_modules/*", "test/*"],
-      "react-navigation-library": ["./src/index"]
+      "*": ["src/*", "node_modules/*"]
     },
     "jsx": "react",
     "esModuleInterop": true

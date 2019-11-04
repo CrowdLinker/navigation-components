@@ -1,5 +1,5 @@
 {
-  "name": "@crowdlinker/navigation",
+  "name": "react-navigation-library",
   "version": "0.1.0",
   "main": "dist/index.js",
   "module": "dist/navigation.esm.js",
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build": "tsdx build --tsconfig tsconfig.build.json",
     "test": "tsdx test --env=jsdom",
     "lint": "tsdx lint"
   },
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@testing-library/jest-native": "^3.0.2",
-    "@testing-library/react-native": "^4.1.0",
+    "@testing-library/react-native": "^4.2.0",
     "@types/jest": "^24.0.20",
     "@types/react": "^16.9.2",
     "@types/react-native": "^0.60.17",

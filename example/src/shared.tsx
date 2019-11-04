@@ -1,11 +1,6 @@
 import React, {memo} from 'react';
 import {View, StyleSheet, Text, ViewStyle} from 'react-native';
-import {
-  usePager,
-  Link,
-  useOffset,
-  useInterpolation,
-} from '@crowdlinker/navigation';
+import {Link, useInterpolation} from 'react-navigation-library';
 import Animated from 'react-native-reanimated';
 import {FlatList} from 'react-native-gesture-handler';
 

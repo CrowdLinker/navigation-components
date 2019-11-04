@@ -2,7 +2,8 @@ import React from 'react';
 import {SpotifyApp} from './src/spotify';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {useScreens} from 'react-native-screens';
-import {History} from '@crowdlinker/navigation';
+import {History, Pager} from 'react-navigation-library';
+import {Slide} from './src/shared';
 
 useScreens();
 
@@ -16,4 +17,13 @@ function App() {
   );
 }
 
+function P() {
+  return (
+    <Pager>
+      <Slide index={0} />
+      <Slide index={1} />
+      <Slide index={2} />
+    </Pager>
+  );
+}
 export default App;

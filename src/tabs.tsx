@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history-component';
-import { Pager, iPager, usePager } from '@crowdlinker/react-native-pager';
+import { Pager, iPager, usePager } from './pager';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { AccessibleScreen } from './accessible-screen';
 

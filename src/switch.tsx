@@ -1,11 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { ScreenContainer, Screen } from 'react-native-screens';
-import {
-  usePager,
-  FocusProvider,
-  IndexProvider,
-} from '@crowdlinker/react-native-pager';
+import { usePager, FocusProvider, IndexProvider } from './pager';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history-component';
 import { AccessibleScreen } from './accessible-screen';
