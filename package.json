@@ -9,9 +9,10 @@
   ],
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build --tsconfig tsconfig.build.json",
+    "build": "tsdx build --tsconfig tsconfig.build.json && yarn build:test",
     "test": "tsdx test --env=jsdom",
-    "lint": "tsdx lint"
+    "lint": "tsdx lint",
+    "build:test": "babel test-utils --out-dir dist/test-utils"
   },
   "peerDependencies": {
     "react": ">=16",
@@ -32,6 +33,7 @@
     "trailingComma": "es5"
   },
   "devDependencies": {
+    "@babel/cli": "^7.7.0",
     "@testing-library/jest-native": "^3.0.2",
     "@testing-library/react-native": "^4.2.0",
     "@types/jest": "^24.0.20",
