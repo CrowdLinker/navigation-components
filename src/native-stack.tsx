@@ -14,7 +14,7 @@ import {
   ScreenStackHeaderTitleView,
   Screen,
 } from 'react-native-screens';
-import { StyleSheet, View, Text, ViewStyle } from 'react-native';
+import { StyleSheet, ViewStyle } from 'react-native';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history-component';
 import { StackContext } from './stack';

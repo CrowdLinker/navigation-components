@@ -1,17 +1,17 @@
 import React from 'react';
 import {
   render,
-  prettyPrint,
   getQueriesForElement,
   getAllByLabelText,
   act,
 } from '@testing-library/react-native';
-import format from 'pretty-format';
 import { History, navigate as globalNavigate, iHistoryProvider } from '../src';
 
 function customRender(ui: any, options?: Partial<iHistoryProvider>) {
   const utils = render(<History {...options}>{ui}</History>, {
-    debug: { omitProps: ['style'] },
+    options: {
+      debug: { omitProps: ['zstyle', 'activeOpacity'] },
+    },
   });
 
   function getFocused() {

@@ -72,7 +72,6 @@ const {
   cond,
   eq,
   add,
-  or,
   stopClock,
   Clock,
   set,

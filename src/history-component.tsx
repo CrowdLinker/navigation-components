@@ -164,4 +164,4 @@ function useLocation() {
   return location;
 }
 
-export { useLocation, useBasepath, BasepathProvider, History };
+export { useLocation, useBasepath, BasepathProvider, useHistory, History };

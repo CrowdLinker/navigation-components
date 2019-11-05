@@ -1,6 +1,5 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
 import { PagerProvider, useFocus } from './pager';
 import {
   getNextRoute,
@@ -25,8 +24,6 @@ interface iNavigatorContext {
   routes: string[];
   activeIndex: number;
 }
-
-const { Value } = Animated;
 
 const NavigatorContext = React.createContext<undefined | iNavigatorContext>(
   undefined
@@ -55,8 +52,6 @@ function Navigator({
 
     return initialIndex;
   });
-
-  const animatedIndex = React.useRef(new Value(activeIndex)).current;
 
   function handleGestureChange(nextIndex: number) {
     onChange(nextIndex);

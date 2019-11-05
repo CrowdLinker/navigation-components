@@ -111,6 +111,8 @@ test('params', () => {
 
   getFocused().getByText(/uno params: 3/i);
 
+  getFocused().debug();
+
   expect(listener).toHaveBeenLastCalledWith(
     expect.objectContaining({ activeIndex: 0 })
   );
