@@ -1,19 +1,5 @@
 import { resolve, getNextRoute, getParams, pick } from '../src/history';
 
-// jest.mock('react-native', () => {
-//   return {
-//     BackHandler: {
-//       addEventListener: jest.fn,
-//       removeEventListener: jest.fn,
-//     },
-//     Linking: {
-//       getInitialURL: () => Promise.resolve(),
-//       addEventListener: jest.fn,
-//       removeEventListener: jest.fn,
-//     },
-//   };
-// });
-
 test('resolve() absolute routes', () => {
   const location = `/app/home/profile/one`;
 

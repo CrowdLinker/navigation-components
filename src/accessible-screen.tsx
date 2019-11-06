@@ -14,7 +14,7 @@ function AccessibleScreen({ children, ...rest }: iAccessibleScreen) {
       style={{ flex: 1 }}
       accessibilityRole="tab"
       accessibilityStates={[focused ? 'selected' : 'disabled']}
-      accessibilityLabel="rnl-screen"
+      testID="rnl-screen"
       {...rest}
     >
       {children}

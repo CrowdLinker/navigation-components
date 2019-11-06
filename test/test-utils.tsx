@@ -2,15 +2,18 @@ import React from 'react';
 import {
   render,
   getQueriesForElement,
-  getAllByLabelText,
   act,
+  getAllByLabelText,
+  getAllByTestId,
 } from '@testing-library/react-native';
 import { History, navigate as globalNavigate, iHistoryProvider } from '../src';
 
 function customRender(ui: any, options?: Partial<iHistoryProvider>) {
   const utils = render(<History {...options}>{ui}</History>, {
+    // @ts-ignore
     options: {
-      debug: { omitProps: ['zstyle', 'activeOpacity'] },
+      // @ts-ignore
+      debug: { omitProps: ['style', 'activeOpacity'] },
     },
   });
 
@@ -26,9 +29,8 @@ function customRender(ui: any, options?: Partial<iHistoryProvider>) {
   }
 
   function findFocused(parent: any): any {
-    const focusedScreens = getAllByLabelText(parent, 'rnl-screen', {
-      // @ts-ignore
-      filter: ({ props }) => props.accessibilityStates.includes('selected'),
+    const focusedScreens = getAllByTestId(parent, 'rnl-screen', {
+      selector: ({ props }) => props.accessibilityStates.includes('selected'),
     });
 
     if (focusedScreens.length > 1) {

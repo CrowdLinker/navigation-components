@@ -6,7 +6,7 @@
     "lib": ["dom", "esnext"],
     "importHelpers": true,
     "sourceMap": true,
-    "rootDir": "./",
+    "rootDir": "../",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -14,14 +14,16 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
+    "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "*": ["src/*", "node_modules/*"]
+      "*": ["src/*", "node_modules/*"],
+      "react-navigation-library": ["../dist/index"]
     },
     "jsx": "react",
     "esModuleInterop": true
