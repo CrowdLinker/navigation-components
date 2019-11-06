@@ -3,6 +3,7 @@ import React from 'react';
 import { history as globalHistory, iHistory } from './history';
 import { BackHandler, Linking } from 'react-native';
 import { FocusProvider } from './pager';
+import { AccessibleScreen } from './accessible-screen';
 
 export interface iHistoryContext {
   location: string;
@@ -115,7 +116,9 @@ function History({
   return (
     <HistoryContext.Provider value={history}>
       <LocationProvider location={location}>
-        <FocusProvider focused>{children}</FocusProvider>
+        <FocusProvider focused>
+          <AccessibleScreen>{children}</AccessibleScreen>
+        </FocusProvider>
       </LocationProvider>
     </HistoryContext.Provider>
   );

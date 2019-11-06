@@ -1,4 +1,10 @@
-import { resolve, getNextRoute, getParams, pick } from '../src/history';
+import {
+  resolve,
+  getNextRoute,
+  getParams,
+  pick,
+  resolveBasepath,
+} from '../src/history';
 
 test('resolve() absolute routes', () => {
   const location = `/app/home/profile/one`;
@@ -123,7 +129,10 @@ test('pick()', () => {
   const sad = ['profile/:id'];
   const m4 = 'profile';
 
-  expect(pick(sad, m4)).toEqual(-1);
+  expect(pick(sad, m4)).toEqual(0);
+
+  const result = pick(['/', 'two/:id'], 'two');
+  expect(result).toEqual(1);
 });
 
 test('pick() w/ root route `/`', () => {
@@ -135,6 +144,8 @@ test('pick() w/ root route `/`', () => {
 
 test.todo('index is available');
 test.todo('back() function works');
-test.todo(
-  'resolveBasepath replaces param values with corresponding location values'
-);
+
+test('resolveBasepath replaces param values with corresponding location values', () => {
+  const result = resolveBasepath('two/:id', '/');
+  expect(result).toEqual('two');
+});

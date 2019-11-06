@@ -60,7 +60,7 @@ function Navigator({
 
     if (nextRoute) {
       if (nextRoute === '/') {
-        navigate(basepath);
+        navigate(basepath || '/');
         return;
       }
 
@@ -84,6 +84,7 @@ function Navigator({
     // only update if the navigator is currently focused and there was a relevant location change
     if (focused) {
       const matchingRoute = getNextRoute(location, basepath);
+
       if (matchingRoute) {
         const nextIndex = pick(routes, matchingRoute);
 

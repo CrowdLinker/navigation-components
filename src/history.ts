@@ -107,7 +107,7 @@ function resolveBasepath(basepath: string, location: string) {
     }
   }
 
-  return `/${basepathSegments.join('/')}`;
+  return `${basepathSegments.filter(Boolean).join('/')}`;
 }
 
 // basepath is necessary because it provides context for relative paths
@@ -265,10 +265,6 @@ function match(route: string, nextRoute: string): number {
   const nextSegments = segmentize(nextRoute);
 
   let rank = -1;
-
-  if (routeSegments.length > nextSegments.length) {
-    return rank;
-  }
 
   if (route === '/') {
     return 0;

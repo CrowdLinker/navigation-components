@@ -12,10 +12,11 @@ import {
   Switch,
   History,
   createHistory,
+  usePager,
 } from '../src';
-import { Text, View } from 'react-native';
+import { Text, View, Button } from 'react-native';
 import { render, navigate } from './test-utils';
-import { fireEvent } from '@testing-library/react-native';
+import { fireEvent, getByText } from '@testing-library/react-native';
 
 import '@testing-library/jest-native/extend-expect';
 
@@ -294,6 +295,90 @@ test('nested history does nothing', () => {
   expect(history.location).toEqual('/blah');
 });
 
-test.todo('handleOnGesture navigates');
-test.todo('onChange prop works');
-test.todo('useNavigator() throws when undefined');
+test('handleOnGesture navigates', () => {
+  function SimulatedGesture() {
+    const [activeIndex, onChange] = usePager();
+
+    return (
+      <Button
+        title="handleOnGesture()"
+        onPress={() => onChange(activeIndex + 1)}
+      />
+    );
+  }
+
+  function Two() {
+    const [, onChange] = usePager();
+
+    return <Button title="back" onPress={() => onChange(0)} />;
+  }
+
+  const { getByText, getFocused } = render(
+    <Navigator routes={['/', 'two/:id']}>
+      <Tabs>
+        <SimulatedGesture />
+        <Two />
+      </Tabs>
+    </Navigator>
+  );
+
+  fireEvent.press(getByText('handleOnGesture()'));
+
+  getFocused().getByText('back');
+
+  fireEvent.press(getByText('back'));
+});
+
+test('back() works', () => {
+  function BackButton({ amount }: any) {
+    const navigator = useNavigator();
+    return <Button title="back" onPress={() => navigator.back(amount)} />;
+  }
+
+  const { getFocused } = render(
+    <Navigator routes={['/', 'two']}>
+      <Tabs>
+        <Text>1</Text>
+        <BackButton amount={1} />
+      </Tabs>
+    </Navigator>
+  );
+
+  expect(() => getFocused().getByText('back')).toThrow();
+
+  navigate('/two');
+
+  fireEvent.press(getFocused().getByText('back'));
+
+  getFocused().getByText('1');
+});
+
+test('onChange prop works', () => {
+  const onChange = jest.fn();
+
+  render(
+    <Navigator onChange={onChange} routes={['one', 'two']}>
+      <Text>1</Text>
+    </Navigator>
+  );
+
+  onChange.mockReset();
+
+  navigate('/two');
+
+  expect(onChange).toHaveBeenCalledTimes(1);
+});
+
+test('useNavigator() throws when undefined', () => {
+  function Consumer() {
+    useNavigator();
+    return null;
+  }
+
+  jest.spyOn(console, 'error').mockImplementation(() => {});
+
+  expect(() => render(<Consumer />)).toThrow();
+
+  // @ts-ignore
+  console.error.mockRestore();
+});
