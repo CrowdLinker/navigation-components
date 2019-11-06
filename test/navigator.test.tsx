@@ -42,7 +42,7 @@ test('render()', () => {
 
   const { getByText } = render(
     <Navigator routes={['uno', 'dos']}>
-      <Tabs style={{ width: 100 }}>
+      <Tabs>
         <Link to="dos">
           <Text>To dos</Text>
         </Link>
@@ -81,7 +81,7 @@ test('params', () => {
 
   const { getFocused } = render(
     <Navigator routes={['uno/:id', 'dos/:id']}>
-      <Tabs style={{ width: 100 }}>
+      <Tabs>
         <Link to="dos/2">
           <Text>To dos</Text>
           <Params prop="id">Uno params: </Params>
@@ -119,7 +119,7 @@ test('nested', () => {
   function Inner() {
     return (
       <Navigator routes={['one', 'two']}>
-        <Tabs style={{ width: 100 }}>
+        <Tabs>
           <Text>One</Text>
 
           <View>
@@ -136,7 +136,7 @@ test('nested', () => {
   function Outer({ children }: any) {
     return (
       <Navigator routes={['root', 'inner']}>
-        <Tabs style={{ width: 100 }}>
+        <Tabs>
           <View>
             <Text>root</Text>
             <Link to="inner/two">
@@ -169,7 +169,7 @@ test('root "/" is the default path', () => {
 
   const { getFocused } = render(
     <Navigator routes={['first', '/']}>
-      <Tabs style={{ width: 100 }}>
+      <Tabs>
         <Text>1</Text>
         <Text>2</Text>
       </Tabs>
