@@ -14,7 +14,8 @@ import {
   createHistory,
 } from '../src';
 import { Text, View } from 'react-native';
-import { render, fireEvent, navigate } from './test-utils';
+import { render, navigate } from './test-utils';
+import { fireEvent } from '@testing-library/react-native';
 
 import '@testing-library/jest-native/extend-expect';
 
@@ -38,8 +39,6 @@ afterEach(() => {
 
 test('render()', () => {
   const listener = jest.fn(() => null);
-
-  navigate('/uno');
 
   const { getByText } = render(
     <Navigator routes={['uno', 'dos']}>
@@ -110,8 +109,6 @@ test('params', () => {
   fireEvent.press(getFocused().getByText('To uno'));
 
   getFocused().getByText(/uno params: 3/i);
-
-  getFocused().debug();
 
   expect(listener).toHaveBeenLastCalledWith(
     expect.objectContaining({ activeIndex: 0 })
