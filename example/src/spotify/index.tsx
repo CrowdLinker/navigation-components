@@ -8,17 +8,17 @@ import SafeAreaView from 'react-native-safe-area-view';
 
 function SpotifyApp() {
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <Navigator>
-        <Modal>
-          <View style={{flex: 1}}>
-            <Library />
-            <PlayerPreview title="This is the title" />
-          </View>
-          <Player />
-        </Modal>
-      </Navigator>
-    </SafeAreaView>
+    // <SafeAreaView style={{flex: 1}}>
+    <Navigator>
+      <Modal>
+        <View style={{flex: 1}}>
+          <Library />
+          <PlayerPreview title="This is the title" />
+        </View>
+        <Player />
+      </Modal>
+    </Navigator>
+    // </SafeAreaView>
   );
 }
 

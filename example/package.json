@@ -12,8 +12,10 @@
     "link:ios": "xcrun simctl openurl booted"
   },
   "dependencies": {
+    "@testing-library/jest-native": "^3.0.2",
     "@types/react-native": "^0.60.17",
-    "react": "16.8.6",
+    "navigation-test-utils": "^0.1.5",
+    "react": "^16.11.0",
     "react-native": "^0.60.5",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-reanimated": "^1.4.0",
@@ -25,7 +27,7 @@
     "@babel/core": "^7.6.2",
     "@babel/runtime": "^7.6.2",
     "@react-native-community/eslint-config": "^0.0.5",
-    "@testing-library/react-native": "^4.1.0",
+    "@testing-library/react-native": "^5.0.0",
     "babel-jest": "^24.9.0",
     "babel-plugin-module-resolver": "^3.2.0",
     "escape-string-regexp": "^2.0.0",
@@ -33,9 +35,23 @@
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.56.0",
     "react-devtools": "3",
-    "react-test-renderer": "16.8.6"
+    "react-test-renderer": "^16.11.0"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "@testing-library/react-native",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-native|react-native-screens|react-native-reanimated)/)"
+    ],
+    "setupFilesAfterEnv": [
+      "@testing-library/react-native/cleanup-after-each",
+      "navigation-test-utils/setup",
+      "navigation-test-utils/cleanup-after-each"
+    ],
+    "transform": {
+      "^.+\\.(t)sx?$": "ts-jest"
+    }
   }
 }

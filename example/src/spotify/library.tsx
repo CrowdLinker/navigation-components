@@ -46,14 +46,16 @@ function UserFeeds() {
   );
 }
 
-function Feeds({routes}) {
+function Feeds({routes}: any) {
   return (
     <Tabs>
-      {routes.map(route => {
+      {routes.map((route: string) => {
         return (
+          // @ts-ignore
           <Feed
             key={route}
             type={route}
+            // @ts-ignore
             items={data[route]}
             row={item => (
               <Link
@@ -69,7 +71,7 @@ function Feeds({routes}) {
   );
 }
 
-function UserFeed({routes}) {
+function UserFeed({routes}: any) {
   return (
     <Navigator routes={routes} initialIndex={0}>
       <FeedHeaders routes={routes} style={styles.subheader} />
@@ -144,7 +146,7 @@ function Profile({children}: any) {
 
 export {Library};
 
-const playlists: iRow[] = [
+const playlists: any[] = [
   {id: 0, name: 'Liked Songs'},
   {id: 1, name: 'Good Albums'},
   {id: 2, name: 'Your Top Songs 2019'},

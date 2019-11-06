@@ -39,6 +39,7 @@ interface iActiveOpacity {
 function ActiveOpacity({index, children}: iActiveOpacity) {
   const styles = useInterpolation(
     {
+      // @ts-ignore
       opacity: {
         inputRange: [-1, 0, 1],
         outputRange: [0.5, 1, 0.5],
@@ -79,10 +80,10 @@ function Feed<T extends iRow>({items = [], row, style, ...rest}: iFeed<T>) {
   );
 }
 
-function FeedHeaders({routes, style}) {
+function FeedHeaders({routes, style}: any) {
   return (
     <View style={{flexDirection: 'row'}}>
-      {routes.map((route, index) => {
+      {routes.map((route: string, index: number) => {
         return (
           <Link to={route} key={route} style={{padding: 5, borderWidth: 1}}>
             <ActiveOpacity index={index}>
