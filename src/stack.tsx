@@ -19,13 +19,14 @@ function Stack({ children, ...rest }: iStack) {
 
   function push(amount = 1) {
     const nextIndex = activeIndex + amount;
+
     if (navigator.routes.length > 0) {
       const nextRoute = navigator.routes[nextIndex];
+
       if (nextRoute) {
         navigator.navigate(nextRoute);
+        return;
       }
-
-      return;
     }
 
     onChange(nextIndex);
@@ -33,13 +34,14 @@ function Stack({ children, ...rest }: iStack) {
 
   function pop(amount = 1) {
     const nextIndex = activeIndex - amount;
+
     if (navigator.routes.length > 0) {
       const nextRoute = navigator.routes[nextIndex];
+
       if (nextRoute) {
         navigator.navigate(nextRoute);
+        return;
       }
-
-      return;
     }
 
     onChange(nextIndex);
@@ -48,7 +50,7 @@ function Stack({ children, ...rest }: iStack) {
   return (
     <StackContext.Provider value={{ push, pop }}>
       <Pager
-        style={{ flex: 1, overflow: 'hidden', borderWidth: 1 }}
+        style={{ flex: 1, overflow: 'hidden' }}
         clamp={{ prev: 0.6 }}
         panProps={{
           enabled: activeIndex > 0,
@@ -77,8 +79,8 @@ function Stack({ children, ...rest }: iStack) {
 const StackContext = React.createContext<undefined | iStackContext>(undefined);
 
 interface iStackContext {
-  push: (amount: number) => void;
-  pop: (amount: number) => void;
+  push: (amount?: number) => void;
+  pop: (amount?: number) => void;
 }
 
 function useStack(): iStackContext {

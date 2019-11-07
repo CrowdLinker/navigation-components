@@ -392,9 +392,11 @@ function Pager({
 
   function renderChildren() {
     // waiting for initial layout - except when testing
-    if (width === UNSET && process.env.NODE_ENV !== 'test') {
-      return null;
-    }
+    // TODO: this doesn't work because process.env is transpiled to 'development' when building
+    // so it looks like: 'development' !== 'test'
+    // if (width === UNSET && process.env.NODE_ENV !== 'test') {
+    //   return null;
+    // }
 
     return adjacentChildren.map((child: any, i) => {
       // use map instead of React.Children because we want to track
