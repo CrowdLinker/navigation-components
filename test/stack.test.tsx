@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigator, Stack, useStack } from '../src';
-import { render } from './test-utils';
+import { render, navigate } from './test-utils';
 import { Button, Text } from 'react-native';
 import { fireEvent } from '@testing-library/react-native';
 
@@ -10,7 +10,7 @@ test('push() adds screen to stack', () => {
     return <Button title="push" onPress={() => stack.push()} />;
   }
 
-  const { getFocused } = render(
+  const { getFocused, debug } = render(
     <Navigator routes={['/', 'two']}>
       <Stack>
         <PushView />

@@ -47,6 +47,12 @@ function Stack({ children, ...rest }: iStack) {
     onChange(nextIndex);
   }
 
+  const [rendered, setRendered] = React.useState([activeIndex]);
+
+  React.useEffect(() => {
+    setRendered([...rendered.filter(i => i !== activeIndex), activeIndex]);
+  }, [activeIndex]);
+
   return (
     <StackContext.Provider value={{ push, pop }}>
       <Pager
@@ -59,6 +65,10 @@ function Stack({ children, ...rest }: iStack) {
         {...rest}
       >
         {React.Children.map(children, (child: any, index: number) => {
+          if (!rendered.includes(index)) {
+            return null;
+          }
+
           const route = navigator.routes[index];
 
           if (route) {
