@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Text, Linking, BackHandler } from 'react-native';
 import { render, act } from '@testing-library/react-native';
 import {
   history,
@@ -14,6 +14,33 @@ function Location() {
   const location = useLocation();
   return <Text>{location}</Text>;
 }
+
+afterEach(() => {
+  history.reset();
+});
+
+jest.mock('Linking', () => {
+  let callbacks: any[] = [];
+
+  return {
+    change: ({ url }: { url: string }) => callbacks.map(cb => cb({ url })),
+    getInitialURL: jest.fn().mockResolvedValue(''),
+    addEventListener: (_: string, cb: Function) => callbacks.push(cb),
+    removeEventListener: (_: string, cb: Function) =>
+      (callbacks = callbacks.filter(c => c !== cb)),
+  };
+});
+
+jest.mock('BackHandler', () => {
+  let callbacks: any[] = [];
+
+  return {
+    press: () => callbacks.map(cb => cb()),
+    addEventListener: (_: string, cb: Function) => callbacks.push(cb),
+    removeEventListener: (_: string, cb: Function) =>
+      (callbacks = callbacks.filter(c => c !== cb)),
+  };
+});
 
 test('history takes an initial path', () => {
   const spy = jest.spyOn(history, 'init');
@@ -84,5 +111,39 @@ test('useHistory() throws if no history is available', () => {
   console.error.mockRestore();
 });
 
-test.todo('history parses out url scheme prop for deep linking');
-test.todo('history fires back() action on android back press');
+test('history parses out url scheme prop for deep linking', () => {
+  const { getByText } = render(
+    <History scheme="test://app">
+      <Location />
+    </History>
+  );
+
+  act(() => {
+    // @ts-ignore
+    Linking.change({ url: 'test://app/one/two' });
+  });
+
+  getByText('/one/two');
+});
+
+test('history fires back() action on android back press', () => {
+  const { getByText } = render(
+    <History scheme="test://app">
+      <Location />
+    </History>
+  );
+
+  act(() => {
+    navigate('/one');
+    navigate('/two');
+  });
+
+  getByText('/two');
+
+  act(() => {
+    // @ts-ignore
+    BackHandler.press();
+  });
+
+  getByText('/one');
+});
