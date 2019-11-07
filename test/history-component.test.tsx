@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, Linking, BackHandler } from 'react-native';
-import { render, act } from '@testing-library/react-native';
+import { render, act, wait } from '@testing-library/react-native';
 import {
   history,
   History,
@@ -97,6 +97,23 @@ test('history onChange prop works', () => {
   expect(onChange).toHaveBeenCalledWith('/123');
 });
 
+test('useHistory() gets active history', () => {
+  const spy = jest.fn().mockImplementation(() => null);
+  function Consumer() {
+    const history = useHistory();
+    return spy(history);
+  }
+
+  render(
+    <History>
+      <Consumer />
+    </History>
+  );
+
+  expect(spy).toHaveBeenCalled();
+  expect(spy).toHaveBeenCalledWith(history);
+});
+
 test('useHistory() throws if no history is available', () => {
   function Consumer() {
     useHistory();
@@ -109,6 +126,22 @@ test('useHistory() throws if no history is available', () => {
 
   // @ts-ignore
   console.error.mockRestore();
+});
+
+test('history responds to initial URL', async () => {
+  const initialURL = 'app://test/123';
+
+  jest
+    .spyOn(Linking, 'getInitialURL')
+    .mockImplementationOnce(() => Promise.resolve(initialURL));
+
+  const { getByText } = render(
+    <History scheme="app://test">
+      <Location />
+    </History>
+  );
+
+  await wait(() => getByText('/123'));
 });
 
 test('history parses out url scheme prop for deep linking', () => {
@@ -127,6 +160,9 @@ test('history parses out url scheme prop for deep linking', () => {
 });
 
 test('history fires back() action on android back press', () => {
+  // @ts-ignore
+  const spy = jest.spyOn(BackHandler, 'press');
+
   const { getByText } = render(
     <History scheme="test://app">
       <Location />
@@ -146,4 +182,15 @@ test('history fires back() action on android back press', () => {
   });
 
   getByText('/one');
+
+  act(() => {
+    // @ts-ignore
+    BackHandler.press();
+    // @ts-ignore
+    BackHandler.press();
+    // @ts-ignore
+    BackHandler.press();
+  });
+
+  getByText('/');
 });
