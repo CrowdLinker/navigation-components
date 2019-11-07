@@ -18,7 +18,7 @@ jest.mock('react-native-reanimated', () => {
         });
     }, []);
 
-    return <View {...props} />;
+    return React.createElement(View, props, props.children);
   }
 
   mock.default.View = MockView;
