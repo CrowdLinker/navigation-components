@@ -4,6 +4,8 @@ import {
   getParams,
   pick,
   resolveBasepath,
+  history,
+  back,
 } from '../src/history';
 
 test('resolve() absolute routes', () => {
@@ -64,6 +66,9 @@ test('resolve() relative routes', () => {
 
   const sad = `../:nope`;
   expect(() => resolve(sad, basepath, location)).toThrowError();
+
+  const rootTo = '/';
+  expect(resolve(rootTo, basepath, location)).toEqual('/');
 });
 
 test('getNextRoute()', () => {
@@ -94,9 +99,8 @@ test('getNextRoute()', () => {
 
   // root path
   const lc = '/';
-  const bp = '';
 
-  expect(getNextRoute(lc, bp)).toEqual('/');
+  expect(getNextRoute(lc)).toEqual('/');
 });
 
 test('getParams()', () => {
@@ -142,8 +146,42 @@ test('pick() w/ root route `/`', () => {
   expect(pick(routes, matchingRoute)).toEqual(0);
 });
 
-test.todo('index is available');
-test.todo('back() function works');
+test('back() function works', () => {
+  history.reset();
+
+  history.navigate('/one/two');
+  history.navigate('/two/three');
+  history.back();
+
+  expect(history.location).toEqual('/one/two');
+
+  history.navigate('/four/five');
+  expect(history.location).toEqual('/four/five');
+
+  history.back(2);
+  expect(history.location).toEqual('/');
+
+  // nothing happens when there is nothing to go back to
+  expect(history.index).toEqual(0);
+  history.back();
+  expect(history.location).toEqual('/');
+
+  history.navigate('/three/four');
+  back();
+  expect(history.location).toEqual('/');
+
+  history.navigate('/five/six');
+  history.navigate('/seven/eight');
+  back(2);
+  expect(history.location).toEqual('/');
+});
+
+test('init with empty initial path defaults to root', () => {
+  history.reset();
+  history.init();
+
+  expect(history.location).toEqual('/');
+});
 
 test('resolveBasepath replaces param values with corresponding location values', () => {
   const result = resolveBasepath('two/:id', '/');

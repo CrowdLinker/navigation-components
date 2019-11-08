@@ -74,6 +74,12 @@
     ],
     "transform": {
       "^.+\\.(t)sx?$": "ts-jest"
-    }
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/src/pager.tsx",
+      "!<rootDir>/src/native-stack.tsx"
+    ]
   }
 }

@@ -144,6 +144,25 @@ test('history responds to initial URL', async () => {
   await wait(() => getByText('/123'));
 });
 
+test('history does not respond to empty link', async () => {
+  const initialURL = 'app://test';
+
+  jest
+    .spyOn(Linking, 'getInitialURL')
+    .mockImplementationOnce(() => Promise.resolve(initialURL));
+
+  const spy = jest.spyOn(history, 'navigate');
+
+  render(
+    <History scheme="app://test">
+      <Location />
+    </History>
+  );
+
+  await wait(() => {}, { timeout: 300 });
+  expect(spy).not.toHaveBeenCalled();
+});
+
 test('history parses out url scheme prop for deep linking', () => {
   const { getByText } = render(
     <History scheme="test://app">
@@ -157,11 +176,27 @@ test('history parses out url scheme prop for deep linking', () => {
   });
 
   getByText('/one/two');
+
+  // empty link does nothing
+  act(() => {
+    // @ts-ignore
+    Linking.change({ url: '' });
+  });
+
+  getByText('/one/two');
+
+  // root path link does nothing
+  act(() => {
+    // @ts-ignore
+    Linking.change({ url: 'test://app' });
+  });
+
+  getByText('/one/two');
 });
 
 test('history fires back() action on android back press', () => {
   // @ts-ignore
-  const spy = jest.spyOn(BackHandler, 'press');
+  jest.spyOn(BackHandler, 'press');
 
   const { getByText } = render(
     <History scheme="test://app">

@@ -1,8 +1,8 @@
 // this is basically a simplified and worse version of @reach/router in-memory history implementation
 export interface iHistory {
-  init: (initialPath: string) => void;
+  init: (initialPath?: string) => void;
   navigate: (to: string, basepath?: string) => void;
-  back: (amount: number) => void;
+  back: (amount?: number) => void;
   location: string;
   index: number;
   listen: (listener: Listener) => () => void;
@@ -78,7 +78,7 @@ function createHistory(): iHistory {
       };
     },
 
-    back: function(amount: number) {
+    back: function(amount = 1) {
       const offset = index - amount;
       const next = paths[offset];
 
@@ -118,7 +118,7 @@ function resolve(to: string, from = '/', location: string): string {
   const toSegments = segmentize(toPath);
 
   // navigate to absolute root
-  if (toSegments[0] === '') {
+  if (!toSegments.length) {
     return '/';
   }
 

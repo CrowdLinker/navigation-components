@@ -254,6 +254,20 @@ test('switch works', () => {
   getFocused().getByText('1');
 });
 
+test('switch works without routes', () => {
+  const { getFocused } = render(
+    <Navigator initialIndex={2}>
+      <Switch>
+        <Text>1</Text>
+        <Text>2</Text>
+        <Text>3</Text>
+      </Switch>
+    </Navigator>
+  );
+
+  getFocused().getByText('3');
+});
+
 test('modal works', () => {
   navigate('/');
   const { getFocused } = render(
@@ -299,34 +313,42 @@ test('handleOnGesture navigates', () => {
   function SimulatedGesture() {
     const [activeIndex, onChange] = usePager();
 
-    return (
-      <Button
-        title="handleOnGesture()"
-        onPress={() => onChange(activeIndex + 1)}
-      />
-    );
+    return <Button title="first" onPress={() => onChange(activeIndex + 1)} />;
   }
 
   function Two() {
+    const [, onChange] = usePager();
+
+    return <Button title="next" onPress={() => onChange(2)} />;
+  }
+
+  function Three() {
     const [, onChange] = usePager();
 
     return <Button title="back" onPress={() => onChange(0)} />;
   }
 
   const { getByText, getFocused } = render(
-    <Navigator routes={['/', 'two/:id']}>
+    <Navigator routes={['/', 'two/:id', 'three']}>
       <Tabs>
         <SimulatedGesture />
         <Two />
+        <Three />
       </Tabs>
     </Navigator>
   );
 
-  fireEvent.press(getByText('handleOnGesture()'));
+  fireEvent.press(getByText('first'));
+
+  getFocused().getByText('next');
+
+  fireEvent.press(getByText('next'));
 
   getFocused().getByText('back');
 
-  fireEvent.press(getByText('back'));
+  fireEvent.press(getFocused().getByText('back'));
+
+  getFocused().getByText('first');
 });
 
 test('back() works', () => {
@@ -367,6 +389,29 @@ test('onChange prop works', () => {
   navigate('/two');
 
   expect(onChange).toHaveBeenCalledTimes(1);
+});
+
+test('undefined onChange does nothing', () => {
+  const onChange = jest.fn();
+
+  function UndefinedPush() {
+    const [_, onChange] = usePager();
+
+    // @ts-ignore
+    return <Button title="change" onPress={() => onChange(undefined)} />;
+  }
+
+  const { getByText } = render(
+    <Navigator onChange={onChange} routes={['one', 'two']}>
+      <UndefinedPush />
+    </Navigator>
+  );
+
+  onChange.mockReset();
+
+  fireEvent.press(getByText('change'));
+
+  expect(onChange).not.toHaveBeenCalled();
 });
 
 test('useNavigator() throws when undefined', () => {

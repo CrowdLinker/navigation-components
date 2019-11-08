@@ -23,10 +23,8 @@ function Stack({ children, ...rest }: iStack) {
     if (navigator.routes.length > 0) {
       const nextRoute = navigator.routes[nextIndex];
 
-      if (nextRoute) {
-        navigator.navigate(nextRoute);
-        return;
-      }
+      navigator.navigate(nextRoute);
+      return;
     }
 
     onChange(nextIndex);
@@ -38,10 +36,8 @@ function Stack({ children, ...rest }: iStack) {
     if (navigator.routes.length > 0) {
       const nextRoute = navigator.routes[nextIndex];
 
-      if (nextRoute) {
-        navigator.navigate(nextRoute);
-        return;
-      }
+      navigator.navigate(nextRoute);
+      return;
     }
 
     onChange(nextIndex);

@@ -77,7 +77,7 @@ function Navigator({
   }
 
   const back = function(amount?: number) {
-    history.back(amount || 1);
+    history.back(amount);
   };
 
   React.useEffect(() => {
