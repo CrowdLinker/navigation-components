@@ -1,6 +1,6 @@
 import React from 'react';
 import {SpotifyApp} from './src/spotify';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {useScreens} from 'react-native-screens';
 import {History, Pager} from 'react-navigation-library';
 import {Slide} from './src/shared';
@@ -10,9 +10,11 @@ useScreens();
 function App() {
   return (
     <SafeAreaProvider>
-      <History initialPath="/main/music/artists" scheme="example://app">
-        <SpotifyApp />
-      </History>
+      <SafeAreaView style={{flex: 1}}>
+        <History initialPath="/main/music/artists" scheme="example://app">
+          <SpotifyApp />
+        </History>
+      </SafeAreaView>
     </SafeAreaProvider>
   );
 }

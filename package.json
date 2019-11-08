@@ -79,7 +79,7 @@
       "src/**/*.{ts,tsx}",
       "!<rootDir>/node_modules/",
       "!<rootDir>/src/pager.tsx",
-      "!<rootDir>/src/native-stack.tsx"
+      "!<rootDir>cd ex/src/native-stack.tsx"
     ]
   }
 }
