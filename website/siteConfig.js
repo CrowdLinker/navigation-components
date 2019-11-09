@@ -24,7 +24,7 @@ const siteConfig = {
   title: 'React Navigation Library', // Title for your website.
   tagline: 'Component driven navigation for React Native',
   url: 'https://your-docusaurus-test-site.com', // Your website URL
-  baseUrl: '/react-navigation-library', // Base URL for your project */
+  baseUrl: '/react-navigation-library/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
   //   baseUrl: '/test-site/',
