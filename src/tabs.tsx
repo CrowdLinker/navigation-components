@@ -1,9 +1,21 @@
 import React from 'react';
-import { View } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  GestureResponderEvent,
+  ViewProps,
+} from 'react-native';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history-component';
-import { Pager, iPager, usePager } from './pager';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {
+  Pager,
+  iPager,
+  usePager,
+  IndexProvider,
+  useIndex,
+  FocusProvider,
+} from './pager';
 import { AccessibleScreen } from './accessible-screen';
 
 const MINIMUM_SWIPE_DISTANCE = 20;
@@ -50,23 +62,70 @@ function Tabs({ children, ...rest }: iTabs) {
   );
 }
 
-function Tabbar({ children, style }: any) {
-  const [, onChange] = usePager();
+interface iTabbar extends ViewProps {
+  children: React.ReactNode;
+}
+
+function Tabbar({ children, style, ...rest }: iTabbar) {
+  const [activeIndex] = usePager();
 
   return (
-    <View style={style || { flexDirection: 'row' }}>
+    <View style={[{ flexDirection: 'row' }, style]} {...rest}>
       {React.Children.map(children, (child: any, index: number) => {
+        const focused = activeIndex === index;
+
         return (
-          <TouchableOpacity
-            style={child.props.style}
-            onPress={() => onChange(index)}
-          >
-            {child}
-          </TouchableOpacity>
+          <IndexProvider index={index}>
+            <FocusProvider focused={focused}>{child}</FocusProvider>
+          </IndexProvider>
         );
       })}
     </View>
   );
 }
 
-export { Tabs, Tabbar };
+interface iTab extends TouchableOpacityProps {
+  children: React.ReactNode;
+}
+
+interface iTabContext {
+  goTo: (index: number) => void;
+}
+
+function useTabs(): iTabContext {
+  const [_, onChange] = usePager();
+  const navigator = useNavigator();
+
+  function goTo(index: number) {
+    const route = navigator.routes[index];
+
+    if (route) {
+      navigator.navigate(route);
+      return;
+    }
+
+    onChange(index);
+  }
+
+  return {
+    goTo,
+  };
+}
+
+function Tab({ children, onPress, ...rest }: iTab) {
+  const index = useIndex();
+  const tabs = useTabs();
+
+  function handlePress(event: GestureResponderEvent) {
+    onPress && onPress(event);
+    tabs.goTo(index);
+  }
+
+  return (
+    <TouchableOpacity {...rest} onPress={handlePress}>
+      {children}
+    </TouchableOpacity>
+  );
+}
+
+export { Tabs, Tabbar, Tab, useTabs };

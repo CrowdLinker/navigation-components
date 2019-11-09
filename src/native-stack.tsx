@@ -17,7 +17,7 @@ import {
 import { StyleSheet, ViewStyle } from 'react-native';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history-component';
-import { StackContext } from './stack';
+import { useStack } from './stack';
 import {
   usePager,
   // @ts-ignore
@@ -44,79 +44,50 @@ function NativeStack({ children, screenConfig = {}, style }: iNativeStack) {
   const navigator = useNavigator();
   const [activeIndex, onChange] = usePager();
 
-  function push(amount = 1) {
-    const nextIndex = activeIndex + amount;
-    if (navigator.routes.length > 0) {
-      const nextRoute = navigator.routes[nextIndex];
-      if (nextRoute) {
-        navigator.navigate(nextRoute);
-      }
-
-      return;
-    }
-
-    onChange(nextIndex);
-  }
-
-  function pop(amount = 1) {
-    const nextIndex = activeIndex - amount;
-
-    if (navigator.routes.length > 0) {
-      const nextRoute = navigator.routes[nextIndex];
-
-      if (nextRoute) {
-        navigator.navigate(nextRoute);
-        return;
-      }
-    }
-
-    onChange(nextIndex);
-  }
+  const { pop } = useStack();
 
   return (
-    <StackContext.Provider value={{ push, pop }}>
-      <ScreenStack style={style || { flex: 1 }}>
-        {React.Children.map(children, (child: any, index: number) => {
-          if (index > activeIndex) {
-            return null;
-          }
+    <ScreenStack style={style || { flex: 1 }}>
+      {React.Children.map(children, (child: any, index: number) => {
+        if (index > activeIndex) {
+          return null;
+        }
 
-          const route = navigator.routes[index];
+        const route = navigator.routes[index];
 
-          if (route) {
-            return (
-              <Screen
-                onDismissed={() => pop(1)}
-                style={StyleSheet.absoluteFill}
-                {...(screenConfig as any)}
-              >
-                <BasepathProvider value={route}>
-                  <FocusProvider focused={index === activeIndex}>
-                    <IndexProvider index={index}>
-                      <AccessibleScreen>{child}</AccessibleScreen>
-                    </IndexProvider>
-                  </FocusProvider>
-                </BasepathProvider>
-              </Screen>
-            );
-          }
-
+        if (route) {
           return (
             <Screen
               onDismissed={() => pop(1)}
               style={StyleSheet.absoluteFill}
               {...(screenConfig as any)}
             >
-              <FocusProvider focused={index === activeIndex}>
-                <IndexProvider index={index}>
-                  <AccessibleScreen>{child}</AccessibleScreen>
-                </IndexProvider>
-              </FocusProvider>
+              <BasepathProvider value={route}>
+                <FocusProvider focused={index === activeIndex}>
+                  <IndexProvider index={index}>
+                    <AccessibleScreen>{child}</AccessibleScreen>
+                  </IndexProvider>
+                </FocusProvider>
+              </BasepathProvider>
             </Screen>
           );
-        })}
-      </ScreenStack>
-    </StackContext.Provider>
+        }
+
+        return (
+          <Screen
+            onDismissed={() => pop(1)}
+            style={StyleSheet.absoluteFill}
+            {...(screenConfig as any)}
+          >
+            <FocusProvider focused={index === activeIndex}>
+              <IndexProvider index={index}>
+                <AccessibleScreen>{child}</AccessibleScreen>
+              </IndexProvider>
+            </FocusProvider>
+          </Screen>
+        );
+      })}
+    </ScreenStack>
   );
 }
 

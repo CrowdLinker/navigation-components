@@ -10,12 +10,48 @@ interface iStack extends iPager {
 
 function Stack({ children, ...rest }: iStack) {
   const navigator = useNavigator();
-  const [activeIndex, onChange] = usePager();
+  const [activeIndex] = usePager();
 
   const lastIndex = React.Children.count(children) - 1;
 
   // if nested in another pan, delegate pan events to parent container on the last screen
   const activeOffsetX = activeIndex === lastIndex ? [-20, 5] : [-5, 5];
+
+  return (
+    <Pager
+      style={{ flex: 1, overflow: 'hidden' }}
+      clamp={{ prev: 0.6 }}
+      panProps={{
+        enabled: activeIndex > 0,
+        activeOffsetX,
+      }}
+      {...rest}
+    >
+      {React.Children.map(children, (child: any, index: number) => {
+        const route = navigator.routes[index];
+
+        if (route) {
+          return (
+            <BasepathProvider value={route}>
+              <AccessibleScreen>{child}</AccessibleScreen>
+            </BasepathProvider>
+          );
+        }
+
+        return <AccessibleScreen>{child}</AccessibleScreen>;
+      })}
+    </Pager>
+  );
+}
+
+interface iStackContext {
+  push: (amount?: number) => void;
+  pop: (amount?: number) => void;
+}
+
+function useStack(): iStackContext {
+  const navigator = useNavigator();
+  const [activeIndex, onChange] = usePager();
 
   function push(amount = 1) {
     const nextIndex = activeIndex + amount;
@@ -43,50 +79,10 @@ function Stack({ children, ...rest }: iStack) {
     onChange(nextIndex);
   }
 
-  return (
-    <StackContext.Provider value={{ push, pop }}>
-      <Pager
-        style={{ flex: 1, overflow: 'hidden' }}
-        clamp={{ prev: 0.6 }}
-        panProps={{
-          enabled: activeIndex > 0,
-          activeOffsetX,
-        }}
-        {...rest}
-      >
-        {React.Children.map(children, (child: any, index: number) => {
-          const route = navigator.routes[index];
-
-          if (route) {
-            return (
-              <BasepathProvider value={route}>
-                <AccessibleScreen>{child}</AccessibleScreen>
-              </BasepathProvider>
-            );
-          }
-
-          return <AccessibleScreen>{child}</AccessibleScreen>;
-        })}
-      </Pager>
-    </StackContext.Provider>
-  );
+  return {
+    push,
+    pop,
+  };
 }
 
-const StackContext = React.createContext<undefined | iStackContext>(undefined);
-
-interface iStackContext {
-  push: (amount?: number) => void;
-  pop: (amount?: number) => void;
-}
-
-function useStack(): iStackContext {
-  const stack = React.useContext(StackContext);
-
-  if (!stack) {
-    throw new Error(`useStack() must be used within a <Stack />`);
-  }
-
-  return stack;
-}
-
-export { Stack, useStack, StackContext };
+export { Stack, useStack };

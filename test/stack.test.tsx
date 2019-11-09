@@ -129,23 +129,3 @@ test('pop() works without routes[]', () => {
 
   getFocused().getByText('1');
 });
-
-test('useStack() throws error if not in a stack provider', () => {
-  function Consumer() {
-    useStack();
-    return null;
-  }
-
-  jest.spyOn(console, 'error').mockImplementation(() => {});
-
-  expect(() =>
-    render(
-      <Navigator>
-        <Consumer />
-      </Navigator>
-    )
-  ).toThrow();
-
-  // @ts-ignore
-  console.error.mockRestore();
-});

@@ -1,6 +1,6 @@
 import React, {memo} from 'react';
 import {View, StyleSheet, Text, ViewStyle} from 'react-native';
-import {Link, useInterpolation} from 'react-navigation-library';
+import {Link, useInterpolation, Tabbar, Tab} from 'react-navigation-library';
 import Animated from 'react-native-reanimated';
 import {FlatList} from 'react-native-gesture-handler';
 
@@ -82,17 +82,17 @@ function Feed<T extends iRow>({items = [], row, style, ...rest}: iFeed<T>) {
 
 function FeedHeaders({routes, style}: any) {
   return (
-    <View style={{flexDirection: 'row'}}>
+    <Tabbar>
       {routes.map((route: string, index: number) => {
         return (
-          <Link to={route} key={route} style={{padding: 5, borderWidth: 1}}>
+          <Tab key={index} style={{paddingVertical: 5}}>
             <ActiveOpacity index={index}>
               <Text style={style}>{route}</Text>
             </ActiveOpacity>
-          </Link>
+          </Tab>
         );
       })}
-    </View>
+    </Tabbar>
   );
 }
 
