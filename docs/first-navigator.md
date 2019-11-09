@@ -4,7 +4,7 @@ title: Basic Example
 sidebar_label: Basic Example
 ---
 
-In the previous section, we installed the library and ensured it was working. The provided example included a few components exported by `react-navigation-library`. Let's take a look at those:
+In the previous section, we installed the library and ensured it was working. Let's take a look at that again and add some functionality:
 
 ```javascript
 import { Navigator, Tabs } from 'react-navigation-library';
@@ -28,7 +28,7 @@ function MyNavigator() {
 }
 ```
 
-Looking at the result, it's clear that the Tabs component has grouped our screens so that we can swipe between them. This is great, but ideally we'll want a tabbar to be able to navigate between screens as well.
+It's clear that the Tabs component has grouped our screens so that we can swipe between them. This is great, but ideally we'll want a tabbar to be able to navigate between screens as well.
 
 ## Adding a tabbar
 
@@ -37,166 +37,123 @@ Let's extend our example by importing Tabbar and creating our own simple Tab com
 ```javascript
 import { Tabbar, Tab } from 'react-navigation-library';
 
+// extract tabs into a component for better visibility
+function MyTabs() {
+  return (
+    <Tabs>
+      <Screen>
+        <Text style={styles.title}>Step 1</Text>
+      </Screen>
+      <Screen>
+        <Text style={styles.title}>Step 2</Text>
+      </Screen>
+      <Screen>
+        <Text style={styles.title}>Step 3</Text>
+      </Screen>
+    </Tabs>
+  );
+}
+
+// create a tabbar to work with our tabs:
+function MyTabbar() {
+  return (
+    <Tabbar>
+      <Tab>
+        <Text style={styles.tab}>1</Text>
+      </Tab>
+      <Tab>
+        <Text style={styles.tab}>2</Text>
+      </Tab>
+      <Tab>
+        <Text style={styles.tab}>3</Text>
+      </Tab>
+    </Tabbar>
+  );
+}
+
 function MyNavigator() {
   return (
     <Navigator>
-      <Tabs>
-        <Screen>
-          <Text style={styles.title}>Step 1</Text>
-        </Screen>
-        <Screen>
-          <Text style={styles.title}>Step 2</Text>
-        </Screen>
-        <Screen>
-          <Text style={styles.title}>Step 3</Text>
-        </Screen>
-      </Tabs>
+      <MyTabs />
+      <MyTabbar />
+    </Navigator>
+  );
+}
 
-      <Tabbar>
-        <Tab>
-          <Text style={styles.tab}>1</Text>
-        </Tab>
-        <Tab>
-          <Text style={styles.tab}>2</Text>
-        </Tab>
-        <Tab>
-          <Text style={styles.tab}>3</Text>
-        </Tab>
-      </Tabbar>
+// add our custom styles for a tab:
+const styles = StyleSheet.create({
+  // ...
+
+  tab: {
+    height: 50,
+    borderWidth: StyleSheet.hairlineWidth,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+```
+
+You'll notice that our Tab components will now navigate to the correct screen based on their order, and we have a way to navigate without needing to swipe.
+
+Let's consider a different example - say you want the Tabbar to be on the top of your tabs instead of below it. All you need to do is switch the order in your markup:
+
+```javascript
+function MyNavigator() {
+  return (
+    <Navigator>
+      <MyTabbar />
+      <MyTabs />
     </Navigator>
   );
 }
 ```
 
-You'll notice that our Tab components will now navigate to the correct screen based on their order, and we have a way to navigate without needing to swipe!
-
-Still, it's not quite clear yet what Navigator is doing for us in all of this. So let's try and think of a different example - say you want the Tabbar to be on the top of your tabs instead of below it. All you need to do is switch the order in your markup:
-
-```javascript
-const App = () => {
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Navigator>
-        {/* Tabbar is up here now */}
-        <Tabbar style={styles.tabbar}>
-          <Tab text="1" />
-          <Tab text="2" />
-          <Tab text="3" />
-          <Tab text="4" />
-        </Tabbar>
-
-        <Tabs style={styles.container}>
-          <Screen title="Step 1" />
-          <Screen title="Step 2" />
-          <Screen title="Step 3" />
-          <Screen title="Step 4" />
-        </Tabs>
-      </Navigator>
-    </SafeAreaView>
-  );
-};
-```
-
-Everything else remains the same, and the Tabbar works as expected. This case is a simplified example, but hopefully it's clear that you can render **_any_** component you'd like, it's completely declarative. This is the value that Navigator provides: it let's us declaratively group related components in the same context.
+This simple example showcases the declarative nature of this library - you can render _any_ components you'd like within a Navigator. Think of the Navigator as a way of grouping related screens in your application. It doesn't render anything itself, but provides _context_ to it's children and let's us declare how they are connected.
 
 ## Adding routes
 
-While the Tabbar is a common and super useful way of navigating to different screens, it's often the case you need to navigate from one screen to another within a screen. To do so, we'll need to configure the Navigator a little bit more. Let's try it out:
+It's often the case you need to navigate from one screen to another within a screen. We can do this by telling our Navigator what routes to listen for, and then link to them from anywhere inside of our Navigator:
 
 ```javascript
 import { Link } from 'react-navigation-library';
 
-const App = () => {
+// define the routes that will map to our screens:
+const routes = ['one', 'two', 'three'];
+
+function MyNavigator() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Navigator>
-        <Tabs style={styles.container}>
-          <Screen title="Step 1">
-            <Link to="two">
-              <Text>Next</Text>
-            </Link>
-          </Screen>
-
-          <Screen title="Step 2">
-            <Link to="three">
-              <Text>Next</Text>
-            </Link>
-          </Screen>
-
-          <Screen title="Step 3">
-            <Link to="four">
-              <Text>Next</Text>
-            </Link>
-          </Screen>
-
-          <Screen title="Step 4">
-            <Link to="one">
-              <Text>First</Text>
-            </Link>
-          </Screen>
-        </Tabs>
-
-        <Tabbar style={styles.tabbar}>
-          <Tab text="1" />
-          <Tab text="2" />
-          <Tab text="3" />
-          <Tab text="4" />
-        </Tabbar>
-      </Navigator>
-    </SafeAreaView>
+    <Navigator routes={routes}>
+      <MyTabs />
+      <MyTabbar />
+    </Navigator>
   );
-};
-```
+}
 
-The Link component renders our text but it doesn't seem to do anything, which makes sense because we are providing links but haven't said anything about what the routes are. We can do this by defining routes for the Navigator:
-
-```javascript
-import { Link } from 'react-navigation-library';
-
-// Define the routes of our Navigator so that links will work:
-const routes = ['one', 'two', 'three', 'four'];
-
-const App = () => {
+// wrap our text content in a Link tag:
+function MyTabs() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {/* pass the routes to Navigator */}
-      <Navigator routes={routes}>
-        <Tabs style={styles.container}>
-          <Screen title="Step 1">
-            <Link to="two">
-              <Text>Next</Text>
-            </Link>
-          </Screen>
+    <Tabs>
+      <Screen>
+        <Link to="two">
+          <Text style={styles.title}>Step 1</Text>
+        </Link>
+      </Screen>
 
-          <Screen title="Step 2">
-            <Link to="three">
-              <Text>Next</Text>
-            </Link>
-          </Screen>
+      <Screen>
+        <Link to="three">
+          <Text style={styles.title}>Step 2</Text>
+        </Link>
+      </Screen>
 
-          <Screen title="Step 3">
-            <Link to="four">
-              <Text>Next</Text>
-            </Link>
-          </Screen>
-
-          <Screen title="Step 4">
-            <Link to="one">
-              <Text>First</Text>
-            </Link>
-          </Screen>
-        </Tabs>
-
-        <Tabbar style={styles.tabbar}>
-          <Tab text="1" />
-          <Tab text="2" />
-          <Tab text="3" />
-          <Tab text="4" />
-        </Tabbar>
-      </Navigator>
-    </SafeAreaView>
+      <Screen>
+        <Link to="one">
+          <Text style={styles.title}>Step 3</Text>
+        </Link>
+      </Screen>
+    </Tabs>
   );
-};
+}
 ```
 
 Now the Navigator knows which route maps to which screen, so our Links should be able to update the active screen. Yet it still doesn't seem to work. This is because there is one additional component required to keep your routing in sync - **History** is a provider component that (usually) will wrap around your entire application, similar to what you would use in React-Router
@@ -204,68 +161,149 @@ Now the Navigator knows which route maps to which screen, so our Links should be
 ```javascript
 import { History } from 'react-navigation-library';
 
-const routes = ['one', 'two', 'three', 'four'];
+// this component wraps our whole application
+function AppContainer({ children }: any) {
+  return (
+    <History>
+      <SafeAreaView style={styles.container}>{children}</SafeAreaView>
+    </History>
+  );
+}
+```
+
+**Note:** _It's usually a good idea to wrap your top-most App component in a History provider as it will provide the context for all of your Navigators to work together._
+
+Our navigator is looking pretty good at this point. We can swipe between screens, tap on a tab, and navigate from within any child component. Here is everything we just wrote:
+
+```javascript
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow
+ */
+
+import React from 'react';
+import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
+
+import {
+  Navigator,
+  Tabs,
+  Tabbar,
+  Tab,
+  Link,
+  History,
+} from 'react-navigation-library';
 
 const App = () => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <History>
-        <Navigator routes={routes}>
-          <Tabs style={styles.container}>
-            <Screen title="Step 1">
-              <Link to="two">
-                <Text>Next</Text>
-              </Link>
-            </Screen>
-
-            <Screen title="Step 2">
-              <Link to="three">
-                <Text>Next</Text>
-              </Link>
-            </Screen>
-
-            <Screen title="Step 3">
-              <Link to="four">
-                <Text>Next</Text>
-              </Link>
-            </Screen>
-
-            <Screen title="Step 4">
-              <Link to="one">
-                <Text>First</Text>
-              </Link>
-            </Screen>
-          </Tabs>
-
-          <Tabbar style={styles.tabbar}>
-            <Tab text="1" />
-            <Tab text="2" />
-            <Tab text="3" />
-            <Tab text="4" />
-          </Tabbar>
-        </Navigator>
-      </History>
-    </SafeAreaView>
+    <AppContainer>
+      <MyNavigator />
+    </AppContainer>
   );
 };
-```
 
-It's usually a good idea to wrap your topmost App component in a History provider as it will provide the context for all of your Navigators to work together
+const routes = ['one', 'two', 'three'];
+
+function MyNavigator() {
+  return (
+    <Navigator routes={routes}>
+      <MyTabs />
+      <MyTabbar />
+    </Navigator>
+  );
+}
+
+function MyTabs() {
+  return (
+    <Tabs>
+      <Screen>
+        <Link to="two">
+          <Text style={styles.title}>Step 1</Text>
+        </Link>
+      </Screen>
+      <Screen>
+        <Link to="three">
+          <Text style={styles.title}>Step 2</Text>
+        </Link>
+      </Screen>
+      <Screen>
+        <Link to="one">
+          <Text style={styles.title}>Step 3</Text>
+        </Link>
+      </Screen>
+    </Tabs>
+  );
+}
+
+function MyTabbar() {
+  return (
+    <Tabbar>
+      <Tab style={styles.tab}>
+        <Text>1</Text>
+      </Tab>
+      <Tab style={styles.tab}>
+        <Text>2</Text>
+      </Tab>
+      <Tab style={styles.tab}>
+        <Text>3</Text>
+      </Tab>
+    </Tabbar>
+  );
+}
+
+function AppContainer({ children }: any) {
+  return (
+    <History>
+      <SafeAreaView style={styles.container}>{children}</SafeAreaView>
+    </History>
+  );
+}
+
+function Screen({ children }: any) {
+  return <View style={styles.screen}>{children}</View>;
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
+  screen: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 10,
+    marginHorizontal: 10,
+  },
+
+  title: {
+    fontSize: 24,
+    fontWeight: '600',
+  },
+
+  tab: {
+    height: 50,
+    borderWidth: StyleSheet.hairlineWidth,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+export default App;
+```
 
 ## Summary
 
-- The Tabs component is responsible for rendering screens within its container, and provides niceties like gesture handling and layout.
+- The Tabs component is responsible for rendering our screens, and provides niceties like gesture handling and layout
 
-- The Tabbar component provides a way to declaratively navigate to different screens through a button press, rather than just using gestures.
+- The Tabbar and Tab components provide a way to navigate to different screens through a button press
 
-- The Navigator component is used to group related screens together. It doesn't render anything itself, but provides a relative context for children.
+- The Navigator component is used to group related screens together. It doesn't render anything itself, but provides a relative context for children
 
-- You can provide routes to Navigator and navigate to them using a Link component. In order for this to work, you must wrap your application in a History component.
-
-Even though this example is overly simplistic, there are some fundamental values that it demonstrates.
-
-For example, while we used the Link component to navigate to relative screens like `two` and `three`, it also can link to parent screens like `../home` or anywhere in your app such as `/settings/profile`.
-
-And while we rendered simple views as our screens, those views could be anything that you like, and you can render anything you'd like around them. We could even compose this Navigator and render the same one inside of it, and both would work as expected.
+- You can link screens together by defining the routes of a Naviagor, and then navigate to them using a Link component. In order for this to work, you must wrap your Navigator in a History component
 
 The remaining examples will go through a few more functions at your disposable, as well as some different ways of configuring and customizing the behaviour of your app, common patterns, and other cool stuff!

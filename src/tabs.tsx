@@ -122,7 +122,7 @@ function Tab({ children, onPress, ...rest }: iTab) {
   }
 
   return (
-    <TouchableOpacity {...rest} onPress={handlePress}>
+    <TouchableOpacity accessibilityRole="link" {...rest} onPress={handlePress}>
       {children}
     </TouchableOpacity>
   );

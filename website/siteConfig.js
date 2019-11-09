@@ -22,7 +22,7 @@ const users = [
 
 const siteConfig = {
   title: 'React Navigation Library', // Title for your website.
-  tagline: 'A website for testing',
+  tagline: 'Component driven navigation for React Native',
   url: 'https://your-docusaurus-test-site.com', // Your website URL
   baseUrl: '/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
@@ -103,7 +103,7 @@ const siteConfig = {
 
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
-  //   repoUrl: 'https://github.com/facebook/test-site',
+  repoUrl: 'https://github.com/Crowdlinker/react-navigation-library',
 };
 
 module.exports = siteConfig;

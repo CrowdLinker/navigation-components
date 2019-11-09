@@ -4,6 +4,8 @@ title: Getting started
 sidebar_label: Getting started
 ---
 
+If this is your first time setting up React Native, head over to their docs first: https://facebook.github.io/react-native/docs/getting-started
+
 The supported peer dependencies versions for this library are:
 
 ```json
