@@ -64,7 +64,7 @@ export default App;
 
 ## Adding a stack
 
-We'll start with using a Stack component. It's very similar to the Tabs component we used in the previous section - in fact the API is exactly the same, you can switch out a Tabs for a Stack anywhere you'd like.
+Now let's add a Stack to our app. It's very similar to the Tabs component we used in the previous section - in fact the API is exactly the same.
 
 ```javascript
 import { Button } from 'react-native';
@@ -114,13 +114,15 @@ function PopButton() {
 }
 ```
 
-As you can hopefully see, the Stack component stacks its screens ontop of one another. What you can't see visually is that the Stack component **unmounts** screens when they are pushed off of the stack.
+The Stack component stacks its screens ontop of one another. What you can't see visually is that the Stack component **unmounts** screens when they are pushed off of the stack.
 
 This means that a Stack component has a different use case than Tabs - generally you'll want a stack when your screens have a logical order to them, for example a multipage form, or a profile view that appears over top of an index page.
 
+Any component inside of a Stack can use the `useStack()` hook to push and pop views imperatively.
+
 ## Adding a modal
 
-Now lets add a popover modal to appear ontop of our Stack:
+Now lets add a Modal that will appear ontop of our Stack. Again, Modal has the same API as what we're already familiar with, but there's one caveat - the _last_ child component is considered the "modal" view that will appear overtop of all others.
 
 ```javascript
 import { Modal, useModal, Navigator } from 'react-navigation-library';
@@ -175,7 +177,7 @@ Now we can toggle the modal, swipe down to dismiss or take advantage of the `use
 
 ## Adding routes
 
-Just like in the previous section, we can add routing to the navigators we've just created. This might be useful if you'd like to navigate directly to a screen that is further down in the Stack, or perhaps want to trigger a modal via a link. Lets look at setting this up.
+Just like in the previous section, we can add routing to the navigators we've just created. The same rules apply here, we'll need to configure the routes of our Navigator, and use Link components to navigate between them.
 
 ```javascript
 import { Link } from 'react-navigation-library';
@@ -242,7 +244,9 @@ function MyStack() {
 }
 ```
 
-We've successfully composed our navigators and wired them up together! Here's the code we wrote:
+Tap around and note that the links work just like before. We've successfully composed our navigators and wired them up together! You can apply these patterns to any combination of Tabs, Stack, and Modal. These are the core "primitives" of the library - it's surprising how much can be accomplished with just these three.
+
+Here's the code we wrote:
 
 ```javascript
 /**
@@ -409,14 +413,14 @@ export default App;
 
 ## Summary
 
-- The Stack component is a lot like the Tabs component, but it can push and pop views off of the itself. This means it unmounts screens that are not active, and is a good candidate for navigators that have a clear logical order, like a multipage form.
+- The Stack component can push and pop views off of itself. This means it unmounts screens that are not active, and is a good candidate for navigators that have a clear logical order, like a multipage form.
 
-- `useStack()` is a hook that can push and pop views in a Stack
+- `useStack()` is a hook that can push and pop views from any component in a Stack
 
-- The Modal component can be used to display a modal over top of some content. The modal screen will be whatever the you render as the last child of Modal. It's also very similar in API to Stack and Tabs
+- The Modal component can be used to display a modal over top of some content. The modal screen will be whatever the you render as the last child of Modal
 
-- `useModal()` is a hook that can show and hide the modal
+- `useModal()` is a hook that can show and hide the modal from any component in a Modal
 
-- Modal and Stack are consumers of Navigator - just like Tabs, and so they can be configured to listen for routes and we can take advantage of the Link component and wire their views together.
+- Modal and Stack work just like Tabs, so they can be configured to listen for routes and linked together with the Link component
 
 - Navigators can be **composed**, a Stack can be used within a Modal, a Modal within a Stack within a Tabs - any combination that you can imagine!

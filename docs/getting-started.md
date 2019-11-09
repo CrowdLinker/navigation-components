@@ -28,7 +28,7 @@ yarn add react-native-gesture-handler
 yarn add react-native-screens
 ```
 
-These dependencies are used to provide better overall performance. They have native implementations so if you are running an iOS build you'll also need to install their Pods:
+These dependencies are used to provide better animation and gesture performance. They have native implementations so if you are running an iOS build you'll also need to install their Pods:
 
 ```bash
 cd ios && pod install

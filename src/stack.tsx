@@ -6,9 +6,10 @@ import { AccessibleScreen } from './accessible-screen';
 
 interface iStack extends iPager {
   children: React.ReactNode[];
+  unmountOnExit: boolean;
 }
 
-function Stack({ children, ...rest }: iStack) {
+function Stack({ children, ...rest, unmountOnExit = false }: iStack) {
   const navigator = useNavigator();
   const [activeIndex] = usePager();
 
@@ -48,7 +49,7 @@ function Stack({ children, ...rest }: iStack) {
       {...rest}
     >
       {React.Children.map(children, (child: any, index: number) => {
-        if (index > popIndex) {
+        if (unmountOnExit && index > popIndex) {
           return null;
         }
 

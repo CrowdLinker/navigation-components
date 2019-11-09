@@ -4,7 +4,7 @@ title: Basic Example
 sidebar_label: Basic Example
 ---
 
-In the previous section, we installed the library and ensured it was working. Let's take a look at that again and add some functionality:
+In the previous section, we installed the library and ensured it was working. Here is what it looks like:
 
 ```javascript
 import { Navigator, Tabs } from 'react-navigation-library';
@@ -28,16 +28,16 @@ function MyNavigator() {
 }
 ```
 
-It's clear that the Tabs component has grouped our screens so that we can swipe between them. This is great, but ideally we'll want a tabbar to be able to navigate between screens as well.
+It's clear that the Tabs component has grouped our screens so that we can swipe between them. This is great, but it doesn't do much yet, so let's add some functionality to it. Ideally we'll want a tabbar to be able to navigate between screens
 
 ## Adding a tabbar
 
-Let's extend our example by importing Tabbar and creating our own simple Tab component:
+Let's extend our example by importing Tabbar and Tab:
 
 ```javascript
 import { Tabbar, Tab } from 'react-navigation-library';
 
-// extract tabs into a component for better visibility
+// extract the Tabs from above into a component for better visibility
 function MyTabs() {
   return (
     <Tabs>
@@ -58,14 +58,14 @@ function MyTabs() {
 function MyTabbar() {
   return (
     <Tabbar>
-      <Tab>
-        <Text style={styles.tab}>1</Text>
+      <Tab style={styles.tab}>
+        <Text>1</Text>
       </Tab>
-      <Tab>
-        <Text style={styles.tab}>2</Text>
+      <Tab style={styles.tab}>
+        <Text>2</Text>
       </Tab>
-      <Tab>
-        <Text style={styles.tab}>3</Text>
+      <Tab style={styles.tab}>
+        <Text>3</Text>
       </Tab>
     </Tabbar>
   );
@@ -94,9 +94,9 @@ const styles = StyleSheet.create({
 });
 ```
 
-You'll notice that our Tab components will now navigate to the correct screen based on their order, and we have a way to navigate without needing to swipe.
+You'll notice that our Tab components will now navigate to the correct screen based on their _order_, and we have a way to navigate without needing to swipe.
 
-Let's consider a different example - say you want the Tabbar to be on the top of your tabs instead of below it. All you need to do is switch the order in your markup:
+Say you want the Tabbar to be on the top of your tabs instead of below it. All you need to do is switch the order in your markup:
 
 ```javascript
 function MyNavigator() {
@@ -109,11 +109,11 @@ function MyNavigator() {
 }
 ```
 
-This simple example showcases the declarative nature of this library - you can render _any_ components you'd like within a Navigator. Think of the Navigator as a way of grouping related screens in your application. It doesn't render anything itself, but provides _context_ to it's children and let's us declare how they are connected.
+This simple example showcases the declarative nature of this library - you can render _any_ components you'd like within a Navigator. Think of it as a way of grouping related screens in your application. It doesn't render anything itself, but provides _context_ to it's children and let's us define how they are connected.
 
 ## Adding routes
 
-It's often the case you need to navigate from one screen to another within a screen. We can do this by telling our Navigator what routes to listen for, and then link to them from anywhere inside of our Navigator:
+At some point, you'll need to navigate from one screen to another with more than just a Tabbar. We can do this by telling our Navigator what routes to listen for, and then link to them from any component inside of our Navigator:
 
 ```javascript
 import { Link } from 'react-navigation-library';
@@ -300,10 +300,8 @@ export default App;
 
 - The Tabs component is responsible for rendering our screens, and provides niceties like gesture handling and layout
 
-- The Tabbar and Tab components provide a way to navigate to different screens through a button press
+- The Tabbar and Tab components provide a way to navigate to different screens base on their order
 
 - The Navigator component is used to group related screens together. It doesn't render anything itself, but provides a relative context for children
 
 - You can link screens together by defining the routes of a Naviagor, and then navigate to them using a Link component. In order for this to work, you must wrap your Navigator in a History component
-
-The remaining examples will go through a few more functions at your disposable, as well as some different ways of configuring and customizing the behaviour of your app, common patterns, and other cool stuff!
