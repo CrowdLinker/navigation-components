@@ -16,6 +16,10 @@
       "introduction": {
         "title": "Introduction",
         "sidebar_label": "Introduction"
+      },
+      "nesting-navigators": {
+        "title": "Nesting Navigators",
+        "sidebar_label": "Nesting Navigators"
       }
     },
     "links": {

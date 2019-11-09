@@ -1,5 +1,12 @@
 import React from 'react';
-import { Pager, iPageInterpolation, usePager, iPager } from './pager';
+import {
+  Pager,
+  iPageInterpolation,
+  usePager,
+  iPager,
+  IndexProvider,
+  FocusProvider,
+} from './pager';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history-component';
 import { AccessibleScreen } from './accessible-screen';
@@ -16,11 +23,8 @@ interface iModal extends iPager {
 function Modal({ children, modalIndex: parentModalIndex, ...rest }: iModal) {
   const [activeIndex, onChange] = usePager();
   const navigator = useNavigator();
-  const [previousIndex, setPreviousIndex] = React.useState(-1);
-  const [state, setState] = React.useState({});
 
-  // // override default index to be 0
-  // const modalActiveIndex = activeIndex === -1 ? 0 : activeIndex;
+  const previousIndex = usePrevious(activeIndex);
 
   // the last child will be the modal element
   const modalIndex =
@@ -28,19 +32,34 @@ function Modal({ children, modalIndex: parentModalIndex, ...rest }: iModal) {
       ? parentModalIndex
       : React.Children.count(children) - 1;
 
-  function show(_state?: Object) {
-    setState({ ...state, ..._state });
-    setPreviousIndex(activeIndex);
+  function show() {
+    const route = navigator.routes[modalIndex];
+
+    if (route) {
+      navigator.navigate(route);
+      return;
+    }
+
     onChange(modalIndex);
   }
 
   function hide() {
+    const route = navigator.routes[previousIndex];
+
+    if (route) {
+      navigator.navigate(route);
+      return;
+    }
+
     onChange(previousIndex);
-    setPreviousIndex(-1);
+  }
+
+  function toggle() {
+    activeIndex === modalIndex ? hide() : show();
   }
 
   return (
-    <ModalContext.Provider value={{ show, hide, state }}>
+    <ModalContext.Provider value={{ show, hide, toggle }}>
       <Pager
         onChange={onChange}
         activeIndex={activeIndex}
@@ -62,14 +81,26 @@ function Modal({ children, modalIndex: parentModalIndex, ...rest }: iModal) {
           if (route) {
             return (
               <BasepathProvider value={route}>
-                <AccessibleScreen accessibilityViewIsModal={isModal}>
-                  {child}
-                </AccessibleScreen>
+                <IndexProvider index={index}>
+                  <FocusProvider focused={index === activeIndex}>
+                    <AccessibleScreen accessibilityViewIsModal={isModal}>
+                      {child}
+                    </AccessibleScreen>
+                  </FocusProvider>
+                </IndexProvider>
               </BasepathProvider>
             );
           }
 
-          return <AccessibleScreen>{child}</AccessibleScreen>;
+          return (
+            <IndexProvider index={index}>
+              <FocusProvider focused={index === activeIndex}>
+                <AccessibleScreen accessibilityViewIsModal={isModal}>
+                  {child}
+                </AccessibleScreen>
+              </FocusProvider>
+            </IndexProvider>
+          );
         })}
       </Pager>
     </ModalContext.Provider>
@@ -77,9 +108,9 @@ function Modal({ children, modalIndex: parentModalIndex, ...rest }: iModal) {
 }
 
 interface iModalContext {
-  show: (state?: any) => void;
+  show: () => void;
   hide: () => void;
-  state?: any;
+  toggle: () => void;
 }
 
 const ModalContext = React.createContext<undefined | iModalContext>(undefined);
@@ -92,6 +123,20 @@ function useModal(): iModalContext {
   }
 
   return display;
+}
+
+function usePrevious(value: any) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = React.useRef<any>();
+
+  // Store current value in ref
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
 }
 
 export { Modal, useModal };

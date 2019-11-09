@@ -14,7 +14,6 @@
   "dependencies": {
     "@testing-library/jest-native": "^3.0.2",
     "@types/react-native": "^0.60.17",
-    "navigation-test-utils": "^0.1.5",
     "react": "^16.11.0",
     "react-native": "^0.60.5",
     "react-native-gesture-handler": "^1.4.1",

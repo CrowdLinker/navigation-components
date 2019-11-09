@@ -655,11 +655,6 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@crowdlinker/react-native-pager@^0.1.18-beta.1":
-  version "0.1.18-beta.1"
-  resolved "https://registry.yarnpkg.com/@crowdlinker/react-native-pager/-/react-native-pager-0.1.18-beta.1.tgz#548848e3a6b30d03e4c676ea73f963af04a3490a"
-  integrity sha512-Ho1Z84X+7BHa9KQTYrFW+tZj4JUrhkbGIgLMYfzjZKw/4gI/MzE7TU7GTkNAbZDmGj+YJXld24t9LkgYF7bpzQ==
-
 "@hapi/address@2.x.x":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.2.tgz#1c794cd6dbf2354d1eb1ef10e0303f573e1c7222"
@@ -4946,15 +4941,6 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-navigation-test-utils@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/navigation-test-utils/-/navigation-test-utils-0.1.5.tgz#eecb772261ac5afdbb3c4f4ed26698fa014cdf40"
-  integrity sha512-soOhs5+zfcKJs92susZYeLyUSLD7wGGdU4D3YCZLng+pjdfQvVnjtsg8w8QAU8omfaQvDc52k3r/IHGY3i7mjA==
-  dependencies:
-    "@testing-library/jest-native" "^3.0.2"
-    "@testing-library/react-native" "^5.0.0"
-    react-navigation-library "^0.2.1"
-
 needle@^2.2.1:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/needle/-/needle-2.4.0.tgz#6833e74975c444642590e15a750288c5f939b57c"
@@ -5794,13 +5780,6 @@ react-native@^0.60.5:
     scheduler "0.14.0"
     stacktrace-parser "^0.1.3"
     whatwg-fetch "^3.0.0"
-
-react-navigation-library@^0.2.1:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/react-navigation-library/-/react-navigation-library-0.2.2.tgz#71ffd8e2fb53053a31411f9208cdc8613bb61842"
-  integrity sha512-lYnYcXzbcfgeFPGR8gE6CC1QzVU055mLuKixLQR0VYsK2BHjU26IpWkVKQ/7vnjv8cVfBj8jQKbq3qStMmFlHw==
-  dependencies:
-    "@crowdlinker/react-native-pager" "^0.1.18-beta.1"
 
 react-proxy@^1.1.7:
   version "1.1.8"

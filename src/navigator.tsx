@@ -39,11 +39,13 @@ function Navigator({
   const location = useLocation();
   const focused = useFocus();
 
+  const cleanRoutes = React.useMemo(() => routes.map(stripSlashes), [routes]);
+
   const [activeIndex, onChange] = React.useState(() => {
     const matchingRoute = getNextRoute(location, basepath);
 
     if (matchingRoute) {
-      const nextIndex = pick(routes, matchingRoute);
+      const nextIndex = pick(cleanRoutes, matchingRoute);
 
       if (nextIndex !== -1) {
         return nextIndex;
@@ -56,7 +58,7 @@ function Navigator({
   function handleGestureChange(nextIndex: number) {
     onChange(nextIndex);
 
-    let nextRoute = routes[nextIndex];
+    let nextRoute = cleanRoutes[nextIndex];
 
     if (nextRoute) {
       if (nextRoute === '/') {
@@ -86,7 +88,7 @@ function Navigator({
       const matchingRoute = getNextRoute(location, basepath);
 
       if (matchingRoute) {
-        const nextIndex = pick(routes, matchingRoute);
+        const nextIndex = pick(cleanRoutes, matchingRoute);
 
         if (nextIndex !== activeIndex && nextIndex !== -1) {
           onChange(nextIndex);
@@ -94,7 +96,7 @@ function Navigator({
         }
       }
     }
-  }, [location, focused, routes, basepath]);
+  }, [location, focused, cleanRoutes, basepath]);
 
   React.useEffect(() => {
     if (activeIndex !== undefined) {
@@ -105,7 +107,7 @@ function Navigator({
   const context = {
     navigate,
     back,
-    routes,
+    routes: cleanRoutes,
     activeIndex,
   };
 
@@ -165,6 +167,14 @@ function useParams<T>() {
   }, [focused, basepath, location]);
 
   return params;
+}
+
+function stripSlashes(str: string) {
+  if (str === '/') {
+    return str;
+  }
+
+  return str.replace(/(^\/+|\/+$)/g, '');
 }
 
 export { useNavigator, useParams, Navigator, Link };
