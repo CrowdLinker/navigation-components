@@ -66,6 +66,7 @@ function History({
     Linking.getInitialURL().then(url => {
       if (url) {
         const [, path] = url.split(scheme);
+
         if (path) {
           history.navigate(path, history.location);
         }
@@ -75,6 +76,7 @@ function History({
     function listenForLink({ url }: { url?: string }) {
       if (url) {
         const [, path] = url.split(scheme);
+
         if (path) {
           history.navigate(path, history.location);
         }

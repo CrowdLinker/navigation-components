@@ -5,7 +5,9 @@
       "getting-started",
       "first-navigator",
       "nesting-navigators",
-      "dynamic-vs-static"
-    ]
+      "dynamic-vs-static",
+      "next-steps"
+    ],
+    "Guides": ["deep-linking"]
   }
 }

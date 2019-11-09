@@ -5,6 +5,10 @@
     "previous": "Previous",
     "tagline": "Component driven navigation for React Native",
     "docs": {
+      "deep-linking": {
+        "title": "Deep Linking",
+        "sidebar_label": "Deep Linking"
+      },
       "dynamic-vs-static": {
         "title": "Dynamic vs Static",
         "sidebar_label": "Dynamic vs Static"
@@ -24,13 +28,18 @@
       "nesting-navigators": {
         "title": "Nesting Navigators",
         "sidebar_label": "Nesting Navigators"
+      },
+      "next-steps": {
+        "title": "Next Steps",
+        "sidebar_label": "Next Steps"
       }
     },
     "links": {
       "Docs": "Docs"
     },
     "categories": {
-      "Overview": "Overview"
+      "Overview": "Overview",
+      "Guides": "Guides"
     }
   },
   "pages-strings": {
