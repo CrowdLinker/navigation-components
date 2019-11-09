@@ -110,7 +110,7 @@
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
 </code></pre>
 <h2><a class="anchor" aria-hidden="true" id="adding-a-stack"></a><a href="#adding-a-stack" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding a stack</h2>
-<p>We'll start with using a Stack component. It's very similar to the Tabs component we used in the previous section - in fact the API is exactly the same, you can switch out a Tabs for a Stack anywhere you'd like.</p>
+<p>Now let's add a Stack to our app. It's very similar to the Tabs component we used in the previous section - in fact the API is exactly the same.</p>
 <pre><code class="hljs css language-javascript"><span class="hljs-keyword">import</span> { Button } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-native'</span>;
 <span class="hljs-keyword">import</span> { Navigator, Stack, useStack } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-navigation-library'</span>;
 
@@ -157,10 +157,11 @@ function PopButton() {
   return &lt;Button title="Pop" onPress={() =&gt; stack.pop()} /&gt;;
 }
 </code></pre>
-<p>As you can hopefully see, the Stack component stacks its screens ontop of one another. What you can't see visually is that the Stack component <strong>unmounts</strong> screens when they are pushed off of the stack.</p>
+<p>The Stack component stacks its screens ontop of one another. What you can't see visually is that the Stack component <strong>unmounts</strong> screens when they are pushed off of the stack.</p>
 <p>This means that a Stack component has a different use case than Tabs - generally you'll want a stack when your screens have a logical order to them, for example a multipage form, or a profile view that appears over top of an index page.</p>
+<p>Any component inside of a Stack can use the <code>useStack()</code> hook to push and pop views imperatively.</p>
 <h2><a class="anchor" aria-hidden="true" id="adding-a-modal"></a><a href="#adding-a-modal" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding a modal</h2>
-<p>Now lets add a popover modal to appear ontop of our Stack:</p>
+<p>Now lets add a Modal that will appear ontop of our Stack. Again, Modal has the same API as what we're already familiar with, but there's one caveat - the <em>last</em> child component is considered the &quot;modal&quot; view that will appear overtop of all others.</p>
 <pre><code class="hljs css language-javascript"><span class="hljs-keyword">import</span> { Modal, useModal, Navigator } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-navigation-library'</span>;
 
 <span class="hljs-comment">// the modal will be the last child of the &lt;Modal /&gt; component:</span>
@@ -210,7 +211,7 @@ const App = () =&gt; {
 </code></pre>
 <p>Now we can toggle the modal, swipe down to dismiss or take advantage of the <code>useModal()</code> hook anywhere inside of our Modal component.</p>
 <h2><a class="anchor" aria-hidden="true" id="adding-routes"></a><a href="#adding-routes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding routes</h2>
-<p>Just like in the previous section, we can add routing to the navigators we've just created. This might be useful if you'd like to navigate directly to a screen that is further down in the Stack, or perhaps want to trigger a modal via a link. Lets look at setting this up.</p>
+<p>Just like in the previous section, we can add routing to the navigators we've just created. The same rules apply here, we'll need to configure the routes of our Navigator, and use Link components to navigate between them.</p>
 <pre><code class="hljs css language-javascript"><span class="hljs-keyword">import</span> { Link } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-navigation-library'</span>;
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MyModalNavigator</span>(<span class="hljs-params">{ children }</span>) </span>{
@@ -274,7 +275,8 @@ const App = () =&gt; {
   );
 }
 </span></code></pre>
-<p>We've successfully composed our navigators and wired them up together! Here's the code we wrote:</p>
+<p>Tap around and note that the links work just like before. We've successfully composed our navigators and wired them up together! You can apply these patterns to any combination of Tabs, Stack, and Modal. These are the core &quot;primitives&quot; of the library - it's surprising how much can be accomplished with just these three.</p>
+<p>Here's the code we wrote:</p>
 <pre><code class="hljs css language-javascript"><span class="hljs-comment">/**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -438,11 +440,11 @@ export default App;
 </code></pre>
 <h2><a class="anchor" aria-hidden="true" id="summary"></a><a href="#summary" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Summary</h2>
 <ul>
-<li><p>The Stack component is a lot like the Tabs component, but it can push and pop views off of the itself. This means it unmounts screens that are not active, and is a good candidate for navigators that have a clear logical order, like a multipage form.</p></li>
-<li><p><code>useStack()</code> is a hook that can push and pop views in a Stack</p></li>
-<li><p>The Modal component can be used to display a modal over top of some content. The modal screen will be whatever the you render as the last child of Modal. It's also very similar in API to Stack and Tabs</p></li>
-<li><p><code>useModal()</code> is a hook that can show and hide the modal</p></li>
-<li><p>Modal and Stack are consumers of Navigator - just like Tabs, and so they can be configured to listen for routes and we can take advantage of the Link component and wire their views together.</p></li>
+<li><p>The Stack component can push and pop views off of itself. This means it unmounts screens that are not active, and is a good candidate for navigators that have a clear logical order, like a multipage form.</p></li>
+<li><p><code>useStack()</code> is a hook that can push and pop views from any component in a Stack</p></li>
+<li><p>The Modal component can be used to display a modal over top of some content. The modal screen will be whatever the you render as the last child of Modal</p></li>
+<li><p><code>useModal()</code> is a hook that can show and hide the modal from any component in a Modal</p></li>
+<li><p>Modal and Stack work just like Tabs, so they can be configured to listen for routes and linked together with the Link component</p></li>
 <li><p>Navigators can be <strong>composed</strong>, a Stack can be used within a Modal, a Modal within a Stack within a Tabs - any combination that you can imagine!</p></li>
 </ul>
 </span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/react-navigation-library/docs/first-navigator"><span class="arrow-prev">← </span><span>Basic Example</span></a><a class="docs-next button" href="/react-navigation-library/docs/dynamic-vs-static"><span>Dynamic vs Static</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#adding-a-stack">Adding a stack</a></li><li><a href="#adding-a-modal">Adding a modal</a></li><li><a href="#adding-routes">Adding routes</a></li><li><a href="#summary">Summary</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/react-navigation-library/" class="nav-home"><img src="/react-navigation-library/img/favicon.ico" alt="React Navigation Library" width="66" height="58"/></a><div><h5>Docs</h5><a href="/react-navigation-library/docs/en/introduction.html">Overview</a><a href="/react-navigation-library/docs/en/guides.html">Guides</a><a href="/react-navigation-library/docs/en/api.html">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" href="https://github.com/Crowdlinker/react-navigation-library" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/react-navigation-library/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Your Name or Your Company Name</section></footer></div></body></html>
