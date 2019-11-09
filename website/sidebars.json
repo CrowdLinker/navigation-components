@@ -4,7 +4,8 @@
       "introduction",
       "getting-started",
       "first-navigator",
-      "nesting-navigators"
+      "nesting-navigators",
+      "dynamic-vs-static"
     ]
   }
 }

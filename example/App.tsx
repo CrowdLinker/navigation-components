@@ -22,15 +22,63 @@ import {
   useModal,
 } from 'react-navigation-library';
 
+interface IScreenConfig {
+  path: string;
+  screen: React.ReactElement<any>;
+}
+
+const routeConfig = [
+  {
+    path: '/',
+    screen: (
+      <Screen>
+        <Text>Home</Text>
+        <PushButton />
+      </Screen>
+    ),
+  },
+
+  {
+    path: 'settings',
+    screen: (
+      <Screen>
+        <Text>Settings</Text>
+        <PushButton />
+        <PopButton />
+      </Screen>
+    ),
+  },
+];
+
+function createStackNavigator(routeConfig: IScreenConfig[] = []) {
+  const routes = routeConfig.map(route => route.path);
+  const screens = routeConfig.map(route => route.screen);
+
+  // we need to return a *component*
+  return function() {
+    return (
+      <Navigator routes={routes}>
+        <Stack>{React.Children.map(screens, screen => screen)}</Stack>
+      </Navigator>
+    );
+  };
+}
+
+function StackNavigator({routeConfig = []}: {routeConfig: IScreenConfig[]}) {
+  const routes = routeConfig.map(route => route.path);
+  const screens = routeConfig.map(route => route.screen);
+
+  return (
+    <Navigator routes={routes}>
+      <Stack>{React.Children.map(screens, screen => screen)}</Stack>
+    </Navigator>
+  );
+}
+
 const App = () => {
   return (
     <AppContainer>
-      <MyModalNavigator>
-        <>
-          <MyStackNavigator />
-          <ShowModalButton />
-        </>
-      </MyModalNavigator>
+      <StackNavigator routeConfig={routeConfig} />
     </AppContainer>
   );
 };

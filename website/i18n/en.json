@@ -5,6 +5,10 @@
     "previous": "Previous",
     "tagline": "Component driven navigation for React Native",
     "docs": {
+      "dynamic-vs-static": {
+        "title": "Dynamic vs Static",
+        "sidebar_label": "Dynamic vs Static"
+      },
       "first-navigator": {
         "title": "Basic Example",
         "sidebar_label": "Basic Example"
