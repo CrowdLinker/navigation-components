@@ -1,0 +1,223 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Deep Linking · React Navigation Library</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="One really nice benefit of buying into a routing system is that deep linking is pretty much already setup for you on the application side."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Deep Linking · React Navigation Library"/><meta property="og:type" content="website"/><meta property="og:url" content="https://your-docusaurus-test-site.com/react-navigation-library/"/><meta property="og:description" content="One really nice benefit of buying into a routing system is that deep linking is pretty much already setup for you on the application side."/><meta property="og:image" content="https://your-docusaurus-test-site.com/react-navigation-library/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://your-docusaurus-test-site.com/react-navigation-library/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/react-navigation-library/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/react-navigation-library/js/scrollSpy.js"></script><link rel="stylesheet" href="/react-navigation-library/css/main.css"/><script src="/react-navigation-library/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/react-navigation-library/"><img class="logo" src="/react-navigation-library/img/favicon.ico" alt="React Navigation Library"/><h2 class="headerTitleWithLogo">React Navigation Library</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/react-navigation-library/docs/introduction" target="_self">Docs</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Guides</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Overview</h3><ul class=""><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/introduction">Introduction</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/getting-started">Getting started</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/first-navigator">Basic Example</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/nesting-navigators">Nesting Navigators</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/dynamic-vs-static">Dynamic vs Static</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/next-steps">Next Steps</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/react-navigation-library/docs/deep-linking">Deep Linking</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Deep Linking</h1></header><article><div><span><p>One really nice benefit of buying into a routing system is that deep linking is pretty much already setup for you on the application side.</p>
+<p>This is because the History component is tracking and updating the location of your app just like it would in a browser. Therefore, if you're using routing in your app, you've already setup your deep links without even knowing it - you just need to configure the native code and wire it all together!</p>
+<p>Let's start with a basic navigation structure:</p>
+<pre><code class="hljs css language-javascript"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> { History, Navigator, Stack } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-navigation-library'</span>;
+<span class="hljs-keyword">import</span> { View, Text } <span class="hljs-keyword">from</span> <span class="hljs-string">'react-native'</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">App</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">History</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">View</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">padding:</span> <span class="hljs-attr">20</span>, <span class="hljs-attr">flex:</span> <span class="hljs-attr">1</span> }}&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">MyNavigator</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">View</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">History</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MyNavigator</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Navigator</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Stack</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Screen</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Text</span>&gt;</span>Home<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Screen</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Screen</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Text</span>&gt;</span>Settings<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Screen</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Stack</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Navigator</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Screen</span>(<span class="hljs-params">{ children }</span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">View</span>
+      <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span>
+        <span class="hljs-attr">backgroundColor:</span> '<span class="hljs-attr">white</span>',
+        <span class="hljs-attr">flex:</span> <span class="hljs-attr">1</span>,
+        <span class="hljs-attr">justifyContent:</span> '<span class="hljs-attr">center</span>',
+        <span class="hljs-attr">alignItems:</span> '<span class="hljs-attr">center</span>',
+        <span class="hljs-attr">borderRadius:</span> <span class="hljs-attr">10</span>,
+        <span class="hljs-attr">borderWidth:</span> <span class="hljs-attr">1</span>,
+      }}
+    &gt;</span>
+      {children}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">View</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> App;
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="decide-on-a-url-scheme"></a><a href="#decide-on-a-url-scheme" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Decide on a url scheme</h2>
+<p>Next, we'll want to decide on a url scheme. Typically, a url will have a scheme and a host, like this: <code>[scheme]://[host]</code>. Let's choose <code>example://app</code> for our case here.</p>
+<p>We can tell our navigation to listen to links with this structure by passing it as a prop to the History component.</p>
+<pre><code class="hljs css language-javascript"><span class="hljs-comment">// setup our app scheme -- pass this to History</span>
+<span class="hljs-keyword">const</span> APP_SCHEME = <span class="hljs-string">'example://app'</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">App</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">History</span> <span class="hljs-attr">scheme</span>=<span class="hljs-string">{APP_SCHEME}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">View</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">padding:</span> <span class="hljs-attr">20</span>, <span class="hljs-attr">flex:</span> <span class="hljs-attr">1</span> }}&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">MyNavigator</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">View</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">History</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MyNavigator</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-comment">// these routes will be accessible by deep links</span>
+  <span class="hljs-keyword">const</span> routes = [<span class="hljs-string">'/'</span>, <span class="hljs-string">'settings'</span>];
+
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Navigator</span> <span class="hljs-attr">routes</span>=<span class="hljs-string">{routes}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Stack</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Screen</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Text</span>&gt;</span>Home<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Screen</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Screen</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Text</span>&gt;</span>Settings<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Screen</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Stack</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Navigator</span>&gt;</span></span>
+  );
+}
+</code></pre>
+<p><strong>Note:</strong> <em>The routes in your application will be relative to the scheme that you provide. For example, a deep link to <code>example://app/your/screen</code> will point to <code>/your/screen</code></em></p>
+<p>Everything is now setup on the application side. If your app were to open with a deep link to <code>example://app/setings</code>, it would navigate to the settings page in our example here.</p>
+<p>Next, we'll have to enable deep linking in our app so that they can actually open the link in their respective OS.</p>
+<h2><a class="anchor" aria-hidden="true" id="setup-android"></a><a href="#setup-android" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Setup - Android</h2>
+<p>For Android builds, you'll need to configure your app's <code>AndroidManifest.xml</code> file. A default React Native project will look something like this:</p>
+<pre><code class="hljs css language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">application</span>
+  <span class="hljs-attr">android:name</span>=<span class="hljs-string">".MainApplication"</span>
+  <span class="hljs-attr">android:label</span>=<span class="hljs-string">"@string/app_name"</span>
+  <span class="hljs-attr">android:icon</span>=<span class="hljs-string">"@mipmap/ic_launcher"</span>
+  <span class="hljs-attr">android:roundIcon</span>=<span class="hljs-string">"@mipmap/ic_launcher_round"</span>
+  <span class="hljs-attr">android:allowBackup</span>=<span class="hljs-string">"false"</span>
+  <span class="hljs-attr">android:theme</span>=<span class="hljs-string">"@style/AppTheme"</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">activity</span>
+    <span class="hljs-attr">android:name</span>=<span class="hljs-string">".MainActivity"</span>
+    <span class="hljs-attr">android:label</span>=<span class="hljs-string">"@string/app_name"</span>
+    <span class="hljs-attr">android:launchMode</span>=<span class="hljs-string">"singleTask"</span>
+    <span class="hljs-attr">android:configChanges</span>=<span class="hljs-string">"keyboard|keyboardHidden|orientation|screenSize"</span>
+    <span class="hljs-attr">android:windowSoftInputMode</span>=<span class="hljs-string">"adjustResize"</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">intent-filter</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">action</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">"android.intent.action.MAIN"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">category</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">"android.intent.category.LAUNCHER"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">intent-filter</span>&gt;</span>
+
+  <span class="hljs-comment">&lt;!-- HERE - this is where you can configure your deep links  --&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">intent-filter</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">category</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">"android.intent.category.DEFAULT"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">category</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">"android.intent.category.BROWSABLE"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">action</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">"android.intent.action.VIEW"</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">data</span> <span class="hljs-attr">android:host</span>=<span class="hljs-string">"app"</span> <span class="hljs-attr">android:scheme</span>=<span class="hljs-string">"example"</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">intent-filter</span>&gt;</span>
+
+
+  <span class="hljs-tag">&lt;/<span class="hljs-name">activity</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">activity</span> <span class="hljs-attr">android:name</span>=<span class="hljs-string">"com.facebook.react.devsupport.DevSettingsActivity"</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">application</span>&gt;</span>
+</code></pre>
+<p>In this case, we've configured a url scheme that looks like this: <code>example://app</code> (<code>[scheme]://[host]</code>) but you can configure it to whatever you choose, so long as it matches what you've passed to History.</p>
+<h2><a class="anchor" aria-hidden="true" id="setup-ios"></a><a href="#setup-ios" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Setup - iOS</h2>
+<p>For iOS builds, you'll need to configure your app's <code>AppDelegate.m</code> file, as well as the <code>Info.plist</code> to register your app scheme. Details for updating the delegate file can be found in the React Native docs:
+<a href="https://facebook.github.io/react-native/docs/linking">https://facebook.github.io/react-native/docs/linking</a>.</p>
+<p>To configure the scheme, you'll need to update the <code>Info.plist</code> dictionary with a new entry like this:</p>
+<pre><code class="hljs css language-xml">&lt;!-- Info.plist --&gt;
+&lt;!-- ... --&gt;
+&lt;key&gt;CFBundleURLTypes&lt;/key&gt;
+&lt;array&gt;
+  &lt;dict&gt;
+    &lt;key&gt;CFBundleTypeRole&lt;/key&gt;
+    &lt;string&gt;Editor&lt;/string&gt;
+    &lt;key&gt;CFBundleURLName&lt;/key&gt;
+    &lt;string&gt;Example&lt;/string&gt;
+    &lt;key&gt;CFBundleURLSchemes&lt;/key&gt;
+    &lt;array&gt;
+      &lt;string&gt;example&lt;/string&gt;  &lt;- this is your scheme
+    &lt;/array&gt;
+  &lt;/dict&gt;
+&lt;/array&gt;
+</code></pre>
+<p>You might notice that the URLScheme here only contains a scheme and not a host. iOS deep links don't require a host as part of the url, so this part is optional. Deep links will still work as they do on Android, so long as the provided links include both the scheme and host -- e.g <code>example://app/settings</code></p>
+<h2><a class="anchor" aria-hidden="true" id="developing-with-deep-links"></a><a href="#developing-with-deep-links" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Developing with deep links</h2>
+<p>Let's test out if our changes worked - launch the app on an Android device or emulator and run the following command in your terminal:</p>
+<pre><code class="hljs css language-bash">adb shell am start -W -a android.intent.action.VIEW -d <span class="hljs-string">"example://app/settings"</span>
+</code></pre>
+<p>For iOS, you'll want to run this command after launching the app in a simulator:</p>
+<pre><code class="hljs css language-bash">xcrun simctl openurl booted <span class="hljs-string">"example://app/settings"</span>
+</code></pre>
+<p>You should see the app snap to the Settings page. If you find yourself needed to run these commands a lot, it's a good idea to include them in your package.json as scripts:</p>
+<pre><code class="hljs css language-json">"link:android": "adb shell am start -W -a android.intent.action.VIEW -d",
+"link:ios": "xcrun simctl openurl booted"
+</code></pre>
+<p>Alternatively, you can open links from the Notes app or Safari in iOS.</p>
+<p><strong>Note:</strong> There's another way to setup deep links on iOS called 'Universal Links' - these require a bit more configuration on your part but there are tons of great resources on the subject.</p>
+<p>That's it! While this example was quite basic, know that deep links will work with any screen that you've routed in your application. The commands above can be run while the app is closed or in the foreground. You
+can even try navigating around your app purely from the command line if you'd like!</p>
+<h2><a class="anchor" aria-hidden="true" id="summary"></a><a href="#summary" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Summary</h2>
+<ul>
+<li><p>The History component tracks and updates the location similar to how it works in a browser. This means that the routing you've defined in your app is available to be deeply linked.</p></li>
+<li><p>In order to setup deep links, you'll need to pass a scheme to the History component - this includes the scheme and host of your deeplinks. At this point, your application is listening for links with the defined schema</p></li>
+<li><p>Deep links have some native configuration that you need to setup - this will alert the devices OS to open your app instead of a browser when a user clicks on your link. Android builds require a schema to be defined in the <code>AndroidManifest.xml</code> file, while iOS has to update both <code>AppDelegate.m</code> and <code>Info.plist</code> to start natively listening for deep links.</p></li>
+<li><p>Both iOS and Android have shell scripts you can run in your terminal. It's often useful to create shortcuts for these to easily test out deep links with your app.</p></li>
+</ul>
+<p><strong>Note:</strong> If you need to configure your own implementation for handling deep links, then you can do so by wrapping History in your implementation and passing it an <code>initialPath</code> prop instead!</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/react-navigation-library/docs/next-steps"><span class="arrow-prev">← </span><span>Next Steps</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#decide-on-a-url-scheme">Decide on a url scheme</a></li><li><a href="#setup-android">Setup - Android</a></li><li><a href="#setup-ios">Setup - iOS</a></li><li><a href="#developing-with-deep-links">Developing with deep links</a></li><li><a href="#summary">Summary</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/react-navigation-library/" class="nav-home"><img src="/react-navigation-library/img/favicon.ico" alt="React Navigation Library" width="66" height="58"/></a><div><h5>Docs</h5><a href="/react-navigation-library/docs/en/introduction.html">Overview</a><a href="/react-navigation-library/docs/en/guides.html">Guides</a><a href="/react-navigation-library/docs/en/api.html">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" href="https://github.com/Crowdlinker/react-navigation-library" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/react-navigation-library/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Your Name or Your Company Name</section></footer></div></body></html>

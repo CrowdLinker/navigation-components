@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Introduction · React Navigation Library</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="React Navigation Library is a component-driven navigation library for React Native. It aims to take what&#x27;s really nice about developing with React Native and make it even better by abstracting away some of the annoying stuff related to navigating between screens. The end result is a tool that stays out of your way and lets you work with your own components and app code."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Introduction · React Navigation Library"/><meta property="og:type" content="website"/><meta property="og:url" content="https://your-docusaurus-test-site.com/react-navigation-library/"/><meta property="og:description" content="React Navigation Library is a component-driven navigation library for React Native. It aims to take what&#x27;s really nice about developing with React Native and make it even better by abstracting away some of the annoying stuff related to navigating between screens. The end result is a tool that stays out of your way and lets you work with your own components and app code."/><meta property="og:image" content="https://your-docusaurus-test-site.com/react-navigation-library/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://your-docusaurus-test-site.com/react-navigation-library/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/react-navigation-library/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/react-navigation-library/js/scrollSpy.js"></script><link rel="stylesheet" href="/react-navigation-library/css/main.css"/><script src="/react-navigation-library/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/react-navigation-library/"><img class="logo" src="/react-navigation-library/img/favicon.ico" alt="React Navigation Library"/><h2 class="headerTitleWithLogo">React Navigation Library</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive siteNavItemActive"><a href="/react-navigation-library/docs/introduction" target="_self">Docs</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Overview</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Overview</h3><ul class=""><li class="navListItem navListItemActive"><a class="navItem" href="/react-navigation-library/docs/introduction">Introduction</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/getting-started">Getting started</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/first-navigator">Basic Example</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/nesting-navigators">Nesting Navigators</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/dynamic-vs-static">Dynamic vs Static</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/next-steps">Next Steps</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul class=""><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/deep-linking">Deep Linking</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Introduction</h1></header><article><div><span><p>React Navigation Library is a component-driven navigation library for React Native. It aims to take what's really nice about developing with React Native and make it even better by abstracting away some of the annoying stuff related to navigating between screens. The end result is a tool that stays out of your way and lets you work with your own components and app code.</p>
+<h2><a class="anchor" aria-hidden="true" id="features"></a><a href="#features" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Features</h2>
+<ul>
+<li>component-driven API</li>
+<li>first class support for routing</li>
+<li>gesture support out of the box</li>
+<li>native navigation options (react-native-screens/stack)</li>
+<li>relative routing</li>
+<li>deep linking</li>
+<li>dedicated test utilities</li>
+</ul>
+<p><strong>What are some of the issues this library is trying to solve?</strong></p>
+<h2><a class="anchor" aria-hidden="true" id="static-configurations"></a><a href="#static-configurations" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Static Configurations</h2>
+<p>When something is statically configured, it no longer lives entirely in the React world. This can make it frustrating to work with at times. The magic behind the scenes often becomes more trouble than it's worth when you need to debug an issue or understand why things are working unexpectedly, and you often end up with some messy overrides to get the results you want.</p>
+<p>One solution to this is to provide an entirely component-driven API that dynamically renders screens. Libraries like React Router and Reach Router do this by deriving active components from the current window location. Likewise, this library listens and responds to a location and updates the focus of your app in a similar fashion. This has tons of benefits, including staying true to the dynamic nature of React.</p>
+<h2><a class="anchor" aria-hidden="true" id="coupling"></a><a href="#coupling" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Coupling</h2>
+<p>Navigators quickly become coupled to the architecture of your app. Say you need to a feature that is deeply nested in your app. Developing this new feature is frustrating by virtue of the fact that it's just hard to get to. So you pull out the subnavigator you're working on and render it in isolation. Now you realize it needs to be wrapped by a couple other parent navigators or depends on a provider at the root of your application. You want to test it but need to mock out the world to get it to render.</p>
+<p>Routing helps solve this problem because every screen in your application can be accessed by a path, and you can pass a path to your root component while developing. This means deeply nested screens are a breeze to get to, and you don't need to pull out and reintegrate components while developing so you'll have confidence that the feature will work in the app as it is!</p>
+<p>Than being said, it's often important to be able to pull out a section of your app, for example to test it or reuse it in multiple parts of your app.</p>
+<p>Routing with relative paths means that your (relative) links will work in isolation, so you can reuse your subnavigators and writing integration / unit tests is much easier (especially with the test utilities that come with the library!)</p>
+<p>One added benefit of routing is that deep linking is included (almost) by default. You just need to configure the native code and pass your app scheme to the root component.</p>
+<h2><a class="anchor" aria-hidden="true" id="opinionated-components"></a><a href="#opinionated-components" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Opinionated Components</h2>
+<p>Component libraries that provide opinionated styles are really awesome to get up and running quickly, but chances are that over time your application will need its own set of components with its own look and feel. Most libraries provide extensibility to the components they give you, but at the end of the day they aren't your components, and take time and effort to work with.</p>
+<p>This library provides little to no opinions in this arena - in fact you can use whatever component library you'd like, or roll your own. The aim of this project is to give you a way to manage and configure the focus, gestures, transitions, and connections between screens in your app, but let you fully control of what and where you render your components.</p>
+<p>If this all sounds good to you - please continue on and get started!</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-next button" href="/react-navigation-library/docs/getting-started"><span>Getting started</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#features">Features</a></li><li><a href="#static-configurations">Static Configurations</a></li><li><a href="#coupling">Coupling</a></li><li><a href="#opinionated-components">Opinionated Components</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/react-navigation-library/" class="nav-home"><img src="/react-navigation-library/img/favicon.ico" alt="React Navigation Library" width="66" height="58"/></a><div><h5>Docs</h5><a href="/react-navigation-library/docs/en/introduction.html">Overview</a><a href="/react-navigation-library/docs/en/guides.html">Guides</a><a href="/react-navigation-library/docs/en/api.html">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/">GitHub</a><a class="github-button" href="https://github.com/Crowdlinker/react-navigation-library" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/react-navigation-library/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Your Name or Your Company Name</section></footer></div></body></html>
