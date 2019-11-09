@@ -1,6 +1,6 @@
 {
   "name": "react-navigation-library",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "main": "dist/index.js",
   "module": "dist/navigation.esm.js",
   "typings": "dist/index.d.ts",
