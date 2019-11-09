@@ -9,7 +9,7 @@ interface iStack extends iPager {
   unmountOnExit: boolean;
 }
 
-function Stack({ children, ...rest, unmountOnExit = false }: iStack) {
+function Stack({ children, unmountOnExit = true, ...rest }: iStack) {
   const navigator = useNavigator();
   const [activeIndex] = usePager();
 
