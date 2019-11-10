@@ -6,7 +6,7 @@ import { AccessibleScreen } from './accessible-screen';
 
 interface iStack extends iPager {
   children: React.ReactNode[];
-  unmountOnExit: boolean;
+  unmountOnExit?: boolean;
 }
 
 function Stack({ children, unmountOnExit = true, ...rest }: iStack) {

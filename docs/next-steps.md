@@ -13,6 +13,7 @@ In the following sections, we'll cover more specific use cases and configuration
 - setting up deep links and developing with deep links
 - using native stack navigators
 - configuring and controlling transitions for any and all screens
+- useFocus() and useOnFocus()
 - building a basic multipage login form
 - setting up and running unit and integration tests with `navigation-test-utils`
 - end to end testing with `detox`

@@ -63,9 +63,3 @@ jest.mock('react-native-gesture-handler', () => {
     Directions: {},
   };
 });
-
-const cleanup = require('navigation-test-utils').cleanup;
-
-afterEach(() => {
-  cleanup();
-});
