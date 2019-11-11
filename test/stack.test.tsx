@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigator, Stack, useStack, history } from '../src';
 import { render } from './test-utils';
 import { Button, Text } from 'react-native';
-import { fireEvent } from '@testing-library/react-native';
+import { fireEvent, act } from '@testing-library/react-native';
 
 afterEach(() => {
   history.reset();
@@ -128,4 +128,62 @@ test('pop() works without routes[]', () => {
   fireEvent.press(pop);
 
   getFocused().getByText('1');
+});
+
+test('unmounts children after popping from stack', () => {
+  jest.useFakeTimers();
+
+  function PopView() {
+    const stack = useStack();
+    return <Button title="pop" onPress={() => stack.pop()} />;
+  }
+
+  const { getFocused, getByText } = render(
+    <Navigator initialIndex={1}>
+      <Stack>
+        <Text>1</Text>
+        <PopView />
+      </Stack>
+    </Navigator>
+  );
+
+  const pop = getFocused().getByText('pop');
+  fireEvent.press(pop);
+
+  expect(() => getByText('pop')).not.toThrow();
+
+  act(() => {
+    jest.runTimersToTime(600);
+  });
+
+  expect(() => getByText('pop')).toThrow();
+});
+
+test('unmountOnExit does not unmount children when false', () => {
+  jest.useFakeTimers();
+
+  function PopView() {
+    const stack = useStack();
+    return <Button title="pop" onPress={() => stack.pop()} />;
+  }
+
+  const { getFocused, getByText } = render(
+    <Navigator initialIndex={1}>
+      <Stack unmountOnExit={false}>
+        <Text>1</Text>
+        <PopView />
+      </Stack>
+    </Navigator>
+  );
+
+  const pop = getFocused().getByText('pop');
+  fireEvent.press(pop);
+
+  expect(() => getByText('pop')).not.toThrow();
+
+  act(() => {
+    jest.runTimersToTime(600);
+  });
+
+  expect(() => getByText('pop')).not.toThrow();
 });

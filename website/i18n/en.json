@@ -25,6 +25,10 @@
         "title": "Introduction",
         "sidebar_label": "Introduction"
       },
+      "multipage-form": {
+        "title": "Building a multipage form",
+        "sidebar_label": "Building a multipage form"
+      },
       "nesting-navigators": {
         "title": "Nesting Navigators",
         "sidebar_label": "Nesting Navigators"

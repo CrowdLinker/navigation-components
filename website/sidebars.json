@@ -8,6 +8,6 @@
       "dynamic-vs-static",
       "next-steps"
     ],
-    "Guides": ["deep-linking"]
+    "Guides": ["deep-linking", "multipage-form"]
   }
 }

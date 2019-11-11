@@ -16,21 +16,20 @@ const modalConfig: iPageInterpolation = {
 };
 
 interface iModal extends iPager {
-  children: React.ReactNode[];
+  children: [React.ReactNode, React.ReactNode];
   modalIndex?: number;
+  active?: boolean;
 }
 
-function Modal({ children, modalIndex: parentModalIndex, ...rest }: iModal) {
+function Modal({ children, modalIndex = 1, active, ...rest }: iModal) {
   const [activeIndex, onChange] = usePager();
   const navigator = useNavigator();
 
-  const previousIndex = usePrevious(activeIndex);
+  const screenIndex = modalIndex === 1 ? 0 : 1;
 
-  // the last child will be the modal element
-  const modalIndex =
-    parentModalIndex !== undefined
-      ? parentModalIndex
-      : React.Children.count(children) - 1;
+  if (navigator.routes.length > 2) {
+    throw new Error(`<Modal /> should only have at most 2 children`);
+  }
 
   function show() {
     const route = navigator.routes[modalIndex];
@@ -44,19 +43,25 @@ function Modal({ children, modalIndex: parentModalIndex, ...rest }: iModal) {
   }
 
   function hide() {
-    const route = navigator.routes[previousIndex];
+    const route = navigator.routes[screenIndex];
 
     if (route) {
       navigator.navigate(route);
       return;
     }
 
-    onChange(previousIndex);
+    onChange(screenIndex);
   }
 
   function toggle() {
     activeIndex === modalIndex ? hide() : show();
   }
+
+  React.useEffect(() => {
+    if (active !== undefined) {
+      active ? show() : hide();
+    }
+  }, [active]);
 
   return (
     <ModalContext.Provider value={{ show, hide, toggle }}>
@@ -72,6 +77,7 @@ function Modal({ children, modalIndex: parentModalIndex, ...rest }: iModal) {
           next: 0,
         }}
         pageInterpolation={modalConfig}
+        style={{ flex: 1, overflow: 'hidden' }}
         {...rest}
       >
         {React.Children.map(children, (child: any, index: number) => {
@@ -123,20 +129,6 @@ function useModal(): iModalContext {
   }
 
   return display;
-}
-
-function usePrevious(value: any) {
-  // The ref object is a generic container whose current property is mutable ...
-  // ... and can hold any value, similar to an instance property on a class
-  const ref = React.useRef<any>();
-
-  // Store current value in ref
-  React.useEffect(() => {
-    ref.current = value;
-  }, [value]); // Only re-run if value changes
-
-  // Return previous value (happens before update in useEffect above)
-  return ref.current;
 }
 
 export { Modal, useModal };
