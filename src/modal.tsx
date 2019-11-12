@@ -58,19 +58,21 @@ function Modal({ children, modalIndex = 1, onClose, active, ...rest }: iModal) {
     activeIndex === modalIndex ? hide() : show();
   }
 
+  const previousIndex = usePrevious(activeIndex);
+
   React.useEffect(() => {
     if (active !== undefined) {
       active ? show() : hide();
     }
-  }, [active]);
 
-  const previousIndex = usePrevious(activeIndex);
+    // this is super buggy -- should be removed probably
+  }, [active, previousIndex]);
 
   React.useEffect(() => {
     if (activeIndex === screenIndex && previousIndex === modalIndex) {
       onClose && onClose();
     }
-  }, [activeIndex]);
+  }, [activeIndex, previousIndex, onClose]);
 
   return (
     <ModalContext.Provider value={{ show, hide, toggle }}>

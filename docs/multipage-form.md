@@ -4,19 +4,21 @@ title: Building a multipage form
 sidebar_label: Building a multipage form
 ---
 
-In this section we'll be implementing a multipage login form. Let's define the success criteria before we start. Our form should have:
+In this section we will implement a login / signup form. Let's define the success criteria before we start. Our form should have:
 
 - a way to signup and login
 - a success screen to indicate signup/login is complete
-- forms should be on separate pages that we can easily navigate between
+- the forms should be on separate pages that we can easily navigate between
 
-Our first task will be to create the our forms - these will be dead simple as they aren't what we're focused on. We'll pull in `formik` to help simplify our form logic so we can focus on the navigation portions of our forms.
+Our first task will be to create the our forms - these will be dead simple as they aren't what we're focused on. We'll pull in `formik` to help simplify our form logic so we can focus on the navigation.
 
 ```bash
 yarn add formik
 ```
 
 If you're not familiar with Formik, know that in this case it is only abstracting away some of the boilerplate that you would have to write if you were to implement the form yourself.
+
+## Setup
 
 Here is the boilerplate to get our forms up and running:
 
@@ -29,6 +31,7 @@ import {
   SafeAreaView,
   TextInputProps,
   StyleSheet,
+  Button,
 } from 'react-native';
 
 import { Formik, useFormikContext } from 'formik';
@@ -48,27 +51,34 @@ const initialFormValues: iFormValues = {
 };
 
 function LoginForms() {
+  function handleSubmit(data: iFormValues) {}
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Forms />
+      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
+        <Forms />
+      </Formik>
     </SafeAreaView>
   );
 }
 
 function Forms() {
-  function handleSubmit(data: iFormValues) {}
-
   return (
-    <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
-      <>
-        <Signup />
-        <Login />
-      </>
-    </Formik>
+    <>
+      <Signup />
+      <Login />
+    </>
   );
 }
 
 function Signup() {
+  const formik = useFormikContext<iFormValues>();
+
+  function handleSubmit() {
+    formik.setFieldValue('type', 'signup');
+    formik.handleSubmit();
+  }
+
   return (
     <>
       <Header title="Signup" />
@@ -79,14 +89,23 @@ function Signup() {
         <Input
           name="password"
           placeholder="Enter password"
-          {...emailInputProps}
+          {...passwordInputProps}
         />
       </View>
+
+      <Button title="Submit" onPress={handleSubmit} />
     </>
   );
 }
 
 function Login() {
+  const formik = useFormikContext<iFormValues>();
+
+  function handleSubmit() {
+    formik.setFieldValue('type', 'login');
+    formik.handleSubmit();
+  }
+
   return (
     <>
       <Header title="Login" />
@@ -98,6 +117,8 @@ function Login() {
           {...passwordInputProps}
         />
       </View>
+
+      <Button title="Submit" onPress={handleSubmit} />
     </>
   );
 }
@@ -148,26 +169,26 @@ const passwordInputProps: Partial<TextInputProps> = {
   secureTextEntry: true,
 };
 
-export { LoginForms };
+export default LoginForms;
 ```
 
-We can test out if our forms are working by updating the email field and noting both forms update in sync. Let's move these to separate screens by wrapping the forms in a navigator:
+Make sure the forms are working by updating the email field.
+
+## Separating the forms
+
+Let's move the forms to separate screens with a tabs component:
 
 ```tsx
 import { Navigator, Tabs } from 'react-navigation-library';
 
 function Forms() {
-  function handleSubmit(data: iFormValues) {}
-
   return (
-    <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
-      <Navigator>
-        <Tabs>
-          <Signup />
-          <Login />
-        </Tabs>
-      </Navigator>
-    </Formik>
+    <Navigator>
+      <Tabs>
+        <Signup />
+        <Login />
+      </Tabs>
+    </Navigator>
   );
 }
 ```
@@ -176,27 +197,24 @@ Now we can swipe between our forms. If we want to default to the Login form as o
 
 ```tsx
 function Forms() {
-  function handleSubmit(data: iFormValues) {}
-
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
-        <Navigator initialIndex={1}>
-          <Tabs>
-            <Signup />
-            <Login />
-          </Tabs>
-        </Navigator>
-      </Formik>
-    </SafeAreaView>
+    <Navigator initialIndex={1}>
+      <Tabs>
+        <Signup />
+        <Login />
+      </Tabs>
+    </Navigator>
   );
 }
 ```
 
-Refresh and you'll see that the login form is now the initial screen. There's still a problem - it's not immediately clear to the user that they can swipe between the screens. Let's add some buttons to let them navigate between the forms:
+Refresh and you'll see that the login form is now the initial screen. Note that you could also just switch the order of the forms, and Login would be the first to appear. But then the Signup form would appear to the right of the Login form. This means that the **order** of screens determines how they transition in and out.
+
+## Navigating with a button
+
+There's still a problem - it's not immediately clear to the user that they can swipe between the screens. Let's add some buttons to let them navigate between the forms:
 
 ```tsx
-import { Button } from 'react-native';
 import { useTabs } from 'react-navigation-library';
 
 function Signup() {
@@ -224,42 +242,144 @@ function Login() {
 
 Awesome - we can now navigate between screens with `useTabs().goTo(index: number)`.
 
+## Adding a success modal
+
 The last screen we'll add will be a success modal that pops up after signup or login. In a real world example, you'd likely want to redirect the user to the app's home page or onboarding with a link of some kind.
 
-First, let's add create the modal component. Then we'll wrap our forms in a Modal container so that we can toggle a modal from within our form components
+First, let's add create the modal component. Then we'll wrap our forms in a Modal container and toggle the success modal on submit
 
 ```tsx
 import { Modal, useModal } from 'react-navigation-library';
 
-// implement our success modal screen:
+// implement our success modal screen
 function SuccessModal() {
   const modal = useModal();
+  const email = useFormikContext().getFieldProps('email').value;
 
   return (
     <View
-      style={{ flex: 1, justifyContent: 'center', backgroundColor: 'white' }}
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'coral',
+        borderRadius: 10,
+      }}
     >
       <Header title="Success" />
-      <Text style={{ fontSize: 20, textAlign: 'center' }}>Welcome!</Text>
+      <Text
+        style={{
+          fontSize: 20,
+          textAlign: 'center',
+        }}
+      >
+        Welcome {email}!
+      </Text>
       <Button title="Dismiss" onPress={() => modal.hide()} />
     </View>
   );
 }
 
-// update login forms to toggle the modal when submitting is a success:
-function Forms() {
-  const modal = useModal();
+// wrap the forms in the modal we've just created
+// we use the active and onClose() props for Modal to declaratively toggle it
+function LoginForms() {
+  const [status, setStatus] = React.useState('');
 
   function handleSubmit(data: iFormValues) {
-    modal.show();
+    setStatus('success');
   }
 
-  // ...
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
+        <Navigator>
+          <Modal active={status === 'success'} onClose={() => setStatus('')}>
+            <Forms />
+            <SuccessModal />
+          </Modal>
+        </Navigator>
+      </Formik>
+    </SafeAreaView>
+  );
+}
+```
+
+Try entering an email and hitting the submit button to see the success modal pop up.
+
+That's it! While it's really basic right now, the core functionality related to navigating is setup with relatively little configuration, and extending the form will be really simple. If we wanted a Reset password workflow for example, we just need to add it as another tab.
+
+Here is the code we just wrote in it's entirety:
+
+```tsx
+import React from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  SafeAreaView,
+  TextInputProps,
+  StyleSheet,
+  Button,
+} from 'react-native';
+
+import { Formik, useFormikContext } from 'formik';
+
+import {
+  Navigator,
+  Tabs,
+  useTabs,
+  Modal,
+  useModal,
+} from 'react-navigation-library';
+
+interface iFormValues {
+  type: 'signup' | 'login' | '';
+  name: string;
+  email: string;
+  password: string;
 }
 
-// add submit buttons to our forms
+const initialFormValues: iFormValues = {
+  type: '',
+  name: '',
+  email: '',
+  password: '',
+};
+
+function LoginForms() {
+  const [status, setStatus] = React.useState('');
+
+  function handleSubmit(data: iFormValues) {
+    setStatus('success');
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
+        <Navigator>
+          <Modal active={status === 'success'} onClose={() => setStatus('')}>
+            <Forms />
+            <SuccessModal />
+          </Modal>
+        </Navigator>
+      </Formik>
+    </SafeAreaView>
+  );
+}
+
+function Forms() {
+  return (
+    <Navigator initialIndex={1}>
+      <Tabs>
+        <Signup />
+        <Login />
+      </Tabs>
+    </Navigator>
+  );
+}
+
 function Signup() {
   const tabs = useTabs();
+
   const formik = useFormikContext<iFormValues>();
 
   function handleSubmit() {
@@ -269,14 +389,27 @@ function Signup() {
 
   return (
     <>
-      ...
+      <Header title="Signup" />
+
+      <View style={{ padding: 50 }}>
+        <Input name="name" placeholder="Enter name" />
+        <Input name="email" placeholder="Enter email" {...emailInputProps} />
+        <Input
+          name="password"
+          placeholder="Enter password"
+          {...passwordInputProps}
+        />
+      </View>
+
       <Button title="Submit" onPress={handleSubmit} />
+      <Button title="Go to login" onPress={() => tabs.goTo(1)} />
     </>
   );
 }
 
 function Login() {
   const tabs = useTabs();
+
   const formik = useFormikContext<iFormValues>();
 
   function handleSubmit() {
@@ -286,23 +419,110 @@ function Login() {
 
   return (
     <>
-      ...
+      <Header title="Login" />
+      <View style={{ padding: 50 }}>
+        <Input name="email" placeholder="Enter email" {...emailInputProps} />
+        <Input
+          name="password"
+          placeholder="Enter password"
+          {...passwordInputProps}
+        />
+      </View>
+
       <Button title="Submit" onPress={handleSubmit} />
+      <Button title="Go to signup" onPress={() => tabs.goTo(0)} />
     </>
   );
 }
 
-// wrap the forms in the modal we've just created
-function LoginForms() {
+function SuccessModal() {
+  const modal = useModal();
+  const email = useFormikContext().getFieldProps('email').value;
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Navigator>
-        <Modal>
-          <Forms />
-          <SuccessModal />
-        </Modal>
-      </Navigator>
-    </SafeAreaView>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'coral',
+        borderRadius: 10,
+      }}
+    >
+      <Header title="Success" />
+      <Text
+        style={{
+          fontSize: 20,
+          textAlign: 'center',
+        }}
+      >
+        Welcome {email}!
+      </Text>
+      <Button title="Dismiss" onPress={() => modal.hide()} />
+    </View>
   );
 }
+
+function Header({ title }) {
+  return (
+    <View style={{ height: 80, justifyContent: 'center' }}>
+      <Text style={{ fontSize: 26, textAlign: 'center', fontWeight: '600' }}>
+        {title}
+      </Text>
+    </View>
+  );
+}
+
+interface iInput extends TextInputProps {
+  name: string;
+}
+
+function Input(props: iInput) {
+  const formik = useFormikContext();
+  const { value } = formik.getFieldProps(props.name);
+
+  return (
+    <TextInput
+      style={{
+        height: 40,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        fontSize: 18,
+        marginVertical: 15,
+      }}
+      value={value}
+      onChangeText={formik.handleChange(props.name)}
+      {...props}
+    />
+  );
+}
+
+const emailInputProps: Partial<TextInputProps> = {
+  autoCompleteType: 'email',
+  keyboardType: 'email-address',
+  textContentType: 'emailAddress',
+  autoCapitalize: 'none',
+};
+
+const passwordInputProps: Partial<TextInputProps> = {
+  textContentType: 'password',
+  autoCapitalize: 'none',
+  secureTextEntry: true,
+};
+
+export default LoginForms;
 ```
+
+## Summary
+
+- We used `formik` to handle some of the boilerplate logic related to forms. While not necessary, it helped reduce repetitive code and prop drilling that we would encounter if we had implemented the forms from scratch.
+
+- Forms (or any view) can be separated into different screens with the Tabs component, which lets the user swipe between them.
+
+- A Navigator can be configured to render the Login screen first by passing an `initialIndex` prop. Screens transition in and out based on the **order** in which they are declared. In our case, the Signup form is on the left and the Login form is on the right because of the order in which we render them.
+
+- The `useTabs()` hook provides a `goTo(index: number)` method that let's you imperatively navigate to a tab.
+
+- The `useModal()` hook can `show()` and `hide()` a modal. The modal can also be toggled declaratively with the `active` and `onClose` props.
+
+## Outling improvements
+
+Our form is looking good, but it can be improved. One thing that's not great is having to track the submit status in our container component. It would be simpler if we could navigate directly to the success modal inside our onSubmit() callback. We also navigate between our forms via index, but this could prove to be brittle if we ever wanted to change the order of our forms. We'll refactor all of this and clean it up, but first, let's capture the behaviour we have now in some tests.

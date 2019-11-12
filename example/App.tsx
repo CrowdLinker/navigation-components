@@ -1,268 +1,197 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React from 'react';
-import {StyleSheet, View, Text, SafeAreaView, Button} from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  SafeAreaView,
+  TextInputProps,
+  StyleSheet,
+  Button,
+} from 'react-native';
+
+import {Formik, useFormikContext} from 'formik';
 
 import {
   Navigator,
   Tabs,
-  Tabbar,
-  Tab,
-  Link,
-  History,
-  Stack,
-  useStack,
+  useTabs,
   Modal,
   useModal,
 } from 'react-navigation-library';
 
-interface IScreenConfig {
-  path: string;
-  screen: React.ReactElement<any>;
+interface iFormValues {
+  type: 'signup' | 'login' | '';
+  name: string;
+  email: string;
+  password: string;
 }
 
-const routeConfig = [
-  {
-    path: '/',
-    screen: (
-      <Screen>
-        <Text>Home</Text>
-        <PushButton />
-      </Screen>
-    ),
-  },
-
-  {
-    path: 'settings',
-    screen: (
-      <Screen>
-        <Text>Settings</Text>
-        <PushButton />
-        <PopButton />
-      </Screen>
-    ),
-  },
-];
-
-function createStackNavigator(routeConfig: IScreenConfig[] = []) {
-  const routes = routeConfig.map(route => route.path);
-  const screens = routeConfig.map(route => route.screen);
-
-  // we need to return a *component*
-  return function() {
-    return (
-      <Navigator routes={routes}>
-        <Stack>{React.Children.map(screens, screen => screen)}</Stack>
-      </Navigator>
-    );
-  };
-}
-
-function StackNavigator({routeConfig = []}: {routeConfig: IScreenConfig[]}) {
-  const routes = routeConfig.map(route => route.path);
-  const screens = routeConfig.map(route => route.screen);
-
-  return (
-    <Navigator routes={routes}>
-      <Stack>{React.Children.map(screens, screen => screen)}</Stack>
-    </Navigator>
-  );
-}
-
-const App = () => {
-  return (
-    <AppContainer>
-      <StackNavigator routeConfig={routeConfig} />
-    </AppContainer>
-  );
+const initialFormValues: iFormValues = {
+  type: '',
+  name: '',
+  email: '',
+  password: '',
 };
 
-const routes = ['one', 'two', 'three'];
+function LoginForms() {
+  const [status, setStatus] = React.useState('');
 
-function MyNavigator() {
+  function handleSubmit(data: iFormValues) {
+    setStatus('success');
+  }
+
   return (
-    <Navigator routes={routes}>
-      <MyTabs />
-      <MyTabbar />
+    <SafeAreaView style={{flex: 1}}>
+      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
+        <Navigator>
+          <Modal active={status === 'success'} onClose={() => setStatus('')}>
+            <Forms />
+            <SuccessModal />
+          </Modal>
+        </Navigator>
+      </Formik>
+    </SafeAreaView>
+  );
+}
+
+function Forms() {
+  return (
+    <Navigator initialIndex={1}>
+      <Tabs>
+        <Signup />
+        <Login />
+      </Tabs>
     </Navigator>
   );
 }
 
-function MyTabs() {
-  return (
-    <Tabs>
-      <Screen>
-        <Link to="two">
-          <Text style={styles.title}>Step 1</Text>
-        </Link>
-      </Screen>
-      <Screen>
-        <Link to="three">
-          <Text style={styles.title}>Step 2</Text>
-        </Link>
-      </Screen>
-      <Screen>
-        <Link to="one">
-          <Text style={styles.title}>Step 3</Text>
-        </Link>
-      </Screen>
-    </Tabs>
-  );
-}
+function Signup() {
+  const tabs = useTabs();
 
-function MyTabbar() {
-  return (
-    <Tabbar>
-      <Tab style={styles.tab}>
-        <Text>1</Text>
-      </Tab>
-      <Tab style={styles.tab}>
-        <Text>2</Text>
-      </Tab>
-      <Tab style={styles.tab}>
-        <Text>3</Text>
-      </Tab>
-    </Tabbar>
-  );
-}
+  const formik = useFormikContext<iFormValues>();
 
-function AppContainer({children}: any) {
-  return (
-    <History scheme="example://app">
-      <SafeAreaView style={styles.container}>{children}</SafeAreaView>
-    </History>
-  );
-}
+  function handleSubmit() {
+    formik.setFieldValue('type', 'signup');
+    formik.handleSubmit();
+  }
 
-function Screen({children}: any) {
-  return <View style={styles.screen}>{children}</View>;
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 10,
-    marginHorizontal: 10,
-    backgroundColor: 'white',
-  },
-
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-
-  tab: {
-    height: 50,
-    borderWidth: StyleSheet.hairlineWidth,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-
-export default App;
-
-function MyStackNavigator() {
-  const routes = ['one', 'two', 'three'];
-
-  return (
-    <Navigator routes={routes}>
-      <MyStack />
-    </Navigator>
-  );
-}
-
-function MyStack() {
   return (
     <>
-      <Link to="/modal">
-        <Text style={styles.title}>Modal Link</Text>
-      </Link>
+      <Header title="Signup" />
 
-      <Stack>
-        <Screen>
-          <Link to="two">
-            <Text style={styles.title}>Screen 1 (Link)</Text>
-          </Link>
+      <View style={{padding: 50}}>
+        <Input name="name" placeholder="Enter name" />
+        <Input name="email" placeholder="Enter email" {...emailInputProps} />
+        <Input
+          name="password"
+          placeholder="Enter password"
+          {...passwordInputProps}
+        />
+      </View>
 
-          <PushButton />
-        </Screen>
-
-        <Screen>
-          <Link to="three">
-            <Text style={styles.title}>Screen 2 (Link)</Text>
-          </Link>
-
-          <PushButton />
-          <PopButton />
-        </Screen>
-
-        <Screen>
-          <Link to="one">
-            <Text style={styles.title}>Screen 3 (Link)</Text>
-          </Link>
-
-          <PopButton />
-        </Screen>
-      </Stack>
+      <Button title="Submit" onPress={handleSubmit} />
+      <Button title="Go to login" onPress={() => tabs.goTo(1)} />
     </>
   );
 }
 
-function PushButton() {
-  const stack = useStack();
+function Login() {
+  const tabs = useTabs();
 
-  return <Button title="Push" onPress={() => stack.push()} />;
-}
+  const formik = useFormikContext<iFormValues>();
 
-function PopButton() {
-  const stack = useStack();
-
-  return <Button title="Pop" onPress={() => stack.pop()} />;
-}
-
-function MyModalNavigator({children}) {
-  const routes = ['/', 'modal'];
+  function handleSubmit() {
+    formik.setFieldValue('type', 'login');
+    formik.handleSubmit();
+  }
 
   return (
-    <Navigator routes={routes}>
-      <Modal>
-        {children}
-        <MyModal />
-      </Modal>
-    </Navigator>
+    <>
+      <Header title="Login" />
+      <View style={{padding: 50}}>
+        <Input name="email" placeholder="Enter email" {...emailInputProps} />
+        <Input
+          name="password"
+          placeholder="Enter password"
+          {...passwordInputProps}
+        />
+      </View>
+
+      <Button title="Submit" onPress={handleSubmit} />
+      <Button title="Go to signup" onPress={() => tabs.goTo(0)} />
+    </>
   );
 }
 
-// useModal() has show() and hide() methods that will toggle the modal
-function MyModal() {
+function SuccessModal() {
   const modal = useModal();
+  const email = useFormikContext().getFieldProps('email').value;
 
   return (
-    <Screen>
-      <Text style={styles.title}>This is the modal!</Text>
-
+    <View
+      style={{
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: 'coral',
+        borderRadius: 10,
+      }}>
+      <Header title="Success" />
+      <Text
+        style={{
+          fontSize: 20,
+          textAlign: 'center',
+        }}>
+        Welcome {email}!
+      </Text>
       <Button title="Dismiss" onPress={() => modal.hide()} />
-    </Screen>
+    </View>
   );
 }
 
-function ShowModalButton() {
-  const modal = useModal();
-
-  return <Button title="Show Modal" onPress={() => modal.show()} />;
+function Header({title}) {
+  return (
+    <View style={{height: 80, justifyContent: 'center'}}>
+      <Text style={{fontSize: 26, textAlign: 'center', fontWeight: '600'}}>
+        {title}
+      </Text>
+    </View>
+  );
 }
+
+interface iInput extends TextInputProps {
+  name: string;
+}
+
+function Input(props: iInput) {
+  const formik = useFormikContext();
+  const {value} = formik.getFieldProps(props.name);
+
+  return (
+    <TextInput
+      style={{
+        height: 40,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        fontSize: 18,
+        marginVertical: 15,
+      }}
+      value={value}
+      onChangeText={formik.handleChange(props.name)}
+      {...props}
+    />
+  );
+}
+
+const emailInputProps: Partial<TextInputProps> = {
+  autoCompleteType: 'email',
+  keyboardType: 'email-address',
+  textContentType: 'emailAddress',
+  autoCapitalize: 'none',
+};
+
+const passwordInputProps: Partial<TextInputProps> = {
+  textContentType: 'password',
+  autoCapitalize: 'none',
+  secureTextEntry: true,
+};
+
+export default LoginForms;

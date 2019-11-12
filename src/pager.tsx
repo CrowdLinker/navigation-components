@@ -392,8 +392,6 @@ function Pager({
 
   function renderChildren() {
     // waiting for initial layout - except when testing
-    // TODO: this doesn't work because process.env is transpiled to 'development' when building
-    // so it looks like: 'development' !== 'test'
     if (width === UNSET) {
       return null;
     }
