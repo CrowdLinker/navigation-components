@@ -10,7 +10,7 @@ This is because the History component is tracking and updating the location of y
 
 Let's start with a basic navigation structure:
 
-```javascript
+```tsx
 import React from 'react';
 import { History, Navigator, Stack } from 'react-navigation-library';
 import { View, Text } from 'react-native';
@@ -66,7 +66,7 @@ Next, we'll want to decide on a url scheme. Typically, a url will have a scheme 
 
 We can tell our navigation to listen to links with this structure by passing it as a prop to the History component.
 
-```javascript
+```tsx
 // setup our app scheme -- pass this to History
 const APP_SCHEME = 'example://app';
 

@@ -6,7 +6,7 @@ sidebar_label: Basic Example
 
 In the previous section, we installed the library and ensured it was working. Here is what it looks like:
 
-```javascript
+```tsx
 import { Navigator, Tabs } from 'react-navigation-library';
 
 function MyNavigator() {
@@ -34,7 +34,7 @@ It's clear that the Tabs component has grouped our screens so that we can swipe 
 
 Let's extend our example by importing Tabbar and Tab:
 
-```javascript
+```tsx
 import { Tabbar, Tab } from 'react-navigation-library';
 
 // extract the Tabs from above into a component for better visibility
@@ -98,7 +98,7 @@ You'll notice that our Tab components will now navigate to the correct screen ba
 
 Say you want the Tabbar to be on the top of your tabs instead of below it. All you need to do is switch the order in your markup:
 
-```javascript
+```tsx
 function MyNavigator() {
   return (
     <Navigator>
@@ -115,7 +115,7 @@ This simple example showcases the declarative nature of this library - you can r
 
 At some point, you'll need to navigate from one screen to another with more than just a Tabbar. We can do this by telling our Navigator what routes to listen for, and then link to them from any component inside of our Navigator:
 
-```javascript
+```tsx
 import { Link } from 'react-navigation-library';
 
 // define the routes that will map to our screens:
@@ -158,7 +158,7 @@ function MyTabs() {
 
 Now the Navigator knows which route maps to which screen, so our Links should be able to update the active screen. Yet it still doesn't seem to work. This is because there is one additional component required to keep your routing in sync - **History** is a provider component that (usually) will wrap around your entire application, similar to what you would use in React-Router
 
-```javascript
+```tsx
 import { History } from 'react-navigation-library';
 
 // this component wraps our whole application
@@ -175,7 +175,7 @@ function AppContainer({ children }: any) {
 
 Our navigator is looking pretty good at this point. We can swipe between screens, tap on a tab, and navigate from within any child component. Here is everything we just wrote:
 
-```javascript
+```tsx
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native

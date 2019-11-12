@@ -10,8 +10,8 @@
         "sidebar_label": "Deep Linking"
       },
       "dynamic-vs-static": {
-        "title": "Dynamic vs Static",
-        "sidebar_label": "Dynamic vs Static"
+        "title": "Build your own Navigator",
+        "sidebar_label": "Build your own Navigator"
       },
       "first-navigator": {
         "title": "Basic Example",
@@ -39,7 +39,8 @@
       }
     },
     "links": {
-      "Docs": "Docs"
+      "Docs": "Docs",
+      "GitHub": "GitHub"
     },
     "categories": {
       "Overview": "Overview",

@@ -38,7 +38,7 @@ cd ios && pod install
 
 Add the following boilerplate to your entry file and swipe away!
 
-```javascript
+```tsx
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native

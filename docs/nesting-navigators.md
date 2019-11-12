@@ -4,9 +4,11 @@ title: Nesting Navigators
 sidebar_label: Nesting Navigators
 ---
 
+Navigators are just components, so we can compose them together in order to achieve different navigations.
+
 In this example we'll explore using the Stack and Modal components in tandem. Let's start with a fresh application:
 
-```javascript
+```tsx
 import React from 'react';
 import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
 
@@ -66,7 +68,7 @@ export default App;
 
 Now let's add a Stack to our app. It's very similar to the Tabs component we used in the previous section - in fact the API is exactly the same.
 
-```javascript
+```tsx
 import { Button } from 'react-native';
 import { Navigator, Stack, useStack } from 'react-navigation-library';
 
@@ -124,7 +126,7 @@ Any component inside of a Stack can use the `useStack()` hook to push and pop vi
 
 Now lets add a Modal that will appear ontop of our Stack. Again, Modal has the same API as what we're already familiar with, but there's one caveat - the _last_ child component is considered the "modal" view that will appear overtop of all others.
 
-```javascript
+```tsx
 import { Modal, useModal, Navigator } from 'react-navigation-library';
 
 // the modal will be the last child of the <Modal /> component:
@@ -179,7 +181,7 @@ Now we can toggle the modal, swipe down to dismiss or take advantage of the `use
 
 Just like in the previous section, we can add routing to the navigators we've just created. The same rules apply here, we'll need to configure the routes of our Navigator, and use Link components to navigate between them.
 
-```javascript
+```tsx
 import { Link } from 'react-navigation-library';
 
 function MyModalNavigator({ children }) {
@@ -248,7 +250,7 @@ Tap around and note that the links work just like before. We've successfully com
 
 Here's the code we wrote:
 
-```javascript
+```tsx
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
