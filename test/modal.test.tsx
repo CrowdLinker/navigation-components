@@ -116,6 +116,27 @@ test('throws when there are more than two routes specified', () => {
   ).toThrow();
 });
 
+test('onClose is called when the modal closes', () => {
+  const fakeCb = jest.fn();
+
+  const { getFocused } = render(
+    <Navigator routes={['/', 'modal']}>
+      <Modal onClose={fakeCb}>
+        <ShowModal />
+        <HideModal />
+      </Modal>
+    </Navigator>
+  );
+
+  expect(fakeCb).not.toHaveBeenCalled();
+
+  fireEvent.press(getFocused().getByText('Show'));
+  expect(fakeCb).not.toHaveBeenCalled();
+
+  fireEvent.press(getFocused().getByText('Hide'));
+  expect(fakeCb).toHaveBeenCalledTimes(1);
+});
+
 test('useModal() throws if no modal context exists', () => {
   function Consumer() {
     useModal();

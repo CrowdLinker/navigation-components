@@ -6,250 +6,302 @@ sidebar_label: Building a multipage form
 
 In this section we'll be implementing a multipage login form. Let's define the success criteria before we start. Our form should have:
 
-- a way to signup with a name, email, and password
-- a way to login with an email and password
+- a way to signup and login
 - a success screen to indicate signup/login is complete
+- forms should be on separate pages that we can easily navigate between
 
-After we're done, we'll fully test out the functionality of our form and refactor it to improve some of the implemntation detail.
+Our first task will be to create the our forms - these will be dead simple as they aren't what we're focused on. We'll pull in `formik` to help simplify our form logic so we can focus on the navigation portions of our forms.
 
-Our first task will be to create the our forms - these will be dead simple as they aren't what we're focused on:
-
-```javascript
-import React from 'react';
-import { View, Text, TextInput, Button, SafeAreaView } from 'react-native';
-
-function AppContainer({ children }) {
-  return <SafeAreaView style={{ flex: 1 }}>{children}</SafeAreaView>;
-}
-
-function App() {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-
-  function handleSignup(name: string) {
-    console.warn('signup()');
-  }
-
-  function handleLogin() {
-    console.warn('login()');
-  }
-
-  return (
-    <AppContainer>
-      <Signup
-        email={email}
-        setEmail={setEmail}
-        password={password}
-        setPassword={setPassword}
-        onSubmit={handleSignup}
-      />
-
-      <Login
-        email={email}
-        setEmail={setEmail}
-        password={password}
-        setPassword={setPassword}
-        onSubmit={handleLogin}
-      />
-    </AppContainer>
-  );
-}
-
-function Signup({ email, setEmail, password, setPassword, onSubmit }) {
-  const [name, setName] = React.useState('');
-
-  return (
-    <View>
-      <Text>Signup Form</Text>
-
-      <TextInput value={name} onChangeText={setName} placeholder="Enter name" />
-
-      <TextInput
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Enter email"
-      />
-
-      <TextInput
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Enter password"
-      />
-
-      <Button title="Submit" onPress={() => onSubmit(name)} />
-    </View>
-  );
-}
-
-function Login({ email, setEmail, password, setPassword, onSubmit }) {
-  return (
-    <View>
-      <Text>Login Form</Text>
-
-      <TextInput
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Enter email"
-      />
-
-      <TextInput
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Enter password"
-      />
-
-      <Button title="Submit" onPress={() => onSubmit()} />
-    </View>
-  );
-}
-
-export default App;
+```bash
+yarn add formik
 ```
 
-Chances are, we'll want these two forms on separate screens, so let's wrap our views in a Navigator and display them on separate tabs:
+If you're not familiar with Formik, know that in this case it is only abstracting away some of the boilerplate that you would have to write if you were to implement the form yourself.
 
-```javascript
-import { Navigator, Tabs } from 'react-navigation-library';
+Here is the boilerplate to get our forms up and running:
 
-function App() {
-  // ...
+```tsx
+import React from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  SafeAreaView,
+  TextInputProps,
+  StyleSheet,
+} from 'react-native';
+
+import { Formik, useFormikContext } from 'formik';
+
+interface iFormValues {
+  type: 'signup' | 'login' | '';
+  name: string;
+  email: string;
+  password: string;
+}
+
+const initialFormValues: iFormValues = {
+  type: '',
+  name: '',
+  email: '',
+  password: '',
+};
+
+function LoginForms() {
+  function handleSubmit(data: iFormValues) {}
 
   return (
-    <Navigator>
-      <Tabs>
-        <Signup
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
-        />
+    <SafeAreaView style={{ flex: 1 }}>
+      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
+        <>
+          <Signup />
+          <Login />
+        </>
+      </Formik>
+    </SafeAreaView>
+  );
+}
 
-        <Login
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
+function Signup() {
+  return (
+    <>
+      <Header title="Signup" />
+
+      <View style={{ padding: 50 }}>
+        <Input name="name" placeholder="Enter name" />
+        <Input name="email" placeholder="Enter email" {...emailInputProps} />
+        <Input
+          name="password"
+          placeholder="Enter password"
+          {...emailInputProps}
         />
-      </Tabs>
-    </Navigator>
+      </View>
+    </>
+  );
+}
+
+function Login() {
+  return (
+    <>
+      <Header title="Login" />
+      <View style={{ padding: 50 }}>
+        <Input name="email" placeholder="Enter email" {...emailInputProps} />
+        <Input
+          name="password"
+          placeholder="Enter password"
+          {...passwordInputProps}
+        />
+      </View>
+    </>
+  );
+}
+
+function Header({ title }) {
+  return (
+    <View style={{ height: 80, justifyContent: 'center' }}>
+      <Text style={{ fontSize: 26, textAlign: 'center', fontWeight: '600' }}>
+        {title}
+      </Text>
+    </View>
+  );
+}
+
+interface iInput extends TextInputProps {
+  name: string;
+}
+
+function Input(props: iInput) {
+  const formik = useFormikContext();
+  const { value } = formik.getFieldProps(props.name);
+
+  return (
+    <TextInput
+      style={{
+        height: 40,
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        fontSize: 18,
+        marginVertical: 15,
+      }}
+      value={value}
+      onChangeText={formik.handleChange(props.name)}
+      {...props}
+    />
+  );
+}
+
+const emailInputProps: Partial<TextInputProps> = {
+  autoCompleteType: 'email',
+  keyboardType: 'email-address',
+  textContentType: 'emailAddress',
+  autoCapitalize: 'none',
+};
+
+const passwordInputProps: Partial<TextInputProps> = {
+  textContentType: 'password',
+  autoCapitalize: 'none',
+  secureTextEntry: true,
+};
+
+export { LoginForms };
+```
+
+We can test out if our forms are working by updating the email field and noting both forms update in sync. Let's move these to separate screens by wrapping the forms in a navigator:
+
+```tsx
+import { Navigator, Tabs } from 'react-navigation-library';
+
+function LoginForms() {
+  function handleSubmit(data: iFormValues) {}
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
+        <Navigator>
+          <Tabs>
+            <Signup />
+            <Login />
+          </Tabs>
+        </Navigator>
+      </Formik>
+    </SafeAreaView>
   );
 }
 ```
 
 Now we can swipe between our forms. If we want to default to the Login form as our first screen, we can do so by updating the `initialIndex` of our Navigator:
 
-```javascript
-function App() {
-  // ...
+```tsx
+function LoginForms() {
+  function handleSubmit(data: iFormValues) {}
 
   return (
-    <AppContainer>
-      <Navigator initialIndex={1}>...</Navigator>
-    </AppContainer>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
+        <Navigator initialIndex={1}>
+          <Tabs>
+            <Signup />
+            <Login />
+          </Tabs>
+        </Navigator>
+      </Formik>
+    </SafeAreaView>
   );
 }
 ```
 
-Great, our login form is now our initial screen. There's still a problem - it's not immediately clear to the user that they can swipe between the screens. Let's add some buttons to let them navigate between the forms:
+Refresh and you'll see that the login form is now the initial screen. There's still a problem - it's not immediately clear to the user that they can swipe between the screens. Let's add some buttons to let them navigate between the forms:
 
-```javascript
+```tsx
+import { Button } from 'react-native';
 import { useTabs } from 'react-navigation-library';
 
-function Signup({ email, setEmail, password, setPassword }) {
-  const [name, setName] = React.useState('');
-
+function Signup() {
   const tabs = useTabs();
 
   return (
-    <View>
+    <>
       ...
       <Button title="Go to login" onPress={() => tabs.goTo(1)} />
-    </View>
+    </>
   );
 }
 
-function Login({ email, setEmail, password, setPassword }) {
+function Login() {
   const tabs = useTabs();
 
   return (
-    <View>
+    <>
       ...
       <Button title="Go to signup" onPress={() => tabs.goTo(0)} />
-    </View>
+    </>
   );
 }
 ```
 
-Awesome - we can now navigate between screens with `useTabs().goTo(index: number)`. Our last screen will be a success modal that pops up after signup or login. In a real world example, you'd likely want to redirect the user to the app's home page or onboarding with a link of some king.
+Awesome - we can now navigate between screens with `useTabs().goTo(index: number)`.
+
+The last screen we'll add will be a success modal that pops up after signup or login. In a real world example, you'd likely want to redirect the user to the app's home page or onboarding with a link of some kind.
 
 First, let's add a modal that will pop up with a success message. We'll wrap our forms in a Modal container, and then we can toggle a modal from within our form components
 
-```javascript
+```tsx
 import { Modal, useModal } from 'react-navigation-library';
 
-function SuccessModal({ email }) {
+// implement our success modal screen:
+function SuccessModal() {
+  const email = useFormikContext().getFieldProps('email').value;
+
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <Text>Success - Welcome {email}!</Text>
-      <Button title="Go to app" onPress={() => {}} />
+    <View
+      style={{ flex: 1, justifyContent: 'center', backgroundColor: 'white' }}
+    >
+      <Header title="Success" />
+      <Text style={{ fontSize: 20, textAlign: 'center' }}>Welcome {email}</Text>
     </View>
   );
 }
 
-function App() {
-  // ...
+// update login forms to toggle the modal when submitting is a success:
+function LoginForms() {
+  const [status, setStatus] = React.useState('initial');
+
+  function handleSubmit(data: iFormValues) {
+    setStatus('success');
+  }
 
   return (
-    <AppContainer>
-      <Navigator>
-        <Modal>
-          <Forms
-            email={email}
-            password={password}
-            setEmail={setEmail}
-            setPassword={setPassword}
-          />
+    <SafeAreaView style={{ flex: 1 }}>
+      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
+        <Navigator>
+          {/* toggle the modal when form submit is success */}
+          <Modal active={status === 'success'}>
+            <Navigator initialIndex={1}>
+              <Tabs>
+                <Signup />
+                <Login />
+              </Tabs>
+            </Navigator>
 
-          <SuccessModal email={email} />
-        </Modal>
-      </Navigator>
-    </AppContainer>
+            <SuccessModal />
+          </Modal>
+        </Navigator>
+      </Formik>
+    </SafeAreaView>
   );
 }
 
-// extract forms into their own component - now we can toggle our modal from inside the forms
+// add submit buttons to our forms
+function Signup() {
+  const tabs = useTabs();
+  const formik = useFormikContext<iFormValues>();
 
-function Forms({ email, setEmail, password, setPassword }) {
-  const modal = useModal();
-
-  function handleSignup(name: string) {
-    modal.show();
-  }
-
-  function handleLogin() {
-    modal.show();
+  function handleSubmit() {
+    formik.setFieldValue('type', 'signup');
+    formik.handleSubmit();
   }
 
   return (
-    <Navigator>
-      <Tabs>
-        <Signup
-          email={email}
-          setEmail={email}
-          password={password}
-          setPassword={setPassword}
-          onSubmit={handleSignup}
-        />
+    <>
+      ...
+      <Button title="Submit" onPress={handleSubmit} />
+    </>
+  );
+}
 
-        <Login
-          email={email}
-          setEmail={email}
-          password={password}
-          setPassword={setPassword}
-          onSubmit={handleLogin}
-        />
-      </Tabs>
-    </Navigator>
+function Login() {
+  const tabs = useTabs();
+  const formik = useFormikContext<iFormValues>();
+
+  function handleSubmit() {
+    formik.setFieldValue('type', 'login');
+    formik.handleSubmit();
+  }
+
+  return (
+    <>
+      ...
+      <Button title="Submit" onPress={handleSubmit} />
+    </>
   );
 }
 ```

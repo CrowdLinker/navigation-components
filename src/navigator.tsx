@@ -15,7 +15,7 @@ interface iNavigator {
   children: React.ReactNode;
   routes?: string[];
   initialIndex?: number;
-  onChange?: (nextRoute: string, location: string) => void;
+  onChange?: (index: number, route: string) => void;
 }
 
 interface iNavigatorContext {
@@ -100,7 +100,7 @@ function Navigator({
 
   React.useEffect(() => {
     if (activeIndex !== undefined) {
-      parentOnChange && parentOnChange(routes[activeIndex], location);
+      parentOnChange && parentOnChange(activeIndex, routes[activeIndex]);
     }
   }, [activeIndex, parentOnChange]);
 

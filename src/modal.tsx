@@ -19,16 +19,17 @@ interface iModal extends iPager {
   children: [React.ReactNode, React.ReactNode];
   modalIndex?: number;
   active?: boolean;
+  onClose?: () => void;
 }
 
-function Modal({ children, modalIndex = 1, active, ...rest }: iModal) {
+function Modal({ children, modalIndex = 1, onClose, active, ...rest }: iModal) {
   const [activeIndex, onChange] = usePager();
   const navigator = useNavigator();
 
   const screenIndex = modalIndex === 1 ? 0 : 1;
 
   if (navigator.routes.length > 2) {
-    throw new Error(`<Modal /> should only have at most 2 children`);
+    throw new Error(`<Modal /> should have at most 2 children`);
   }
 
   function show() {
@@ -62,6 +63,14 @@ function Modal({ children, modalIndex = 1, active, ...rest }: iModal) {
       active ? show() : hide();
     }
   }, [active]);
+
+  const previousIndex = usePrevious(activeIndex);
+
+  React.useEffect(() => {
+    if (activeIndex === screenIndex && previousIndex === modalIndex) {
+      onClose && onClose();
+    }
+  }, [activeIndex]);
 
   return (
     <ModalContext.Provider value={{ show, hide, toggle }}>
@@ -129,6 +138,20 @@ function useModal(): iModalContext {
   }
 
   return display;
+}
+
+function usePrevious(value: any) {
+  // The ref object is a generic container whose current property is mutable ...
+  // ... and can hold any value, similar to an instance property on a class
+  const ref = React.useRef<any>();
+
+  // Store current value in ref
+  React.useEffect(() => {
+    ref.current = value;
+  }, [value]); // Only re-run if value changes
+
+  // Return previous value (happens before update in useEffect above)
+  return ref.current;
 }
 
 export { Modal, useModal };

@@ -389,6 +389,7 @@ test('onChange prop works', () => {
   navigate('/two');
 
   expect(onChange).toHaveBeenCalledTimes(1);
+  expect(onChange).toHaveBeenCalledWith(1, 'two');
 });
 
 test('undefined onChange does nothing', () => {
