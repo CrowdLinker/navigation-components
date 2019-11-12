@@ -48,17 +48,23 @@ const initialFormValues: iFormValues = {
 };
 
 function LoginForms() {
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Forms />
+    </SafeAreaView>
+  );
+}
+
+function Forms() {
   function handleSubmit(data: iFormValues) {}
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
-        <>
-          <Signup />
-          <Login />
-        </>
-      </Formik>
-    </SafeAreaView>
+    <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
+      <>
+        <Signup />
+        <Login />
+      </>
+    </Formik>
   );
 }
 
@@ -150,20 +156,18 @@ We can test out if our forms are working by updating the email field and noting 
 ```tsx
 import { Navigator, Tabs } from 'react-navigation-library';
 
-function LoginForms() {
+function Forms() {
   function handleSubmit(data: iFormValues) {}
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
-        <Navigator>
-          <Tabs>
-            <Signup />
-            <Login />
-          </Tabs>
-        </Navigator>
-      </Formik>
-    </SafeAreaView>
+    <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
+      <Navigator>
+        <Tabs>
+          <Signup />
+          <Login />
+        </Tabs>
+      </Navigator>
+    </Formik>
   );
 }
 ```
@@ -171,7 +175,7 @@ function LoginForms() {
 Now we can swipe between our forms. If we want to default to the Login form as our first screen, we can do so by updating the `initialIndex` of our Navigator:
 
 ```tsx
-function LoginForms() {
+function Forms() {
   function handleSubmit(data: iFormValues) {}
 
   return (
@@ -222,52 +226,35 @@ Awesome - we can now navigate between screens with `useTabs().goTo(index: number
 
 The last screen we'll add will be a success modal that pops up after signup or login. In a real world example, you'd likely want to redirect the user to the app's home page or onboarding with a link of some kind.
 
-First, let's add a modal that will pop up with a success message. We'll wrap our forms in a Modal container, and then we can toggle a modal from within our form components
+First, let's add create the modal component. Then we'll wrap our forms in a Modal container so that we can toggle a modal from within our form components
 
 ```tsx
 import { Modal, useModal } from 'react-navigation-library';
 
 // implement our success modal screen:
 function SuccessModal() {
-  const email = useFormikContext().getFieldProps('email').value;
+  const modal = useModal();
 
   return (
     <View
       style={{ flex: 1, justifyContent: 'center', backgroundColor: 'white' }}
     >
       <Header title="Success" />
-      <Text style={{ fontSize: 20, textAlign: 'center' }}>Welcome {email}</Text>
+      <Text style={{ fontSize: 20, textAlign: 'center' }}>Welcome!</Text>
+      <Button title="Dismiss" onPress={() => modal.hide()} />
     </View>
   );
 }
 
 // update login forms to toggle the modal when submitting is a success:
-function LoginForms() {
-  const [status, setStatus] = React.useState('initial');
+function Forms() {
+  const modal = useModal();
 
   function handleSubmit(data: iFormValues) {
-    setStatus('success');
+    modal.show();
   }
 
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
-        <Navigator>
-          {/* toggle the modal when form submit is success */}
-          <Modal active={status === 'success'}>
-            <Navigator initialIndex={1}>
-              <Tabs>
-                <Signup />
-                <Login />
-              </Tabs>
-            </Navigator>
-
-            <SuccessModal />
-          </Modal>
-        </Navigator>
-      </Formik>
-    </SafeAreaView>
-  );
+  // ...
 }
 
 // add submit buttons to our forms
@@ -302,6 +289,20 @@ function Login() {
       ...
       <Button title="Submit" onPress={handleSubmit} />
     </>
+  );
+}
+
+// wrap the forms in the modal we've just created
+function LoginForms() {
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Navigator>
+        <Modal>
+          <Forms />
+          <SuccessModal />
+        </Modal>
+      </Navigator>
+    </SafeAreaView>
   );
 }
 ```

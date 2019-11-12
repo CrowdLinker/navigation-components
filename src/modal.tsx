@@ -75,8 +75,6 @@ function Modal({ children, modalIndex = 1, onClose, active, ...rest }: iModal) {
   return (
     <ModalContext.Provider value={{ show, hide, toggle }}>
       <Pager
-        onChange={onChange}
-        activeIndex={activeIndex}
         type="vertical"
         clamp={{
           prev: 0,
