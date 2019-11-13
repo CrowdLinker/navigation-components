@@ -36,6 +36,10 @@
       "next-steps": {
         "title": "Next Steps",
         "sidebar_label": "Next Steps"
+      },
+      "testing": {
+        "title": "Testing our form",
+        "sidebar_label": "Testing our form"
       }
     },
     "links": {
