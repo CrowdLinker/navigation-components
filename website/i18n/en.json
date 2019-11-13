@@ -37,6 +37,10 @@
         "title": "Next Steps",
         "sidebar_label": "Next Steps"
       },
+      "screen-containers": {
+        "title": "Rendering screens",
+        "sidebar_label": "Rendering screens"
+      },
       "testing": {
         "title": "Testing our form",
         "sidebar_label": "Testing our form"
