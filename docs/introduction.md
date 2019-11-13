@@ -4,7 +4,7 @@ title: Introduction
 sidebar_label: Introduction
 ---
 
-React Navigation Library is a component-driven navigation library for React Native. It aims to take what's really nice about developing with React Native and make it even better by abstracting away some of the annoying stuff. The end result is a tool that stays out of your way and lets you work with your own components and app code.
+Navigation Components is a component-driven navigation library for React Native. It aims to take what's really nice about developing with React Native and make it even better by abstracting away some of the annoying stuff. The end result is a tool that stays out of your way and lets you work with your own components and app code.
 
 ## Features
 

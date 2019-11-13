@@ -3,7 +3,7 @@
   "localized-strings": {
     "next": "Next",
     "previous": "Previous",
-    "tagline": "Component driven navigation for React Native",
+    "tagline": "Navigation components for React native",
     "docs": {
       "deep-linking": {
         "title": "Deep Linking",
