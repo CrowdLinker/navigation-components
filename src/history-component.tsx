@@ -1,6 +1,6 @@
 // this is basically a simplified and worse version of @reach/router in-memory history implementation
 import React from 'react';
-import { history as globalHistory, iHistory } from './history';
+import { history as globalHistory, iHistory, navigate } from './history';
 import { BackHandler, Linking } from 'react-native';
 import { FocusProvider } from './pager';
 import { AccessibleScreen } from './accessible-screen';
@@ -169,4 +169,19 @@ function useLocation() {
   return location;
 }
 
-export { useLocation, useBasepath, BasepathProvider, useHistory, History };
+function useNavigate() {
+  const basepath = useBasepath();
+
+  return function(to: string) {
+    navigate(to, basepath || '/');
+  };
+}
+
+export {
+  useLocation,
+  useBasepath,
+  BasepathProvider,
+  useHistory,
+  useNavigate,
+  History,
+};

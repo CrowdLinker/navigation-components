@@ -22,7 +22,7 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "*": ["src/*", "node_modules/*"],
+      "*": ["src/*", "node_modules/*", "../src/*"],
       "navigation-components": ["../src/index"]
     },
     "jsx": "react",

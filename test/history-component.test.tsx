@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, Linking, BackHandler } from 'react-native';
-import { render, act, wait } from '@testing-library/react-native';
+import { Text, Linking, BackHandler, Button } from 'react-native';
+import { render, act, wait, fireEvent } from '@testing-library/react-native';
 import {
   history,
   History,
@@ -8,6 +8,8 @@ import {
   createHistory,
   navigate,
   useHistory,
+  BasepathProvider,
+  useNavigate,
 } from '../src';
 
 function Location() {
@@ -126,6 +128,76 @@ test('useHistory() throws if no history is available', () => {
 
   // @ts-ignore
   console.error.mockRestore();
+});
+
+test('useNavigate() works', () => {
+  function Consumer() {
+    const navigate = useNavigate();
+    return (
+      <>
+        <Button title="navigate" onPress={() => navigate('test')} />;
+        <Location />
+      </>
+    );
+  }
+
+  const { getByText } = render(
+    <History>
+      <BasepathProvider value="/deep/nested/link">
+        <Consumer />
+      </BasepathProvider>
+    </History>
+  );
+
+  fireEvent.press(getByText('navigate'));
+
+  getByText('/deep/nested/link/test');
+});
+
+test('useNavigate() works with root path', () => {
+  function Consumer() {
+    const navigate = useNavigate();
+    return (
+      <>
+        <Button title="navigate" onPress={() => navigate('test')} />;
+        <Location />
+      </>
+    );
+  }
+
+  const { getByText } = render(
+    <History>
+      <Consumer />
+    </History>
+  );
+
+  fireEvent.press(getByText('navigate'));
+
+  getByText('/test');
+});
+
+test('useNavigate() works with relative paths', () => {
+  function Consumer() {
+    const navigate = useNavigate();
+    return (
+      <>
+        <Button title="navigate" onPress={() => navigate('../test')} />;
+        <Location />
+      </>
+    );
+  }
+
+  const { getByText } = render(
+    <History>
+      <BasepathProvider value="/deep/nested/link">
+        <Consumer />
+      </BasepathProvider>
+    </History>
+  );
+
+  fireEvent.press(getByText('navigate'));
+
+  getByText('/deep/nested/test');
 });
 
 test('history responds to initial URL', async () => {

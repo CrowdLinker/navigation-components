@@ -83,7 +83,7 @@ function Signup() {
     <>
       <Header title="Signup" />
 
-      <View style={{ padding: 50 }}>
+      <View style={styles.form}>
         <Input name="name" placeholder="Enter name" />
         <Input name="email" placeholder="Enter email" {...emailInputProps} />
         <Input
@@ -109,7 +109,7 @@ function Login() {
   return (
     <>
       <Header title="Login" />
-      <View style={{ padding: 50 }}>
+      <View style={styles.form}>
         <Input name="email" placeholder="Enter email" {...emailInputProps} />
         <Input
           name="password"
@@ -125,10 +125,8 @@ function Login() {
 
 function Header({ title }) {
   return (
-    <View style={{ height: 80, justifyContent: 'center' }}>
-      <Text style={{ fontSize: 26, textAlign: 'center', fontWeight: '600' }}>
-        {title}
-      </Text>
+    <View style={styles.header}>
+      <Text style={styles.title}>{title}</Text>
     </View>
   );
 }
@@ -143,18 +141,44 @@ function Input(props: iInput) {
 
   return (
     <TextInput
-      style={{
-        height: 40,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        fontSize: 18,
-        marginVertical: 15,
-      }}
+      style={styles.input}
       value={value}
       onChangeText={formik.handleChange(props.name)}
       {...props}
     />
   );
 }
+
+const styles = StyleSheet.create({
+  form: {
+    padding: 50,
+  },
+
+  header: {
+    height: 80,
+    justifyContent: 'center',
+  },
+
+  title: {
+    fontSize: 26,
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+
+  input: {
+    height: 40,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    fontSize: 18,
+    marginVertical: 15,
+  },
+
+  link: {
+    fontSize: 18,
+    color: 'aquamarine',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+});
 
 const emailInputProps: Partial<TextInputProps> = {
   autoCompleteType: 'email',
@@ -212,48 +236,67 @@ Refresh and you'll see that the login form is now the initial screen. Note that 
 
 ## Navigating with a button
 
-There's still a problem - it's not immediately clear to the user that they can swipe between the screens. Let's add some buttons to let them navigate between the forms:
+There's still a problem - it's not immediately clear to the user that they can swipe between the screens. Let's add some buttons to let them navigate via a button press. In order to do so, we'll add some routes to the navigator:
 
 ```tsx
-import { useTabs } from 'navigation-components';
+import { Link, History } from 'navigation-components';
+
+function LoginForms() {
+  return (
+    <History>
+      {...}
+    </History>
+  )
+}
+
+function Forms() {
+  return (
+    <Navigator initialIndex={1} routes={['signup', 'login']}>
+      <Tabs>
+        <Signup />
+        <Login />
+      </Tabs>
+    </Navigator>
+  );
+}
 
 function Signup() {
-  const tabs = useTabs();
-
   return (
     <>
       ...
-      <Button title="Go to login" onPress={() => tabs.goTo(1)} />
+      <Link to="login">
+        <Text style={styles.link}>Go to login</Text>
+      </Link>
     </>
   );
 }
 
 function Login() {
-  const tabs = useTabs();
-
   return (
     <>
       ...
-      <Button title="Go to signup" onPress={() => tabs.goTo(0)} />
+      <Link to="signup">
+        <Text style={styles.link}>Go to signup</Text>
+      </Link>
     </>
   );
 }
 ```
 
-Awesome - we can now navigate between screens with `useTabs().goTo(index: number)`.
+Awesome - we can now navigate between screens with our routing in place.
 
 ## Adding a success modal
 
 The last screen we'll add will be a success modal that pops up after signup or login. In a real world example, you'd likely want to redirect the user to the app's home page or onboarding with a link of some kind.
 
-First, let's add create the modal component. Then we'll wrap our forms in a Modal container and toggle the success modal on submit
-
 ```tsx
-import { Modal, useModal } from 'navigation-components';
+import { Modal, useNavigate, useModal } from 'navigation-components';
 
 // implement our success modal screen
 function SuccessModal() {
+  // we can imperatively toggle our modal using the useModal() hook:
   const modal = useModal();
+
   const email = useFormikContext().getFieldProps('email').value;
 
   return (
@@ -279,19 +322,19 @@ function SuccessModal() {
   );
 }
 
-// wrap the forms in the modal we've just created
-// we use the active and onClose() props for Modal to declaratively toggle it
+// wrap the forms in the modal we've just created and add our routes
 function LoginForms() {
-  const [status, setStatus] = React.useState('');
+  const navigate = useNavigate();
 
   function handleSubmit(data: iFormValues) {
-    setStatus('success');
+    // this will navigate similar to how a link would:
+    navigate('success-modal');
   }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
-        <Navigator>
+        <Navigator routes={['/', 'success-modal']}>
           <Modal active={status === 'success'} onClose={() => setStatus('')}>
             <Forms />
             <SuccessModal />
@@ -326,9 +369,11 @@ import { Formik, useFormikContext } from 'formik';
 import {
   Navigator,
   Tabs,
-  useTabs,
   Modal,
   useModal,
+  useNavigate,
+  History,
+  Link,
 } from 'navigation-components';
 
 interface iFormValues {
@@ -346,29 +391,31 @@ const initialFormValues: iFormValues = {
 };
 
 function LoginForms() {
-  const [status, setStatus] = React.useState('');
+  const navigate = useNavigate();
 
   function handleSubmit(data: iFormValues) {
-    setStatus('success');
+    navigate('success-modal');
   }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
-        <Navigator>
-          <Modal active={status === 'success'} onClose={() => setStatus('')}>
-            <Forms />
-            <SuccessModal />
-          </Modal>
-        </Navigator>
-      </Formik>
+      <History>
+        <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
+          <Navigator routes={['/', 'success-modal']}>
+            <Modal>
+              <Forms />
+              <SuccessModal />
+            </Modal>
+          </Navigator>
+        </Formik>
+      </History>
     </SafeAreaView>
   );
 }
 
 function Forms() {
   return (
-    <Navigator initialIndex={1}>
+    <Navigator initialIndex={1} routes={['signup', 'login']}>
       <Tabs>
         <Signup />
         <Login />
@@ -378,8 +425,6 @@ function Forms() {
 }
 
 function Signup() {
-  const tabs = useTabs();
-
   const formik = useFormikContext<iFormValues>();
 
   function handleSubmit() {
@@ -391,7 +436,7 @@ function Signup() {
     <>
       <Header title="Signup" />
 
-      <View style={{ padding: 50 }}>
+      <View style={styles.form}>
         <Input name="name" placeholder="Enter name" />
         <Input name="email" placeholder="Enter email" {...emailInputProps} />
         <Input
@@ -402,14 +447,14 @@ function Signup() {
       </View>
 
       <Button title="Submit" onPress={handleSubmit} />
-      <Button title="Go to login" onPress={() => tabs.goTo(1)} />
+      <Link to="login">
+        <Text style={styles.link}>Go to login</Text>
+      </Link>
     </>
   );
 }
 
 function Login() {
-  const tabs = useTabs();
-
   const formik = useFormikContext<iFormValues>();
 
   function handleSubmit() {
@@ -420,7 +465,7 @@ function Login() {
   return (
     <>
       <Header title="Login" />
-      <View style={{ padding: 50 }}>
+      <View style={styles.form}>
         <Input name="email" placeholder="Enter email" {...emailInputProps} />
         <Input
           name="password"
@@ -430,7 +475,10 @@ function Login() {
       </View>
 
       <Button title="Submit" onPress={handleSubmit} />
-      <Button title="Go to signup" onPress={() => tabs.goTo(0)} />
+
+      <Link to="signup">
+        <Text style={styles.link}>Go to signup</Text>
+      </Link>
     </>
   );
 }
@@ -464,10 +512,8 @@ function SuccessModal() {
 
 function Header({ title }) {
   return (
-    <View style={{ height: 80, justifyContent: 'center' }}>
-      <Text style={{ fontSize: 26, textAlign: 'center', fontWeight: '600' }}>
-        {title}
-      </Text>
+    <View style={styles.header}>
+      <Text style={styles.title}>{title}</Text>
     </View>
   );
 }
@@ -482,18 +528,44 @@ function Input(props: iInput) {
 
   return (
     <TextInput
-      style={{
-        height: 40,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        fontSize: 18,
-        marginVertical: 15,
-      }}
+      style={styles.input}
       value={value}
       onChangeText={formik.handleChange(props.name)}
       {...props}
     />
   );
 }
+
+const styles = StyleSheet.create({
+  form: {
+    padding: 50,
+  },
+
+  header: {
+    height: 80,
+    justifyContent: 'center',
+  },
+
+  title: {
+    fontSize: 26,
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+
+  input: {
+    height: 40,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    fontSize: 18,
+    marginVertical: 15,
+  },
+
+  link: {
+    fontSize: 18,
+    color: 'aquamarine',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+});
 
 const emailInputProps: Partial<TextInputProps> = {
   autoCompleteType: 'email',
@@ -519,10 +591,8 @@ export default LoginForms;
 
 - A Navigator can be configured to render the Login screen first by passing an `initialIndex` prop. Screens transition in and out based on the **order** in which they are declared. In our case, the Signup form is on the left and the Login form is on the right because of the order in which we render them.
 
-- The `useTabs()` hook provides a `goTo(index: number)` method that let's you imperatively navigate to a tab.
+- Routing lets users navigate to different screens via a Link or useNavigate().navigate() function call
 
-- The `useModal()` hook can `show()` and `hide()` a modal. The modal can also be toggled declaratively with the `active` and `onClose` props.
+## Next steps
 
-## Outling improvements
-
-Our form is looking good, but it can be improved. One thing that's not great is having to track the submit status in our container component. It would be simpler if we could navigate directly to the success modal inside our onSubmit() callback. We also navigate between our forms via index, but this could prove to be brittle if we ever wanted to change the order of our forms. We'll refactor all of this and clean it up, but first, let's capture the behaviour we have now in some tests.
+Our form is looking pretty good - in the next section we'll look into testing it fully.

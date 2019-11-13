@@ -11,7 +11,15 @@ import {
 
 import {Formik, useFormikContext} from 'formik';
 
-import {Navigator, Tabs, useTabs, Modal, useModal} from 'navigation-components';
+import {
+  Navigator,
+  Tabs,
+  Modal,
+  useModal,
+  useNavigate,
+  History,
+  Link,
+} from 'navigation-components';
 
 interface iFormValues {
   type: 'signup' | 'login' | '';
@@ -28,29 +36,31 @@ const initialFormValues: iFormValues = {
 };
 
 function LoginForms() {
-  const [status, setStatus] = React.useState('');
+  const navigate = useNavigate();
 
   function handleSubmit(data: iFormValues) {
-    setStatus('success');
+    navigate('success-modal');
   }
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
-        <Navigator>
-          <Modal active={status === 'success'} onClose={() => setStatus('')}>
-            <Forms />
-            <SuccessModal />
-          </Modal>
-        </Navigator>
-      </Formik>
+      <History>
+        <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
+          <Navigator routes={['/', 'success-modal']}>
+            <Modal>
+              <Forms />
+              <SuccessModal />
+            </Modal>
+          </Navigator>
+        </Formik>
+      </History>
     </SafeAreaView>
   );
 }
 
 function Forms() {
   return (
-    <Navigator initialIndex={1}>
+    <Navigator initialIndex={1} routes={['signup', 'login']}>
       <Tabs>
         <Signup />
         <Login />
@@ -60,8 +70,6 @@ function Forms() {
 }
 
 function Signup() {
-  const tabs = useTabs();
-
   const formik = useFormikContext<iFormValues>();
 
   function handleSubmit() {
@@ -73,7 +81,7 @@ function Signup() {
     <>
       <Header title="Signup" />
 
-      <View style={{padding: 50}}>
+      <View style={styles.form}>
         <Input name="name" placeholder="Enter name" />
         <Input name="email" placeholder="Enter email" {...emailInputProps} />
         <Input
@@ -84,14 +92,14 @@ function Signup() {
       </View>
 
       <Button title="Submit" onPress={handleSubmit} />
-      <Button title="Go to login" onPress={() => tabs.goTo(1)} />
+      <Link to="login">
+        <Text style={styles.link}>Go to login</Text>
+      </Link>
     </>
   );
 }
 
 function Login() {
-  const tabs = useTabs();
-
   const formik = useFormikContext<iFormValues>();
 
   function handleSubmit() {
@@ -102,7 +110,7 @@ function Login() {
   return (
     <>
       <Header title="Login" />
-      <View style={{padding: 50}}>
+      <View style={styles.form}>
         <Input name="email" placeholder="Enter email" {...emailInputProps} />
         <Input
           name="password"
@@ -112,7 +120,10 @@ function Login() {
       </View>
 
       <Button title="Submit" onPress={handleSubmit} />
-      <Button title="Go to signup" onPress={() => tabs.goTo(0)} />
+
+      <Link to="signup">
+        <Text style={styles.link}>Go to signup</Text>
+      </Link>
     </>
   );
 }
@@ -144,10 +155,8 @@ function SuccessModal() {
 
 function Header({title}) {
   return (
-    <View style={{height: 80, justifyContent: 'center'}}>
-      <Text style={{fontSize: 26, textAlign: 'center', fontWeight: '600'}}>
-        {title}
-      </Text>
+    <View style={styles.header}>
+      <Text style={styles.title}>{title}</Text>
     </View>
   );
 }
@@ -162,18 +171,44 @@ function Input(props: iInput) {
 
   return (
     <TextInput
-      style={{
-        height: 40,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        fontSize: 18,
-        marginVertical: 15,
-      }}
+      style={styles.input}
       value={value}
       onChangeText={formik.handleChange(props.name)}
       {...props}
     />
   );
 }
+
+const styles = StyleSheet.create({
+  form: {
+    padding: 50,
+  },
+
+  header: {
+    height: 80,
+    justifyContent: 'center',
+  },
+
+  title: {
+    fontSize: 26,
+    textAlign: 'center',
+    fontWeight: '600',
+  },
+
+  input: {
+    height: 40,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    fontSize: 18,
+    marginVertical: 15,
+  },
+
+  link: {
+    fontSize: 18,
+    color: 'aquamarine',
+    textAlign: 'center',
+    lineHeight: 24,
+  },
+});
 
 const emailInputProps: Partial<TextInputProps> = {
   autoCompleteType: 'email',
