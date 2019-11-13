@@ -1,0 +1,269 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Testing our form · React Navigation Library</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="In this section, we will configure our test environment and run tests on the form that we just implemented."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Testing our form · React Navigation Library"/><meta property="og:type" content="website"/><meta property="og:url" content="https://your-docusaurus-test-site.com/react-navigation-library/"/><meta property="og:description" content="In this section, we will configure our test environment and run tests on the form that we just implemented."/><meta property="og:image" content="https://your-docusaurus-test-site.com/react-navigation-library/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://your-docusaurus-test-site.com/react-navigation-library/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/react-navigation-library/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/react-navigation-library/js/scrollSpy.js"></script><link rel="stylesheet" href="/react-navigation-library/css/main.css"/><script src="/react-navigation-library/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/react-navigation-library/"><img class="logo" src="/react-navigation-library/img/favicon.ico" alt="React Navigation Library"/><h2 class="headerTitleWithLogo">React Navigation Library</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/react-navigation-library/docs/introduction" target="_self">Docs</a></li><li class=""><a href="https://github.com/Crowdlinker/react-navigation-library" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Guides</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Overview</h3><ul class=""><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/introduction">Introduction</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/getting-started">Getting started</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/first-navigator">Basic Example</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/nesting-navigators">Nesting Navigators</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/dynamic-vs-static">Build your own Navigator</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/next-steps">Next Steps</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul class=""><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/deep-linking">Deep Linking</a></li><li class="navListItem"><a class="navItem" href="/react-navigation-library/docs/multipage-form">Building a multipage form</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/react-navigation-library/docs/testing">Testing our form</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Testing our form</h1></header><article><div><span><p>In this section, we will configure our test environment and run tests on the form that we just implemented.</p>
+<h2><a class="anchor" aria-hidden="true" id="installation"></a><a href="#installation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Installation</h2>
+<pre><code class="hljs css language-bash">yarn add --dev @testing-library/react-native @testing-library/jest-native navigation-test-utils
+
+<span class="hljs-comment"># if you're running typescript you'll need these as well</span>
+yarn add --dev @types/jest @types/react-native typescript ts-jest
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="configuring-typescript"></a><a href="#configuring-typescript" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuring typescript</h2>
+<p>If you're running typescript and do not already have a <code>tsconfig.json</code>, you'll want to add one at the root of your project:</p>
+<pre><code class="hljs css language-json">{
+  <span class="hljs-attr">"compilerOptions"</span>: {
+    <span class="hljs-attr">"target"</span>: <span class="hljs-string">"es5"</span>,
+    <span class="hljs-attr">"module"</span>: <span class="hljs-string">"commonjs"</span>,
+    <span class="hljs-attr">"jsx"</span>: <span class="hljs-string">"react"</span>,
+    <span class="hljs-attr">"strict"</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-attr">"noImplicitAny"</span>: <span class="hljs-literal">false</span>,
+    <span class="hljs-attr">"esModuleInterop"</span>: <span class="hljs-literal">true</span>
+  }
+}
+</code></pre>
+<h2><a class="anchor" aria-hidden="true" id="configuring-the-test-environment"></a><a href="#configuring-the-test-environment" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuring the test environment</h2>
+<p>There's some addition configuration to get everything running - we can do this in <code>package.json</code>:</p>
+<pre><code class="hljs css language-json">  // ...
+  "jest": {
+    "preset": "@testing-library/react-native",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-native|react-native-screens|react-native-reanimated)/)"
+    ],
+    "setupFilesAfterEnv": [
+      "@testing-library/react-native/cleanup-after-each",
+      "react-navigation-library/mock",
+      "navigation-test-utils/cleanup-after-each"
+    ],
+    "transform": {
+      "^.+\\.(t)sx?$": "ts-jest"
+    }
+  }
+</code></pre>
+<p><strong>Note:</strong> the <code>transform</code> key here is only to be used for typescript projects.</p>
+<p>Here's a brief breakdown of each of this fields:</p>
+<ul>
+<li><p><code>preset</code>: <code>@testing-library/react-native</code> loads a bunch of mocks and stuff to simulate React Native. Our tests will run in this simulated environment</p></li>
+<li><p><code>transformIgnorePatterns</code>: some dependencies aren't transpiled to older javascript, so we specify that babel should transpile them before running our tests. If you're running a project with a lot of dependencies, it's likely you'll have to add more to this list as lots of RN packages do not transpile their code before shipping to npm</p></li>
+<li><p><code>setupFilesAfterEnv</code>: these files will run before each test file - here we are cleaning up the environment after each test, and mocking out some components that are used by react-navigation-library but don't work in a test environment</p></li>
+<li><p><code>transform</code>: we're specifying all of our <code>.tsx</code> files to run through ts-jest</p></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="writing-our-first-test"></a><a href="#writing-our-first-test" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Writing our first test</h2>
+<p>Let's make sure everything is working and move on to some real tests.</p>
+<p><strong>Note:</strong> If you're coming from a fresh install of React Native, there have been issues in the past of running the included test (<code>__tests__/App-test.js</code>) so you might want to remove this first.</p>
+<p>Create a file <code>__tests__/login-form.test.tsx</code> and include the following boilerplate</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> { render } <span class="hljs-keyword">from</span> <span class="hljs-string">'navigation-test-utils'</span>;
+<span class="hljs-keyword">import</span> LoginForms <span class="hljs-keyword">from</span> <span class="hljs-string">'../login-form'</span>;
+
+test(<span class="hljs-string">'render()'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  const { getFocused } = render(&lt;LoginForms /&gt;);]
+
+  getFocused().<span class="hljs-built_in">debug</span>()
+});
+</code></pre>
+<p>You'll notice we pulled in <code>render</code> from the <code>navigation-test-utils</code> package. Under the hood this uses <code>@testing-library/react-native</code>. If you're not familiar with the <code>testing-library</code> apis, you can check out the docs for the native one here: <a href="https://www.native-testing-library.com/">https://www.native-testing-library.com/</a>.</p>
+<p><code>navigation-test-utils</code> returns a <code>getFocused()</code> method when we render a navigator. This function works in tandem with <code>react-navigation-library</code> to return the currently focused view of your components, making tests much easier to debug and work with.</p>
+<p>Now run the test:</p>
+<pre><code class="hljs css language-bash">yarn <span class="hljs-built_in">test</span> --watch
+</code></pre>
+<p>and you should see something in your terminal that looks like this:</p>
+<p><img src="/react-navigation-library/docs/assets/test-debugger.png" alt="debugger output"></p>
+<p>You can peek into your components at any point in a test using getFocused, which can help a lot when you're trying to figure out what's going on:</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">import</span> { fireEvent } <span class="hljs-keyword">from</span> <span class="hljs-string">'@testing-library/react-native'</span>
+
+test(<span class="hljs-string">'render()'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> { getFocused } = render(&lt;LoginForms /&gt;);]
+
+  getFocused().debug()
+
+  <span class="hljs-comment">// navigate to signup screen</span>
+  fireEvent.press(getFocused().getByText(<span class="hljs-regexp">/signup/i</span>))
+
+  <span class="hljs-comment">// outputs signup screen</span>
+  getFocused().debug()
+});
+</code></pre>
+<p>Now that we have our test environment working, we can start making some assertions. Let's write some tests!</p>
+<pre><code class="hljs css language-tsx">test('login', async () =&gt; {
+  const inputData = {
+    email: 'andy@test.ca',
+    password: '<span class="hljs-number">123456</span>',
+    type: 'login',
+  }<span class="hljs-comment">;</span>
+
+  const { getFocused } = render(<span class="hljs-name">&lt;LoginForms</span> /&gt;)<span class="hljs-comment">;</span>
+
+  // assert success screen is not focused
+  expect(() =&gt; getFocused().getByText(<span class="hljs-name">/success/i</span>)).toThrow()<span class="hljs-comment">;</span>
+
+  // we need to wrap the changeText events in an async act() because formik updates values asynchronously
+  await act(<span class="hljs-name">async</span> () =&gt; {
+    fireEvent.changeText(
+      <span class="hljs-name">getFocused</span>().getByPlaceholderText(<span class="hljs-name">/email/i</span>),
+      inputData.email
+    )<span class="hljs-comment">;</span>
+
+    fireEvent.changeText(
+      <span class="hljs-name">getFocused</span>().getByPlaceholderText(<span class="hljs-name">/password/i</span>),
+      inputData.password
+    )<span class="hljs-comment">;</span>
+
+    fireEvent.press(<span class="hljs-name">getFocused</span>().getByTitle('Submit'))<span class="hljs-comment">;</span>
+  })<span class="hljs-comment">;</span>
+
+  getFocused().getByText(<span class="hljs-name">/success/i</span>)<span class="hljs-comment">;</span>
+})<span class="hljs-comment">;</span>
+
+test('signup', async () =&gt; {
+  const inputData = {
+    name: 'andy',
+    email: 'andy@test.ca',
+    password: '<span class="hljs-number">123456</span>',
+    type: 'signup',
+  }<span class="hljs-comment">;</span>
+
+  const { getFocused } = render(<span class="hljs-name">&lt;LoginForms</span> /&gt;)<span class="hljs-comment">;</span>
+
+  fireEvent.press(<span class="hljs-name">getFocused</span>().getByText(<span class="hljs-name">/to</span> signup/i))<span class="hljs-comment">;</span>
+
+  await act(<span class="hljs-name">async</span> () =&gt; {
+    const signupScreen = getFocused()<span class="hljs-comment">;</span>
+
+    fireEvent.changeText(
+      <span class="hljs-name">signupScreen</span>.getByPlaceholderText(<span class="hljs-name">/name/i</span>),
+      inputData.name
+    )<span class="hljs-comment">;</span>
+
+    fireEvent.changeText(
+      <span class="hljs-name">signupScreen</span>.getByPlaceholderText(<span class="hljs-name">/email/i</span>),
+      inputData.email
+    )<span class="hljs-comment">;</span>
+
+    fireEvent.changeText(
+      <span class="hljs-name">signupScreen</span>.getByPlaceholderText(<span class="hljs-name">/password/i</span>),
+      inputData.password
+    )<span class="hljs-comment">;</span>
+
+    // fireEvent.press(<span class="hljs-name">getFocused</span>().getByTitle('Submit'))<span class="hljs-comment">;</span>
+  })<span class="hljs-comment">;</span>
+
+  getFocused().getByText(<span class="hljs-name">/success/i</span>)<span class="hljs-comment">;</span>
+})<span class="hljs-comment">;</span>
+</code></pre>
+<p>You'll notice that the second test fails because we never hit the submit button. Uncomment that section of the test and all test should be green.</p>
+<h2><a class="anchor" aria-hidden="true" id="adding-a-submit-call"></a><a href="#adding-a-submit-call" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding a submit call</h2>
+<p>One thing we're missing in our tests is confirmation that the input data is actually being submitted. Let's add those calls to LoginForms and test it out.</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-comment">// login-forms.tsx</span>
+
+<span class="hljs-keyword">function</span> <span class="hljs-constructor">LoginForms({<span class="hljs-params">onSubmit</span>}: <span class="hljs-params">any</span>)</span> {
+  const <span class="hljs-literal">[<span class="hljs-identifier">status</span>, <span class="hljs-identifier">setStatus</span>]</span> = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">React</span>.</span></span>use<span class="hljs-constructor">State('')</span>;
+
+  <span class="hljs-keyword">function</span> handle<span class="hljs-constructor">Submit(<span class="hljs-params">data</span>: <span class="hljs-params">iFormValues</span>)</span> {
+    set<span class="hljs-constructor">Status('<span class="hljs-params">success</span>')</span>;
+    on<span class="hljs-constructor">Submit(<span class="hljs-params">data</span>)</span>;
+  }<span class="hljs-operator">
+
+  ...
+
+</span>}
+</code></pre>
+<pre><code class="hljs css language-tsx"><span class="hljs-comment">// __tests__/login-form.test.tsx</span>
+test(<span class="hljs-string">'login'</span>, <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">const</span> inputData = {
+    email: <span class="hljs-string">'andy@test.ca'</span>,
+    password: <span class="hljs-string">'123456'</span>,
+    <span class="hljs-keyword">type</span>: <span class="hljs-string">'login'</span>,
+  };
+
+  <span class="hljs-keyword">const</span> fakeSubmit = jest.fn();
+
+  <span class="hljs-keyword">const</span> { getFocused } = render(&lt;LoginForms onSubmit={fakeSubmit} /&gt;);
+
+  <span class="hljs-comment">// assert success screen is not focused</span>
+  expect(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> getFocused().getByText(<span class="hljs-regexp">/success/i</span>)).toThrow();
+
+  <span class="hljs-comment">// we need to wrap the changeText events in an act() because formik updates values asynchronously</span>
+  <span class="hljs-keyword">await</span> act(<span class="hljs-keyword">async</span> () =&gt; {
+    fireEvent.changeText(
+      getFocused().getByPlaceholderText(<span class="hljs-regexp">/email/i</span>),
+      inputData.email
+    );
+
+    fireEvent.changeText(
+      getFocused().getByPlaceholderText(<span class="hljs-regexp">/password/i</span>),
+      inputData.password
+    );
+
+    expect(fakeSubmit).not.toHaveBeenCalled();
+
+    fireEvent.press(getFocused().getByTitle(<span class="hljs-string">'Submit'</span>));
+  });
+
+  <span class="hljs-comment">// verify submit call receives input data</span>
+  expect(fakeSubmit).toHaveBeenCalledWith(expect.objectContaining(inputData));
+
+  getFocused().getByText(<span class="hljs-regexp">/success/i</span>);
+});
+</code></pre>
+<p>Try implementing the same thing for your signup test and see how it goes! We've now successfully captured the core functionality of our login forms.</p>
+<h2><a class="anchor" aria-hidden="true" id="summary"></a><a href="#summary" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Summary</h2>
+<ul>
+<li><p>in order to get up and running with jest, there are a few required dependencies you need to install, and some configuration that you can setup in your <code>package.json</code>. Projects using typescript need to install some additional dependencies, and add a <code>tsconfig.json</code> to the project</p></li>
+<li><p>we can render our navigators using the <code>render</code> function from <code>navigation-test-utils</code>, which returns a <code>getFocused()</code> method for targeting the focused screen in our tests. This method can be run at any step in your test to help you see what is going on in your markup and run assertions on what the user would be seeing.</p></li>
+<li><p><code>@testing-library/react-native</code> is an excellent resource for all of the other tools we can use in our tests: <a href="https://www.native-testing-library.com/">https://www.native-testing-library.com/</a></p></li>
+</ul>
+<p>In the next section, we'll refactor our Login forms example with some routing</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/react-navigation-library/docs/multipage-form"><span class="arrow-prev">← </span><span>Building a multipage form</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#installation">Installation</a></li><li><a href="#configuring-typescript">Configuring typescript</a></li><li><a href="#configuring-the-test-environment">Configuring the test environment</a></li><li><a href="#writing-our-first-test">Writing our first test</a></li><li><a href="#adding-a-submit-call">Adding a submit call</a></li><li><a href="#summary">Summary</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/react-navigation-library/" class="nav-home"><img src="/react-navigation-library/img/favicon.ico" alt="React Navigation Library" width="66" height="58"/></a><div><h5>Docs</h5><a href="/react-navigation-library/docs/en/introduction.html">Overview</a><a href="/react-navigation-library/docs/en/guides.html">Guides</a><a href="/react-navigation-library/docs/en/api.html">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/Crowdlinker/react-navigation-library">GitHub</a><a class="github-button" href="https://github.com/Crowdlinker/react-navigation-library" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/react-navigation-library/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Your Name or Your Company Name</section></footer></div></body></html>
