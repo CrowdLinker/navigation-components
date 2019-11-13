@@ -126,7 +126,7 @@
     &lt;&gt;
       &lt;Header title=<span class="hljs-string">"Signup"</span> /&gt;
 
-      &lt;View style={{ padding: <span class="hljs-number">50</span> }}&gt;
+      &lt;View style={styles.form}&gt;
         &lt;Input name=<span class="hljs-string">"name"</span> placeholder=<span class="hljs-string">"Enter name"</span> /&gt;
         &lt;Input name=<span class="hljs-string">"email"</span> placeholder=<span class="hljs-string">"Enter email"</span> {...emailInputProps} /&gt;
         &lt;Input
@@ -152,7 +152,7 @@
   <span class="hljs-keyword">return</span> (
     &lt;&gt;
       &lt;Header title=<span class="hljs-string">"Login"</span> /&gt;
-      &lt;View style={{ padding: <span class="hljs-number">50</span> }}&gt;
+      &lt;View style={styles.form}&gt;
         &lt;Input name=<span class="hljs-string">"email"</span> placeholder=<span class="hljs-string">"Enter email"</span> {...emailInputProps} /&gt;
         &lt;Input
           name=<span class="hljs-string">"password"</span>
@@ -168,10 +168,8 @@
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Header</span><span class="hljs-params">({ title })</span> </span>{
   <span class="hljs-keyword">return</span> (
-    &lt;View style={{ height: <span class="hljs-number">80</span>, justifyContent: <span class="hljs-string">'center'</span> }}&gt;
-      &lt;Text style={{ fontSize: <span class="hljs-number">26</span>, textAlign: <span class="hljs-string">'center'</span>, fontWeight: <span class="hljs-string">'600'</span> }}&gt;
-        {title}
-      &lt;/Text&gt;
+    &lt;View style={styles.header}&gt;
+      &lt;Text style={styles.title}&gt;{title}&lt;/Text&gt;
     &lt;/View&gt;
   );
 }
@@ -186,18 +184,44 @@
 
   <span class="hljs-keyword">return</span> (
     &lt;TextInput
-      style={{
-        height: <span class="hljs-number">40</span>,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        fontSize: <span class="hljs-number">18</span>,
-        marginVertical: <span class="hljs-number">15</span>,
-      }}
+      style={styles.input}
       value={value}
       onChangeText={formik.handleChange(props.name)}
       {...props}
     /&gt;
   );
 }
+
+<span class="hljs-keyword">const</span> styles = StyleSheet.create({
+  form: {
+    padding: <span class="hljs-number">50</span>,
+  },
+
+  header: {
+    height: <span class="hljs-number">80</span>,
+    justifyContent: <span class="hljs-string">'center'</span>,
+  },
+
+  title: {
+    fontSize: <span class="hljs-number">26</span>,
+    textAlign: <span class="hljs-string">'center'</span>,
+    fontWeight: <span class="hljs-string">'600'</span>,
+  },
+
+  input: {
+    height: <span class="hljs-number">40</span>,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    fontSize: <span class="hljs-number">18</span>,
+    marginVertical: <span class="hljs-number">15</span>,
+  },
+
+  link: {
+    fontSize: <span class="hljs-number">18</span>,
+    color: <span class="hljs-string">'aquamarine'</span>,
+    textAlign: <span class="hljs-string">'center'</span>,
+    lineHeight: <span class="hljs-number">24</span>,
+  },
+});
 
 <span class="hljs-keyword">const</span> emailInputProps: Partial&lt;TextInputProps&gt; = {
   autoCompleteType: <span class="hljs-string">'email'</span>,
@@ -244,40 +268,60 @@ export <span class="hljs-keyword">default</span> LoginForms;
 </code></pre>
 <p>Refresh and you'll see that the login form is now the initial screen. Note that you could also just switch the order of the forms, and Login would be the first to appear. But then the Signup form would appear to the right of the Login form. This means that the <strong>order</strong> of screens determines how they transition in and out.</p>
 <h2><a class="anchor" aria-hidden="true" id="navigating-with-a-button"></a><a href="#navigating-with-a-button" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Navigating with a button</h2>
-<p>There's still a problem - it's not immediately clear to the user that they can swipe between the screens. Let's add some buttons to let them navigate between the forms:</p>
-<pre><code class="hljs css language-tsx">import { useTabs } from <span class="hljs-string">'navigation-components'</span>;
+<p>There's still a problem - it's not immediately clear to the user that they can swipe between the screens. Let's add some buttons to let them navigate via a button press. In order to do so, we'll add some routes to the navigator:</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">import</span> { Link, History } <span class="hljs-keyword">from</span> <span class="hljs-string">'navigation-components'</span>;
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Signup</span><span class="hljs-params">()</span> </span>{
-  <span class="hljs-keyword">const</span> tabs = useTabs();
-
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">LoginForms</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">return</span> (
-    &lt;&gt;
-      ...
-      &lt;Button title=<span class="hljs-string">"Go to login"</span> onPress={() =&gt; tabs.<span class="hljs-keyword">goTo</span>(<span class="hljs-number">1</span>)} /&gt;
-    &lt;/&gt;
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">History</span>&gt;</span>
+      {...}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">History</span>&gt;</span></span>
+  )
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Forms</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Navigator</span> <span class="hljs-attr">initialIndex</span>=<span class="hljs-string">{1}</span> <span class="hljs-attr">routes</span>=<span class="hljs-string">{[</span>'<span class="hljs-attr">signup</span>', '<span class="hljs-attr">login</span>']}&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Tabs</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Signup</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Login</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Tabs</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Navigator</span>&gt;</span></span>
   );
 }
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Login</span><span class="hljs-params">()</span> </span>{
-  <span class="hljs-keyword">const</span> tabs = useTabs();
-
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Signup</span>(<span class="hljs-params"></span>) </span>{
   <span class="hljs-keyword">return</span> (
-    &lt;&gt;
+    <span class="xml"><span class="hljs-tag">&lt;&gt;</span>
       ...
-      &lt;Button title=<span class="hljs-string">"Go to signup"</span> onPress={() =&gt; tabs.<span class="hljs-keyword">goTo</span>(<span class="hljs-number">0</span>)} /&gt;
-    &lt;/&gt;
+      <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">to</span>=<span class="hljs-string">"login"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.link}</span>&gt;</span>Go to login<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
+    <span class="hljs-tag">&lt;/&gt;</span>
   );
 }
-</code></pre>
-<p>Awesome - we can now navigate between screens with <code>useTabs().goTo(index: number)</code>.</p>
+
+function Login() {
+  return (
+    <span class="hljs-tag">&lt;&gt;</span>
+      ...
+      <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">to</span>=<span class="hljs-string">"signup"</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.link}</span>&gt;</span>Go to signup<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
+    <span class="hljs-tag">&lt;/&gt;</span>
+  );
+}
+</span></code></pre>
+<p>Awesome - we can now navigate between screens with our routing in place.</p>
 <h2><a class="anchor" aria-hidden="true" id="adding-a-success-modal"></a><a href="#adding-a-success-modal" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding a success modal</h2>
 <p>The last screen we'll add will be a success modal that pops up after signup or login. In a real world example, you'd likely want to redirect the user to the app's home page or onboarding with a link of some kind.</p>
-<p>First, let's add create the modal component. Then we'll wrap our forms in a Modal container and toggle the success modal on submit</p>
-<pre><code class="hljs css language-tsx">import { Modal, useModal } from <span class="hljs-string">'navigation-components'</span>;
+<pre><code class="hljs css language-tsx">import { Modal, useNavigate, useModal } from <span class="hljs-string">'navigation-components'</span>;
 
 <span class="hljs-comment">// implement our success modal screen</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">SuccessModal</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-comment">// we can imperatively toggle our modal using the useModal() hook:</span>
   <span class="hljs-keyword">const</span> modal = useModal();
+
   <span class="hljs-keyword">const</span> email = useFormikContext().getFieldProps(<span class="hljs-string">'email'</span>).value;
 
   <span class="hljs-keyword">return</span> (
@@ -303,19 +347,19 @@ export <span class="hljs-keyword">default</span> LoginForms;
   );
 }
 
-<span class="hljs-comment">// wrap the forms in the modal we've just created</span>
-<span class="hljs-comment">// we use the active and onClose() props for Modal to declaratively toggle it</span>
+<span class="hljs-comment">// wrap the forms in the modal we've just created and add our routes</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">LoginForms</span><span class="hljs-params">()</span> </span>{
-  <span class="hljs-keyword">const</span> [status, setStatus] = React.useState(<span class="hljs-string">''</span>);
+  <span class="hljs-keyword">const</span> navigate = useNavigate();
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleSubmit</span><span class="hljs-params">(data: iFormValues)</span> </span>{
-    setStatus(<span class="hljs-string">'success'</span>);
+    <span class="hljs-comment">// this will navigate similar to how a link would:</span>
+    navigate(<span class="hljs-string">'success-modal'</span>);
   }
 
   <span class="hljs-keyword">return</span> (
     &lt;SafeAreaView style={{ flex: <span class="hljs-number">1</span> }}&gt;
       &lt;Formik initialValues={initialFormValues} onSubmit={handleSubmit}&gt;
-        &lt;Navigator&gt;
+        &lt;Navigator routes={[<span class="hljs-string">'/'</span>, <span class="hljs-string">'success-modal'</span>]}&gt;
           &lt;Modal active={status === <span class="hljs-string">'success'</span>} onClose={() =&gt; setStatus(<span class="hljs-string">''</span>)}&gt;
             &lt;Forms /&gt;
             &lt;SuccessModal /&gt;
@@ -329,8 +373,8 @@ export <span class="hljs-keyword">default</span> LoginForms;
 <p>Try entering an email and hitting the submit button to see the success modal pop up.</p>
 <p>That's it! While it's really basic right now, the core functionality related to navigating is setup with relatively little configuration, and extending the form will be really simple. If we wanted a Reset password workflow for example, we just need to add it as another tab.</p>
 <p>Here is the code we just wrote in it's entirety:</p>
-<pre><code class="hljs css language-tsx">import React from <span class="hljs-string">'react'</span>;
-import {
+<pre><code class="hljs css language-tsx"><span class="hljs-meta"><span class="hljs-meta-keyword">import</span> React from 'react';</span>
+<span class="hljs-meta"><span class="hljs-meta-keyword">import</span> {
   View,
   Text,
   TextInput,
@@ -338,17 +382,19 @@ import {
   TextInputProps,
   StyleSheet,
   Button,
-} from <span class="hljs-string">'react-native'</span>;
+} from 'react-native';</span>
 
-import { Formik, useFormikContext } from <span class="hljs-string">'formik'</span>;
+<span class="hljs-meta"><span class="hljs-meta-keyword">import</span> { Formik, useFormikContext } from 'formik';</span>
 
-import {
+<span class="hljs-meta"><span class="hljs-meta-keyword">import</span> {
   Navigator,
   Tabs,
-  useTabs,
   Modal,
   useModal,
-} from <span class="hljs-string">'navigation-components'</span>;
+  useNavigate,
+  History,
+  Link,
+} from 'navigation-components';</span>
 
 <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">iFormValues</span> </span>{
   type: <span class="hljs-string">'signup'</span> | <span class="hljs-string">'login'</span> | <span class="hljs-string">''</span>;
@@ -365,29 +411,31 @@ import {
 };
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">LoginForms</span><span class="hljs-params">()</span> </span>{
-  <span class="hljs-keyword">const</span> [status, setStatus] = React.useState(<span class="hljs-string">''</span>);
+  <span class="hljs-keyword">const</span> navigate = useNavigate();
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleSubmit</span><span class="hljs-params">(data: iFormValues)</span> </span>{
-    setStatus(<span class="hljs-string">'success'</span>);
+    navigate(<span class="hljs-string">'success-modal'</span>);
   }
 
   <span class="hljs-keyword">return</span> (
     &lt;SafeAreaView style={{ flex: <span class="hljs-number">1</span> }}&gt;
-      &lt;Formik initialValues={initialFormValues} onSubmit={handleSubmit}&gt;
-        &lt;Navigator&gt;
-          &lt;Modal active={status === <span class="hljs-string">'success'</span>} onClose={() =&gt; setStatus(<span class="hljs-string">''</span>)}&gt;
-            &lt;Forms /&gt;
-            &lt;SuccessModal /&gt;
-          &lt;/Modal&gt;
-        &lt;/Navigator&gt;
-      &lt;/Formik&gt;
+      &lt;History&gt;
+        &lt;Formik initialValues={initialFormValues} onSubmit={handleSubmit}&gt;
+          &lt;Navigator routes={[<span class="hljs-string">'/'</span>, <span class="hljs-string">'success-modal'</span>]}&gt;
+            &lt;Modal&gt;
+              &lt;Forms /&gt;
+              &lt;SuccessModal /&gt;
+            &lt;/Modal&gt;
+          &lt;/Navigator&gt;
+        &lt;/Formik&gt;
+      &lt;/History&gt;
     &lt;/SafeAreaView&gt;
   );
 }
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Forms</span><span class="hljs-params">()</span> </span>{
   <span class="hljs-keyword">return</span> (
-    &lt;Navigator initialIndex={<span class="hljs-number">1</span>}&gt;
+    &lt;Navigator initialIndex={<span class="hljs-number">1</span>} routes={[<span class="hljs-string">'signup'</span>, <span class="hljs-string">'login'</span>]}&gt;
       &lt;Tabs&gt;
         &lt;Signup /&gt;
         &lt;Login /&gt;
@@ -397,8 +445,6 @@ import {
 }
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Signup</span><span class="hljs-params">()</span> </span>{
-  <span class="hljs-keyword">const</span> tabs = useTabs();
-
   <span class="hljs-keyword">const</span> formik = useFormikContext&lt;iFormValues&gt;();
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleSubmit</span><span class="hljs-params">()</span> </span>{
@@ -410,7 +456,7 @@ import {
     &lt;&gt;
       &lt;Header title=<span class="hljs-string">"Signup"</span> /&gt;
 
-      &lt;View style={{ padding: <span class="hljs-number">50</span> }}&gt;
+      &lt;View style={styles.form}&gt;
         &lt;Input name=<span class="hljs-string">"name"</span> placeholder=<span class="hljs-string">"Enter name"</span> /&gt;
         &lt;Input name=<span class="hljs-string">"email"</span> placeholder=<span class="hljs-string">"Enter email"</span> {...emailInputProps} /&gt;
         &lt;Input
@@ -421,14 +467,14 @@ import {
       &lt;/View&gt;
 
       &lt;Button title=<span class="hljs-string">"Submit"</span> onPress={handleSubmit} /&gt;
-      &lt;Button title=<span class="hljs-string">"Go to login"</span> onPress={() =&gt; tabs.<span class="hljs-keyword">goTo</span>(<span class="hljs-number">1</span>)} /&gt;
+      &lt;Link to=<span class="hljs-string">"login"</span>&gt;
+        &lt;Text style={styles.link}&gt;Go to login&lt;/Text&gt;
+      &lt;/Link&gt;
     &lt;/&gt;
   );
 }
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Login</span><span class="hljs-params">()</span> </span>{
-  <span class="hljs-keyword">const</span> tabs = useTabs();
-
   <span class="hljs-keyword">const</span> formik = useFormikContext&lt;iFormValues&gt;();
 
   <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleSubmit</span><span class="hljs-params">()</span> </span>{
@@ -439,7 +485,7 @@ import {
   <span class="hljs-keyword">return</span> (
     &lt;&gt;
       &lt;Header title=<span class="hljs-string">"Login"</span> /&gt;
-      &lt;View style={{ padding: <span class="hljs-number">50</span> }}&gt;
+      &lt;View style={styles.form}&gt;
         &lt;Input name=<span class="hljs-string">"email"</span> placeholder=<span class="hljs-string">"Enter email"</span> {...emailInputProps} /&gt;
         &lt;Input
           name=<span class="hljs-string">"password"</span>
@@ -449,7 +495,10 @@ import {
       &lt;/View&gt;
 
       &lt;Button title=<span class="hljs-string">"Submit"</span> onPress={handleSubmit} /&gt;
-      &lt;Button title=<span class="hljs-string">"Go to signup"</span> onPress={() =&gt; tabs.<span class="hljs-keyword">goTo</span>(<span class="hljs-number">0</span>)} /&gt;
+
+      &lt;Link to=<span class="hljs-string">"signup"</span>&gt;
+        &lt;Text style={styles.link}&gt;Go to signup&lt;/Text&gt;
+      &lt;/Link&gt;
     &lt;/&gt;
   );
 }
@@ -483,10 +532,8 @@ import {
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Header</span><span class="hljs-params">({ title })</span> </span>{
   <span class="hljs-keyword">return</span> (
-    &lt;View style={{ height: <span class="hljs-number">80</span>, justifyContent: <span class="hljs-string">'center'</span> }}&gt;
-      &lt;Text style={{ fontSize: <span class="hljs-number">26</span>, textAlign: <span class="hljs-string">'center'</span>, fontWeight: <span class="hljs-string">'600'</span> }}&gt;
-        {title}
-      &lt;/Text&gt;
+    &lt;View style={styles.header}&gt;
+      &lt;Text style={styles.title}&gt;{title}&lt;/Text&gt;
     &lt;/View&gt;
   );
 }
@@ -501,18 +548,44 @@ import {
 
   <span class="hljs-keyword">return</span> (
     &lt;TextInput
-      style={{
-        height: <span class="hljs-number">40</span>,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        fontSize: <span class="hljs-number">18</span>,
-        marginVertical: <span class="hljs-number">15</span>,
-      }}
+      style={styles.input}
       value={value}
       onChangeText={formik.handleChange(props.name)}
       {...props}
     /&gt;
   );
 }
+
+<span class="hljs-keyword">const</span> styles = StyleSheet.create({
+  form: {
+    padding: <span class="hljs-number">50</span>,
+  },
+
+  header: {
+    height: <span class="hljs-number">80</span>,
+    justifyContent: <span class="hljs-string">'center'</span>,
+  },
+
+  title: {
+    fontSize: <span class="hljs-number">26</span>,
+    textAlign: <span class="hljs-string">'center'</span>,
+    fontWeight: <span class="hljs-string">'600'</span>,
+  },
+
+  input: {
+    height: <span class="hljs-number">40</span>,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    fontSize: <span class="hljs-number">18</span>,
+    marginVertical: <span class="hljs-number">15</span>,
+  },
+
+  link: {
+    fontSize: <span class="hljs-number">18</span>,
+    color: <span class="hljs-string">'aquamarine'</span>,
+    textAlign: <span class="hljs-string">'center'</span>,
+    lineHeight: <span class="hljs-number">24</span>,
+  },
+});
 
 <span class="hljs-keyword">const</span> emailInputProps: Partial&lt;TextInputProps&gt; = {
   autoCompleteType: <span class="hljs-string">'email'</span>,
@@ -524,7 +597,7 @@ import {
 <span class="hljs-keyword">const</span> passwordInputProps: Partial&lt;TextInputProps&gt; = {
   textContentType: <span class="hljs-string">'password'</span>,
   autoCapitalize: <span class="hljs-string">'none'</span>,
-  secureTextEntry: <span class="hljs-keyword">true</span>,
+  secureTextEntry: <span class="hljs-literal">true</span>,
 };
 
 export <span class="hljs-keyword">default</span> LoginForms;
@@ -534,9 +607,8 @@ export <span class="hljs-keyword">default</span> LoginForms;
 <li><p>We used <code>formik</code> to handle some of the boilerplate logic related to forms. While not necessary, it helped reduce repetitive code and prop drilling that we would encounter if we had implemented the forms from scratch.</p></li>
 <li><p>Forms (or any view) can be separated into different screens with the Tabs component, which lets the user swipe between them.</p></li>
 <li><p>A Navigator can be configured to render the Login screen first by passing an <code>initialIndex</code> prop. Screens transition in and out based on the <strong>order</strong> in which they are declared. In our case, the Signup form is on the left and the Login form is on the right because of the order in which we render them.</p></li>
-<li><p>The <code>useTabs()</code> hook provides a <code>goTo(index: number)</code> method that let's you imperatively navigate to a tab.</p></li>
-<li><p>The <code>useModal()</code> hook can <code>show()</code> and <code>hide()</code> a modal. The modal can also be toggled declaratively with the <code>active</code> and <code>onClose</code> props.</p></li>
+<li><p>Routing lets users navigate to different screens via a Link or useNavigate().navigate() function call</p></li>
 </ul>
-<h2><a class="anchor" aria-hidden="true" id="outling-improvements"></a><a href="#outling-improvements" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Outling improvements</h2>
-<p>Our form is looking good, but it can be improved. One thing that's not great is having to track the submit status in our container component. It would be simpler if we could navigate directly to the success modal inside our onSubmit() callback. We also navigate between our forms via index, but this could prove to be brittle if we ever wanted to change the order of our forms. We'll refactor all of this and clean it up, but first, let's capture the behaviour we have now in some tests.</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/navigation-components/docs/deep-linking"><span class="arrow-prev">← </span><span>Deep Linking</span></a><a class="docs-next button" href="/navigation-components/docs/testing"><span>Testing our form</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#setup">Setup</a></li><li><a href="#separating-the-forms">Separating the forms</a></li><li><a href="#navigating-with-a-button">Navigating with a button</a></li><li><a href="#adding-a-success-modal">Adding a success modal</a></li><li><a href="#summary">Summary</a></li><li><a href="#outling-improvements">Outling improvements</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/navigation-components/" class="nav-home"><img src="/navigation-components/img/favicon.ico" alt="Navigation Components" width="66" height="58"/></a><div><h5>Docs</h5><a href="/navigation-components/docs/en/introduction.html">Overview</a><a href="/navigation-components/docs/en/guides.html">Guides</a><a href="/navigation-components/docs/en/api.html">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/Crowdlinker/navigation-components">GitHub</a><a class="github-button" href="https://github.com/Crowdlinker/navigation-components" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/navigation-components/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Your Name or Your Company Name</section></footer></div></body></html>
+<h2><a class="anchor" aria-hidden="true" id="next-steps"></a><a href="#next-steps" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Next steps</h2>
+<p>Our form is looking pretty good - in the next section we'll look into testing it fully.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/navigation-components/docs/deep-linking"><span class="arrow-prev">← </span><span>Deep Linking</span></a><a class="docs-next button" href="/navigation-components/docs/testing"><span>Testing our form</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#setup">Setup</a></li><li><a href="#separating-the-forms">Separating the forms</a></li><li><a href="#navigating-with-a-button">Navigating with a button</a></li><li><a href="#adding-a-success-modal">Adding a success modal</a></li><li><a href="#summary">Summary</a></li><li><a href="#next-steps">Next steps</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/navigation-components/" class="nav-home"><img src="/navigation-components/img/favicon.ico" alt="Navigation Components" width="66" height="58"/></a><div><h5>Docs</h5><a href="/navigation-components/docs/en/introduction.html">Overview</a><a href="/navigation-components/docs/en/guides.html">Guides</a><a href="/navigation-components/docs/en/api.html">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/Crowdlinker/navigation-components">GitHub</a><a class="github-button" href="https://github.com/Crowdlinker/navigation-components" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/navigation-components/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Your Name or Your Company Name</section></footer></div></body></html>
