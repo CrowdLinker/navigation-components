@@ -23,7 +23,7 @@
     "baseUrl": "./",
     "paths": {
       "*": ["src/*", "node_modules/*", "test/*"],
-      "react-navigation-library": ["./src/index"]
+      "navigation-components": ["./src/index"]
     },
     "jsx": "react",
     "esModuleInterop": true

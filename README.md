@@ -2,4 +2,4 @@
 
 WIP
 
-[Docs](https://crowdlinker.github.io/react-navigation-library/)
+[Docs](https://crowdlinker.github.io/navigation-components/)

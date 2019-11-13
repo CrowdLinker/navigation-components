@@ -4,7 +4,7 @@ title: Next Steps
 sidebar_label: Next Steps
 ---
 
-At this point, we've covered a basic use case for pretty much every component that is provided by `react-navigation-library`. While we've covered a lot of ground already, there's still quite a bit we haven't touched on yet.
+At this point, we've covered a basic use case for pretty much every component that is provided by `navigation-components`. While we've covered a lot of ground already, there's still quite a bit we haven't touched on yet.
 
 In the following sections, we'll cover more specific use cases and configurations that you might come across while developing. These guides will assume that you've read or are familiar with the concepts presented in the first few sections. Topics that we will cover include:
 

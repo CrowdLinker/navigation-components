@@ -9,7 +9,7 @@ import {
   useParams,
   navigate,
   Stack,
-} from 'react-navigation-library';
+} from 'navigation-components';
 import {View, Text, Button} from 'react-native';
 import {colors, styles, Feed, FeedHeaders, Slide} from '../shared';
 

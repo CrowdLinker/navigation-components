@@ -4,7 +4,7 @@ title: Build your own Navigator
 sidebar_label: Build your own Navigator
 ---
 
-This section shows some of the flexibility that is at your disposable with `react-navigation-library`. Let's build out a custom navigator API.
+This section shows some of the flexibility that is at your disposable with `navigation-components`. Let's build out a custom navigator API.
 
 ## Creating a static navigator
 

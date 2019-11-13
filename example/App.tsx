@@ -11,13 +11,7 @@ import {
 
 import {Formik, useFormikContext} from 'formik';
 
-import {
-  Navigator,
-  Tabs,
-  useTabs,
-  Modal,
-  useModal,
-} from 'react-navigation-library';
+import {Navigator, Tabs, useTabs, Modal, useModal} from 'navigation-components';
 
 interface iFormValues {
   type: 'signup' | 'login' | '';

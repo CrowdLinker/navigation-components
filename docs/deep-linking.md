@@ -12,7 +12,7 @@ Let's start with a basic navigation structure:
 
 ```tsx
 import React from 'react';
-import { History, Navigator, Stack } from 'react-navigation-library';
+import { History, Navigator, Stack } from 'navigation-components';
 import { View, Text } from 'react-native';
 
 function App() {

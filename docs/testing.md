@@ -45,7 +45,7 @@ There's some addition configuration to get everything running - we can do this i
     ],
     "setupFilesAfterEnv": [
       "@testing-library/react-native/cleanup-after-each",
-      "react-navigation-library/mock",
+      "navigation-components/mock",
       "navigation-test-utils/cleanup-after-each"
     ],
     "transform": {
@@ -62,7 +62,7 @@ Here's a brief breakdown of each of this fields:
 
 - `transformIgnorePatterns`: some dependencies aren't transpiled to older javascript, so we specify that babel should transpile them before running our tests. If you're running a project with a lot of dependencies, it's likely you'll have to add more to this list as lots of RN packages do not transpile their code before shipping to npm
 
-- `setupFilesAfterEnv`: these files will run before each test file - here we are cleaning up the environment after each test, and mocking out some components that are used by react-navigation-library but don't work in a test environment
+- `setupFilesAfterEnv`: these files will run before each test file - here we are cleaning up the environment after each test, and mocking out some components that are used by navigation-components but don't work in a test environment
 
 - `transform`: we're specifying all of our `.tsx` files to run through ts-jest
 
@@ -88,7 +88,7 @@ test('render()', () => {
 
 You'll notice we pulled in `render` from the `navigation-test-utils` package. Under the hood this uses `@testing-library/react-native`. If you're not familiar with the `testing-library` apis, you can check out the docs for the native one here: https://www.native-testing-library.com/.
 
-`navigation-test-utils` returns a `getFocused()` method when we render a navigator. This function works in tandem with `react-navigation-library` to return the currently focused view of your components, making tests much easier to debug and work with.
+`navigation-test-utils` returns a `getFocused()` method when we render a navigator. This function works in tandem with `navigation-components` to return the currently focused view of your components, making tests much easier to debug and work with.
 
 Now run the test:
 

@@ -6247,7 +6247,7 @@ navigation-test-utils@^0.1.7:
   dependencies:
     "@testing-library/jest-native" "^3.0.2"
     "@testing-library/react-native" "^5.0.0"
-    react-navigation-library "^0.2.6"
+    navigation-components "^0.2.6"
 
 needle@^2.2.1:
   version "2.4.0"
@@ -7265,9 +7265,9 @@ react-native@0.60.5:
     stacktrace-parser "^0.1.3"
     whatwg-fetch "^3.0.0"
 
-react-navigation-library@^0.2.6:
+navigation-components@^0.2.6:
   version "0.2.12"
-  resolved "https://registry.yarnpkg.com/react-navigation-library/-/react-navigation-library-0.2.12.tgz#57c44b83ffb3c91ae2d10d4bfe3af4eb7412eb22"
+  resolved "https://registry.yarnpkg.com/navigation-components/-/navigation-components-0.2.12.tgz#57c44b83ffb3c91ae2d10d4bfe3af4eb7412eb22"
   integrity sha512-Zh7ClF2uCo7mn5vcapaeN4A8+oQjV3PoE9JwZ109Axy+fglPq/++V9UI5V3dIHTA+SEFoedJ7gGYSniiae5+mA==
   dependencies:
     navigation-test-utils "^0.1.7"

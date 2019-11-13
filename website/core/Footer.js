@@ -70,7 +70,7 @@ class Footer extends React.Component {
           <div>
             <h5>More</h5>
             {/* <a href={`${this.props.config.baseUrl}blog`}>Blog</a> */}
-            <a href="https://github.com/Crowdlinker/react-navigation-library">
+            <a href="https://github.com/Crowdlinker/navigation-components">
               GitHub
             </a>
             <a

@@ -1,6 +1,6 @@
 import React, {memo} from 'react';
 import {View, StyleSheet, Text, ViewStyle} from 'react-native';
-import {Link, useInterpolation, Tabbar, Tab} from 'react-navigation-library';
+import {Link, useInterpolation, Tabbar, Tab} from 'navigation-components';
 import Animated from 'react-native-reanimated';
 import {FlatList} from 'react-native-gesture-handler';
 

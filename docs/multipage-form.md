@@ -179,7 +179,7 @@ Make sure the forms are working by updating the email field.
 Let's move the forms to separate screens with a tabs component:
 
 ```tsx
-import { Navigator, Tabs } from 'react-navigation-library';
+import { Navigator, Tabs } from 'navigation-components';
 
 function Forms() {
   return (
@@ -215,7 +215,7 @@ Refresh and you'll see that the login form is now the initial screen. Note that 
 There's still a problem - it's not immediately clear to the user that they can swipe between the screens. Let's add some buttons to let them navigate between the forms:
 
 ```tsx
-import { useTabs } from 'react-navigation-library';
+import { useTabs } from 'navigation-components';
 
 function Signup() {
   const tabs = useTabs();
@@ -249,7 +249,7 @@ The last screen we'll add will be a success modal that pops up after signup or l
 First, let's add create the modal component. Then we'll wrap our forms in a Modal container and toggle the success modal on submit
 
 ```tsx
-import { Modal, useModal } from 'react-navigation-library';
+import { Modal, useModal } from 'navigation-components';
 
 // implement our success modal screen
 function SuccessModal() {
@@ -329,7 +329,7 @@ import {
   useTabs,
   Modal,
   useModal,
-} from 'react-navigation-library';
+} from 'navigation-components';
 
 interface iFormValues {
   type: 'signup' | 'login' | '';

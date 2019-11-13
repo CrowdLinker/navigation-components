@@ -1,7 +1,7 @@
 import React from 'react';
 import {Library} from './library';
 import {View, Text, StyleSheet} from 'react-native';
-import {Modal, useModal, Navigator} from 'react-navigation-library';
+import {Modal, useModal, Navigator} from 'navigation-components';
 import {Slide, styles} from '../shared';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import SafeAreaView from 'react-native-safe-area-view';

@@ -21,7 +21,7 @@ The supported peer dependencies versions for this library are:
 In order to get started, there are a few packages that need to be installed:
 
 ```bash
-yarn add react-navigation-library
+yarn add navigation-components
 # expo provides these packages by default -- you might already have them!
 yarn add react-native-reanimated
 yarn add react-native-gesture-handler
@@ -50,7 +50,7 @@ Add the following boilerplate to your entry file and swipe away!
 import React from 'react';
 import { StyleSheet, View, Text, SafeAreaView } from 'react-native';
 
-import { Navigator, Tabs } from 'react-navigation-library';
+import { Navigator, Tabs } from 'navigation-components';
 
 const App = () => {
   return (
@@ -109,4 +109,4 @@ const styles = StyleSheet.create({
 export default App;
 ```
 
-As you can see, we've imported a few components from `react-navigation-library` and verified that they work. We'll go more in depth on what these are in the next section!
+As you can see, we've imported a few components from `navigation-components` and verified that they work. We'll go more in depth on what these are in the next section!

@@ -9,7 +9,7 @@ You might have noticed from the previous example that the Tabs component is wher
 ## Tabs
 
 ```tsx
-import { Navigator, Tabs } from 'react-navigation-library';
+import { Navigator, Tabs } from 'navigation-components';
 
 function MyNavigator() {
   return (
@@ -33,7 +33,7 @@ function MyNavigator() {
 The tabs component will render its children horizontally by default, and let the user swipe from one screen to the next. We can alter the configuration of Tabs if we'd like:
 
 ```tsx
-import { Navigator, Tabs } from 'react-navigation-library';
+import { Navigator, Tabs } from 'navigation-components';
 
 function MyNavigator() {
   return (
@@ -64,7 +64,7 @@ Now we have a vertical tabs configuration, which swipes up and down, that is con
 We're not just restricted to tab components however. Let's take a look at a Stack container:
 
 ```tsx
-import { Navigator, Stack, useStack } from 'react-navigation-library';
+import { Navigator, Stack, useStack } from 'navigation-components';
 
 function MyStack() {
   return (
@@ -123,7 +123,7 @@ function MyStack() {
 Sometimes you'll want to include a header component that renders with your screens, or take advantage of the native iOS and Android stack components for performance / styling. It's easy to switch to a native stack:
 
 ```tsx
-import { Navigator, NativeStack, Header } from 'react-navigation-library';
+import { Navigator, NativeStack, Header } from 'navigation-components';
 
 import { enableScreens } from 'react-native-screens';
 
@@ -179,7 +179,7 @@ Often there are several sibling views that need to be rendered in the same locat
 Switch serves an additional purpose of offloading CPU/GPU hungry components by taking advantage of the `react-native-screens` library.
 
 ```tsx
-import { Switch, Navigator, Tabbar, Tab } from 'react-navigation-library';
+import { Switch, Navigator, Tabbar, Tab } from 'navigation-components';
 import { Text } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 
@@ -223,7 +223,7 @@ function MyNavigator() {
 A modal serves to display one screen over top of another. It has the same API as Stack and Tabs, with the exception that it only takes two child screens:
 
 ```tsx
-import { Modal, Navigator, useModal } from 'react-navigation-library';
+import { Modal, Navigator, useModal } from 'navigation-components';
 import { Button } from 'react-native';
 
 function MyNavigator() {

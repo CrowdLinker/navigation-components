@@ -7,7 +7,7 @@ sidebar_label: Basic Example
 In the previous section, we installed the library and ensured it was working. Here is what it looks like:
 
 ```tsx
-import { Navigator, Tabs } from 'react-navigation-library';
+import { Navigator, Tabs } from 'navigation-components';
 
 function MyNavigator() {
   return (
@@ -35,7 +35,7 @@ It's clear that the Tabs component has grouped our screens so that we can swipe 
 Let's extend our example by importing Tabbar and Tab:
 
 ```tsx
-import { Tabbar, Tab } from 'react-navigation-library';
+import { Tabbar, Tab } from 'navigation-components';
 
 // extract the Tabs from above into a component for better visibility
 function MyTabs() {
@@ -116,7 +116,7 @@ This simple example showcases the declarative nature of this library - you can r
 At some point, you'll need to navigate from one screen to another with more than just a Tabbar. We can do this by telling our Navigator what routes to listen for, and then link to them from any component inside of our Navigator:
 
 ```tsx
-import { Link } from 'react-navigation-library';
+import { Link } from 'navigation-components';
 
 // define the routes that will map to our screens:
 const routes = ['one', 'two', 'three'];
@@ -159,7 +159,7 @@ function MyTabs() {
 Now the Navigator knows which route maps to which screen, so our Links should be able to update the active screen. Yet it still doesn't seem to work. This is because there is one additional component required to keep your routing in sync - **History** is a provider component that (usually) will wrap around your entire application, similar to what you would use in React-Router
 
 ```tsx
-import { History } from 'react-navigation-library';
+import { History } from 'navigation-components';
 
 // this component wraps our whole application
 function AppContainer({ children }: any) {
@@ -194,7 +194,7 @@ import {
   Tab,
   Link,
   History,
-} from 'react-navigation-library';
+} from 'navigation-components';
 
 const App = () => {
   return (
