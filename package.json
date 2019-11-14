@@ -1,6 +1,6 @@
 {
   "name": "navigation-components",
-  "version": "0.2.17",
+  "version": "0.2.18",
   "main": "dist/index.js",
   "module": "dist/navigation.esm.js",
   "typings": "dist/index.d.ts",
