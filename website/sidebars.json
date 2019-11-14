@@ -9,6 +9,6 @@
       "dynamic-vs-static",
       "next-steps"
     ],
-    "Guides": ["multipage-form", "testing", "deep-linking"]
+    "Guides": ["navigate-anywhere", "multipage-form", "testing", "deep-linking"]
   }
 }

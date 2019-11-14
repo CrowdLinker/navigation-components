@@ -106,7 +106,7 @@ Relative routes can be really handy when it comes to building reusable subnaviga
 
 ### useNavigate
 
-You can also use the `useNavigate()` hook which will navigate relative to the _screen_
+You can also use the `useNavigate()` hook which will navigate relative to the _screen_ it's used in.
 
 ```tsx
 import { useNavigate } from 'navigation-components'
@@ -129,9 +129,7 @@ function MyProfileScreen() {
 
 #### What is the difference?
 
-`useNavigator()` resolves paths relative to the _navigator_ and `useNavigate()` resolves paths relative to the _screen_. There are some cases where a parent navigator might not be present, for example running a unit test or building an isolated subnavigator, and so you'll want to use `useNavigate()` instead.
-
-This might prove useful for building reusable subnavigators in isolation or running unit tests, where a parent Navigator might not be wrapping what you render. Usually you'll want the `useNavigator()` as it's the more intuitive, but you'll know when you need to reach for `useNavigate()`
+`useNavigator()` resolves paths relative to the _navigator_ and `useNavigate()` resolves paths relative to the _screen_. There are some cases where a parent navigator might not be present, for example running a unit test or building an isolated subnavigator, or logically the paths might make more sense.
 
 ## Summary
 
@@ -139,4 +137,4 @@ This might prove useful for building reusable subnavigators in isolation or runn
 
 - Global navigate could be used to improve debugging, unit tests, and perhaps even in automated workflows.
 
-- The routing model of `navigation-components` supports absolute and relative paths, much like Reach Router. The Link component, `useNavigator()`, and `useNavigate()` can be used inside your components to update the location of your app.
+- The routing model of `navigation-components` supports absolute and relative paths, much like Reach Router. The Link component, `useNavigator()`, and `useNavigate()` can be used inside your components to update the location of your app. `useNavigator()` resolves relative paths from the navigator wheras `useNavigate()` resolves paths from the screen.

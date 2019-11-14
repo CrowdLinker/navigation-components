@@ -198,11 +198,11 @@ One thing we're missing in our tests is confirmation that the input data is actu
 // login-forms.tsx
 
 function LoginForms({onSubmit}: any) {
-  const [status, setStatus] = React.useState('');
+  const navigate = useNavigate()
 
   function handleSubmit(data: iFormValues) {
-    setStatus('success');
-    onSubmit(data);
+    navigate('success-modal')
+    onSubmit(data)
   }
 
   ...
@@ -259,5 +259,3 @@ Try implementing the same thing for your signup test and see how it goes! We've 
 - we can render our navigators using the `render` function from `navigation-test-utils`, which returns a `getFocused()` method for targeting the focused screen in our tests. This method can be run at any step in your test to help you see what is going on in your markup and run assertions on what the user would be seeing.
 
 - `@testing-library/react-native` is an excellent resource for all of the other tools we can use in our tests: https://www.native-testing-library.com/
-
-In the next section, we'll refactor our Login forms example with some routing
