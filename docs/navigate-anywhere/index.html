@@ -1,0 +1,101 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Navigate anywhere · Navigation Components</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="There are several ways to navigate throughout you app using paths. We&#x27;ve covered some use cases for the Link component already, but `navigation-components` also exports a global `navigate()` function that lets you navigate anywhere in your application, even from outside of a History component. Let&#x27;s take a look:"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Navigate anywhere · Navigation Components"/><meta property="og:type" content="website"/><meta property="og:url" content="https://your-docusaurus-test-site.com/navigation-components/"/><meta property="og:description" content="There are several ways to navigate throughout you app using paths. We&#x27;ve covered some use cases for the Link component already, but `navigation-components` also exports a global `navigate()` function that lets you navigate anywhere in your application, even from outside of a History component. Let&#x27;s take a look:"/><meta property="og:image" content="https://your-docusaurus-test-site.com/navigation-components/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://your-docusaurus-test-site.com/navigation-components/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/navigation-components/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/navigation-components/js/scrollSpy.js"></script><link rel="stylesheet" href="/navigation-components/css/main.css"/><script src="/navigation-components/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/navigation-components/"><img class="logo" src="/navigation-components/img/favicon.ico" alt="Navigation Components"/><h2 class="headerTitleWithLogo">Navigation Components</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/navigation-components/docs/introduction" target="_self">Docs</a></li><li class=""><a href="https://github.com/Crowdlinker/navigation-components" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Navigate anywhere</h1></header><article><div><span><p>There are several ways to navigate throughout you app using paths. We've covered some use cases for the Link component already, but <code>navigation-components</code> also exports a global <code>navigate()</code> function that lets you navigate anywhere in your application, even from outside of a History component. Let's take a look:</p>
+<h2><a class="anchor" aria-hidden="true" id="global-navigate"></a><a href="#global-navigate" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Global navigate</h2>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">import</span> { History, navigate } <span class="hljs-keyword">from</span> <span class="hljs-string">'navigation-components'</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">App</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">View</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">History</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">MyNavigators</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">History</span>&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">Button</span>
+        <span class="hljs-attr">title</span>=<span class="hljs-string">"To Profile Settings Page"</span>
+        <span class="hljs-attr">onPress</span>=<span class="hljs-string">{()</span> =&gt;</span> navigate('/app/profile/settings')}
+      /&gt;
+    <span class="hljs-tag">&lt;/<span class="hljs-name">View</span>&gt;</span>
+  );
+}
+</span></code></pre>
+<p>Even though Button is outside of our context, we're able to update our app's location. One caveat to this approach is that relative links are not guaranteed to work, so it's a good idea to only pass in absolute paths to the global navigate function.</p>
+<h2><a class="anchor" aria-hidden="true" id="use-cases-for-global-navigate"></a><a href="#use-cases-for-global-navigate" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Use cases for global navigate</h2>
+<p>You could enhance your debugging experience by exposing this function to the console:</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">import</span> { navigate } <span class="hljs-keyword">from</span> <span class="hljs-string">'navigation-components'</span>;
+
+<span class="hljs-built_in">global</span>.navigate = navigate;
+</code></pre>
+<p>Now you can move around in your app in the debugger console if that's something you're interested in doing.</p>
+<p>It also means that you could run some automation scripts to navigate throughout your app in a specified sequence of steps. This might be useful if you need to replicate bugs or perhaps run end to end tests.</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">import</span> { navigate } <span class="hljs-keyword">from</span> <span class="hljs-string">'navigation-components'</span>;
+
+<span class="hljs-keyword">const</span> steps = [<span class="hljs-string">'/home'</span>, <span class="hljs-string">'/home/profile'</span>, <span class="hljs-string">'/home/profile/settings'</span>];
+
+steps.<span class="hljs-keyword">map</span>(navigate);
+</code></pre>
+<p>You can even use it in your unit tests to quickly navigate to the screen you're trying to test.</p>
+<h2><a class="anchor" aria-hidden="true" id="relative-paths"></a><a href="#relative-paths" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Relative paths</h2>
+<p>Aside from the global navigate, there are a few other ways to hook into the navigate function.</p>
+<h3><a class="anchor" aria-hidden="true" id="link"></a><a href="#link" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Link</h3>
+<p>We've covered the Link component already, but they can also use relative paths:</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">import</span> { Link } <span class="hljs-keyword">from</span> <span class="hljs-string">'navigation-components'</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MyScreen</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">to</span>=<span class="hljs-string">"../home"</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Text</span>&gt;</span>Go back<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span></span>
+  );
+}
+</code></pre>
+<p>This will move the location up one directory and update the location to the home route, much like how it works in Reach Router or using <code>cd</code> in your terminal.</p>
+<h3><a class="anchor" aria-hidden="true" id="usenavigator"></a><a href="#usenavigator" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>useNavigator</h3>
+<p>Any child component of a Navigator can call <code>useNavigator().navigate</code> to resolve paths relative to the <em>navigator</em>:</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">import</span> { useNavigator } <span class="hljs-keyword">from</span> <span class="hljs-string">'navigation-components'</span>
+
+<span class="hljs-comment">// navigator lives at /app/settings</span>
+<span class="hljs-comment">// screen lives at /app/settings/profile</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MyProfileScreen</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> navigator = useNavigator()
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleButtonPress</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-comment">// will navigate to /app</span>
+    navigator.navigate(<span class="hljs-string">'../home'</span>)
+  }
+
+  <span class="hljs-keyword">return</span> (
+    ...
+  )
+}
+</code></pre>
+<p>This navigate function is different from global one because it can handle paths that are relative to where the navigator lives in your app. For example, if your navigator is living at route <code>/app/settings</code>, then this handler function would update the app's location to <code>/home</code>. Link components operate in the same way - they resolve to routes relative to the <em>navigator</em>.</p>
+<p><strong>Note:</strong> You can also pass in absolute paths and they will function much in the same way as the first example.</p>
+<p>Relative routes can be really handy when it comes to building reusable subnavigators because your links will work as an independent unit if you happen to move it to another portion of your app.</p>
+<h3><a class="anchor" aria-hidden="true" id="usenavigate"></a><a href="#usenavigate" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>useNavigate</h3>
+<p>You can also use the <code>useNavigate()</code> hook which will navigate relative to the <em>screen</em></p>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">import</span> { useNavigate } <span class="hljs-keyword">from</span> <span class="hljs-string">'navigation-components'</span>
+
+<span class="hljs-comment">// navigator lives at /app/settings</span>
+<span class="hljs-comment">// screen lives at /app/settings/profile</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MyProfileScreen</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">const</span> navigate = useNavigate()
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">handleButtonPress</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-comment">// will navigate to /app/home</span>
+    navigate(<span class="hljs-string">'../home'</span>)
+  }
+
+  <span class="hljs-keyword">return</span> (
+    ...
+  )
+}
+</code></pre>
+<h4><a class="anchor" aria-hidden="true" id="what-is-the-difference"></a><a href="#what-is-the-difference" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What is the difference?</h4>
+<p><code>useNavigator()</code> resolves paths relative to the <em>navigator</em> and <code>useNavigate()</code> resolves paths relative to the <em>screen</em>. There are some cases where a parent navigator might not be present, for example running a unit test or building an isolated subnavigator, and so you'll want to use <code>useNavigate()</code> instead.</p>
+<p>This might prove useful for building reusable subnavigators in isolation or running unit tests, where a parent Navigator might not be wrapping what you render. Usually you'll want the <code>useNavigator()</code> as it's the more intuitive, but you'll know when you need to reach for <code>useNavigate()</code></p>
+<h2><a class="anchor" aria-hidden="true" id="summary"></a><a href="#summary" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Summary</h2>
+<ul>
+<li><p><code>navigation-components</code> exports a global navigate function that can update the location of your app from anywhere. It is recommended to use absolute paths only with this function</p></li>
+<li><p>Global navigate could be used to improve debugging, unit tests, and perhaps even in automated workflows.</p></li>
+<li><p>The routing model of <code>navigation-components</code> supports absolute and relative paths, much like Reach Router. The Link component, <code>useNavigator()</code>, and <code>useNavigate()</code> can be used inside your components to update the location of your app.</p></li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#global-navigate">Global navigate</a></li><li><a href="#use-cases-for-global-navigate">Use cases for global navigate</a></li><li><a href="#relative-paths">Relative paths</a><ul class="toc-headings"><li><a href="#link">Link</a></li><li><a href="#usenavigator">useNavigator</a></li><li><a href="#usenavigate">useNavigate</a></li></ul></li><li><a href="#summary">Summary</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/navigation-components/" class="nav-home"><img src="/navigation-components/img/favicon.ico" alt="Navigation Components" width="66" height="58"/></a><div><h5>Docs</h5><a href="/navigation-components/docs/en/introduction.html">Overview</a><a href="/navigation-components/docs/en/guides.html">Guides</a><a href="/navigation-components/docs/en/api.html">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/Crowdlinker/navigation-components">GitHub</a><a class="github-button" href="https://github.com/Crowdlinker/navigation-components" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/navigation-components/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Your Name or Your Company Name</section></footer></div></body></html>
