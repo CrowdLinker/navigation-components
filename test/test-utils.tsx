@@ -3,7 +3,8 @@ import { render, navigate } from 'navigation-test-utils';
 import { History, history } from '../src';
 
 function customRender(ui: any) {
-  const utils = render(<History history={history}>{ui}</History>, {
+  const utils = render(ui, {
+    wrapper: History as any,
     historyProps: {
       noWrap: true,
     },

@@ -16,9 +16,15 @@ import {
 } from '../src';
 import { Text, View, Button } from 'react-native';
 import { render, navigate } from './test-utils';
-import { fireEvent, getByText } from '@testing-library/react-native';
+import { fireEvent, act } from '@testing-library/react-native';
 
 import '@testing-library/jest-native/extend-expect';
+
+afterEach(() => {
+  act(() => {
+    history.reset();
+  });
+});
 
 function NavigatorListener({ listener }: any) {
   const navigator = useNavigator();
@@ -33,10 +39,6 @@ function Params({ prop, children }: any) {
     </Text>
   );
 }
-
-afterEach(() => {
-  history.reset();
-});
 
 test('render()', () => {
   const listener = jest.fn(() => null);
@@ -117,6 +119,8 @@ test('params', () => {
 });
 
 test('nested', () => {
+  history.reset();
+
   function Inner() {
     return (
       <Navigator routes={['one', 'two']}>
@@ -136,23 +140,25 @@ test('nested', () => {
 
   function Outer({ children }: any) {
     return (
-      <Navigator routes={['root', 'inner']}>
-        <Tabs>
-          <View>
-            <Text>root</Text>
-            <Link to="inner/two">
-              <Text>Link</Text>
-            </Link>
-          </View>
-          {children}
-        </Tabs>
-      </Navigator>
+      <History>
+        <Navigator routes={['root', 'inner']}>
+          <Tabs>
+            <View>
+              <Text>root</Text>
+              <Link to="inner/two">
+                <Text>Link</Text>
+              </Link>
+            </View>
+            {children}
+          </Tabs>
+        </Navigator>
+      </History>
     );
   }
 
   navigate('/root');
 
-  const { getFocused } = render(
+  const { getFocused, debug, container } = render(
     <Outer>
       <Inner />
     </Outer>
@@ -285,14 +291,16 @@ test('modal works', () => {
   expect(getFocused().container).toHaveProp('accessibilityViewIsModal', true);
 });
 
-test('nested history does nothing', () => {
+test.only('nested history does nothing', () => {
   const fakeHistory = createHistory();
 
   const listener = jest.fn();
   fakeHistory.listen(listener);
 
+  const spy = jest.spyOn(history, 'navigate');
+
   const { getByText } = render(
-    <History history={history}>
+    <History history={fakeHistory}>
       <Navigator>
         <Text>1</Text>
         <Link to="blah">
@@ -306,6 +314,8 @@ test('nested history does nothing', () => {
 
   expect(fakeHistory.location).toEqual('/');
   expect(listener).not.toHaveBeenCalled();
+
+  expect(spy).toHaveBeenCalled();
   expect(history.location).toEqual('/blah');
 });
 

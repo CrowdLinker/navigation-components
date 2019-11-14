@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { ScreenContainer, Screen } from 'react-native-screens';
-import { usePager, FocusProvider, IndexProvider } from './pager';
+import { ScreenContainer, Screen, screensEnabled } from 'react-native-screens';
+import { usePager, FocusProvider, IndexProvider, useFocus } from './pager';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history-component';
 import { AccessibleScreen } from './accessible-screen';
@@ -13,6 +13,7 @@ interface iSwitch {
 function Switch({ children }: iSwitch) {
   const [activeIndex] = usePager();
   const navigator = useNavigator();
+  const focused = useFocus();
 
   return (
     <ScreenContainer style={{ flex: 1 }}>
@@ -24,7 +25,7 @@ function Switch({ children }: iSwitch) {
           return (
             <Screen active={active} style={StyleSheet.absoluteFill}>
               <BasepathProvider value={route}>
-                <FocusProvider focused={index === activeIndex}>
+                <FocusProvider focused={focused && index === activeIndex}>
                   <IndexProvider index={index}>
                     <AccessibleScreen>{child}</AccessibleScreen>
                   </IndexProvider>
@@ -36,7 +37,7 @@ function Switch({ children }: iSwitch) {
 
         return (
           <Screen active={active} style={StyleSheet.absoluteFill}>
-            <FocusProvider focused={index === activeIndex}>
+            <FocusProvider focused={focused && index === activeIndex}>
               <IndexProvider index={index}>
                 <AccessibleScreen>{child}</AccessibleScreen>
               </IndexProvider>

@@ -160,6 +160,7 @@ function Pager({
   animatedValue,
 }: iPager) {
   const context = useContext(PagerContext);
+  const focused = useFocus();
 
   const isControlled = parentActiveIndex !== undefined;
 
@@ -412,7 +413,7 @@ function Pager({
 
       return (
         <IndexProvider index={index} key={index}>
-          <FocusProvider focused={index === activeIndex}>
+          <FocusProvider focused={focused && index === activeIndex}>
             <Page
               index={index}
               animatedIndex={animatedIndex}

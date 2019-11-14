@@ -13,6 +13,7 @@ import {
   // @ts-ignore
   ScreenStackHeaderTitleView,
   Screen,
+  screensEnabled,
 } from 'react-native-screens';
 import { StyleSheet, ViewStyle } from 'react-native';
 import { useNavigator } from './navigator';
@@ -24,6 +25,7 @@ import {
   FocusProvider,
   // @ts-ignore
   IndexProvider,
+  useFocus,
 } from './pager';
 import { AccessibleScreen } from './accessible-screen';
 
@@ -43,6 +45,7 @@ interface iScreenConfig {
 function NativeStack({ children, screenConfig = {}, style }: iNativeStack) {
   const navigator = useNavigator();
   const [activeIndex, onChange] = usePager();
+  const focused = useFocus();
 
   const { pop } = useStack();
 
@@ -63,7 +66,7 @@ function NativeStack({ children, screenConfig = {}, style }: iNativeStack) {
               {...(screenConfig as any)}
             >
               <BasepathProvider value={route}>
-                <FocusProvider focused={index === activeIndex}>
+                <FocusProvider focused={focused && index === activeIndex}>
                   <IndexProvider index={index}>
                     <AccessibleScreen>{child}</AccessibleScreen>
                   </IndexProvider>

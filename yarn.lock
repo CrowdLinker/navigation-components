@@ -1113,7 +1113,7 @@
     ramda "^0.26.1"
     redent "^2.0.0"
 
-"@testing-library/react-native@^5.0.0":
+"@testing-library/react-native@^5.0.0", "@testing-library/react-native@^5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-5.0.1.tgz#7edd21eef10aa9d2738e601964c6ca39014f8644"
   integrity sha512-sS7dO8ws5GyQ7r2X6dw3Mj+KUjrY/9Obr+9zyrph6hwz5DDntrCvCz+NSyWtwIPeLsr7pRj+BWWsw8uYYFUKJg==
@@ -6036,10 +6036,10 @@ navigation-components@^0.2.17:
   resolved "https://registry.yarnpkg.com/navigation-components/-/navigation-components-0.2.17.tgz#5cc1c2b5e31f90eaf5aa0c3dcc14dcb71d7c304c"
   integrity sha512-8pLCzMEIuYtK0CNTDBp+bRfo++ZfsDmc4Y7Ii6f1Hl+NcIg6J5qvtV9CVKWhebokbn7U1JL27u3iz51lfKjTbg==
 
-navigation-test-utils@^0.1.11:
-  version "0.1.11"
-  resolved "https://registry.yarnpkg.com/navigation-test-utils/-/navigation-test-utils-0.1.11.tgz#f20241c6a430de91cd154cb71134351ee0e2adac"
-  integrity sha512-TUoENrzK6dtW9puxcOjf38Fu7bfM0zhMY9z76fUqHDicE2PuBNFHqzNiF90qZnVkuJJkTNyJ3rH8xZ08LjOdXA==
+navigation-test-utils@^0.1.12:
+  version "0.1.12"
+  resolved "https://registry.yarnpkg.com/navigation-test-utils/-/navigation-test-utils-0.1.12.tgz#eb873e73309576171ee7e4ad259b7f0f3d9e6180"
+  integrity sha512-Ug+Ig5b88u8oQbyFX0r22o7y2x0CiycHfBa2F4tBidGElxFPuLgsyqExRis3i+vzMCr8ak+K7RhSVcTj1eGtCQ==
   dependencies:
     "@testing-library/jest-native" "^3.0.2"
     "@testing-library/react-native" "^5.0.0"

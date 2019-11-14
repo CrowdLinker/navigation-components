@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Pager,
-  iPageInterpolation,
-  usePager,
-  iPager,
-  IndexProvider,
-  FocusProvider,
-} from './pager';
+import { Pager, iPageInterpolation, usePager, iPager } from './pager';
 import { useNavigator } from './navigator';
 import { BasepathProvider } from './history-component';
 import { AccessibleScreen } from './accessible-screen';
@@ -96,25 +89,17 @@ function Modal({ children, modalIndex = 1, onClose, active, ...rest }: iModal) {
           if (route) {
             return (
               <BasepathProvider value={route}>
-                <IndexProvider index={index}>
-                  <FocusProvider focused={index === activeIndex}>
-                    <AccessibleScreen accessibilityViewIsModal={isModal}>
-                      {child}
-                    </AccessibleScreen>
-                  </FocusProvider>
-                </IndexProvider>
+                <AccessibleScreen accessibilityViewIsModal={isModal}>
+                  {child}
+                </AccessibleScreen>
               </BasepathProvider>
             );
           }
 
           return (
-            <IndexProvider index={index}>
-              <FocusProvider focused={index === activeIndex}>
-                <AccessibleScreen accessibilityViewIsModal={isModal}>
-                  {child}
-                </AccessibleScreen>
-              </FocusProvider>
-            </IndexProvider>
+            <AccessibleScreen accessibilityViewIsModal={isModal}>
+              {child}
+            </AccessibleScreen>
           );
         })}
       </Pager>

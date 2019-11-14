@@ -38,6 +38,7 @@ function createHistory(): iHistory {
     reset: function() {
       index = 0;
       paths = ['/'];
+      notify();
     },
 
     navigate: function(to: string, from?: string) {

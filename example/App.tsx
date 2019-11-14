@@ -223,4 +223,65 @@ const passwordInputProps: Partial<TextInputProps> = {
   secureTextEntry: true,
 };
 
-export default LoginForms;
+function Inner() {
+  return (
+    <Navigator routes={['one', 'two']}>
+      <Tabs>
+        <Text>One</Text>
+
+        <View>
+          <Text>Two</Text>
+          <Link to="../../root">
+            <Text>Back</Text>
+          </Link>
+        </View>
+      </Tabs>
+    </Navigator>
+  );
+}
+
+function Outer({children}: any) {
+  return (
+    <History>
+      <Navigator routes={['root', 'inner']}>
+        <Tabs>
+          <View>
+            <Text>root</Text>
+            <Link to="inner/two">
+              <Text>Link</Text>
+            </Link>
+          </View>
+          {children}
+        </Tabs>
+      </Navigator>
+    </History>
+  );
+}
+
+function Tester() {
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <Outer>
+        <Inner />
+      </Outer>
+    </SafeAreaView>
+  );
+}
+
+import {enableScreens} from 'react-native-screens';
+
+enableScreens();
+
+import {SpotifyApp} from './src/spotify';
+
+function Container() {
+  return (
+    <SafeAreaView style={{flex: 1}}>
+      <History>
+        <SpotifyApp />
+      </History>
+    </SafeAreaView>
+  );
+}
+
+export default Container;
