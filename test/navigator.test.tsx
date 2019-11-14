@@ -291,7 +291,7 @@ test('modal works', () => {
   expect(getFocused().container).toHaveProp('accessibilityViewIsModal', true);
 });
 
-test.only('nested history does nothing', () => {
+test('nested history does nothing', () => {
   const fakeHistory = createHistory();
 
   const listener = jest.fn();
@@ -310,6 +310,7 @@ test.only('nested history does nothing', () => {
     </History>
   );
 
+  listener.mockReset();
   fireEvent.press(getByText('test'));
 
   expect(fakeHistory.location).toEqual('/');

@@ -5,7 +5,9 @@ import { Button, Text } from 'react-native';
 import { fireEvent, act } from '@testing-library/react-native';
 
 afterEach(() => {
-  history.reset();
+  act(() => {
+    history.reset();
+  });
 });
 
 test('push() adds screen to stack', () => {

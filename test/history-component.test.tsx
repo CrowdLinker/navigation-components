@@ -18,7 +18,9 @@ function Location() {
 }
 
 afterEach(() => {
-  history.reset();
+  act(() => {
+    history.reset();
+  });
 });
 
 jest.mock('Linking', () => {
