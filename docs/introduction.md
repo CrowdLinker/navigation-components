@@ -4,7 +4,7 @@ title: Introduction
 sidebar_label: Introduction
 ---
 
-Navigation Components is a component-driven navigation library for React Native. It aims to take what's really nice about developing with React Native and make it even better by abstracting away some of the annoying stuff. The end result is a tool that stays out of your way and lets you work with your own components and app code.
+`navigation-components` is a component-driven navigation library for React Native. It aims to take what's really nice about developing with React Native and make it even better by abstracting away some of the annoying stuff. The end result is a tool that stays out of your way and lets you work with your own components and app code.
 
 ## Features
 
@@ -24,9 +24,7 @@ Libraries like React Router and Reach Router derive active components from the c
 
 ### Nesting and Coupling
 
-Say you need to add a feature that is deeply nested in your app. Development is a frustrating experience by virtue of the fact that it's just hard to get to the screens you want to work on. So you pull out the subnavigator you're working on and render it in isolation. Now you realize it needs to be wrapped by a couple other parent navigators or depends on a provider at the root of your application. You also want to test it but need to mock out the world to get it to render.
-
-Routing helps solve this problem because every screen in your application can be accessed by a path, and you can pass a path to your root component while developing. This means deeply nested screens are a breeze to get to, and you don't need to pull out and reintegrate components while developing so you'll have confidence that the feature will work in the app as it is!
+As an app grows it size, developing new features can be a frustrating experience, especially if those screens are nested in your app. Routing helps solve this problem because every screen in your application can be accessed by a path, and you can pass a path to your root component while developing. This means deeply nested screens are a breeze to get to, and you don't need to pull out and reintegrate components while developing so you'll have confidence that the feature will work in the app as it is!
 
 Routing with relative paths means that your (relative) links will work in isolation, so you can reuse your subnavigators and writing integration / unit tests is much easier (especially with the test utilities that come with the library!)
 

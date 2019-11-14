@@ -4,7 +4,7 @@ title: Nesting Navigators
 sidebar_label: Nesting Navigators
 ---
 
-Navigators are just components, so we can compose them together in order to achieve different navigations.
+Navigators are just components, so we can compose them together in order to achieve different navigation patterns.
 
 In this example we'll explore using the Stack and Modal components in tandem. Let's start with a fresh application:
 
@@ -246,7 +246,7 @@ function MyStack() {
 }
 ```
 
-Tap around and note that the links work just like before. We've successfully composed our navigators and wired them up together! You can apply these patterns to any combination of Tabs, Stack, and Modal. These are the core "primitives" of the library - it's surprising how much can be accomplished with just these three.
+Tap around and note that the links work just like before. We've successfully composed our navigators and wired them up together! You can apply these patterns to any combination of the screen containers provided by this library
 
 Here's the code we wrote:
 
@@ -415,9 +415,9 @@ export default App;
 
 ## Summary
 
-- The Stack component can push and pop views off of itself. This means it unmounts screens that are not active, and is a good candidate for navigators that have a clear logical order, like a multipage form.
+- The Stack component pushes and pops views. This means it unmounts screens that are not active, and is a good candidate for navigators that have a clear logical order, like a multipage form.
 
-- `useStack()` is a hook that can push and pop views from any component in a Stack
+- `useStack()` is a hook that can push and pop views from any component inside of a Stack
 
 - The Modal component can be used to display a modal over top of some content. The modal screen will be whatever the you render as the last child of Modal
 

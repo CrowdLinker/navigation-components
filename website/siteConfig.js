@@ -22,7 +22,7 @@ const users = [
 
 const siteConfig = {
   title: 'Navigation Components', // Title for your website.
-  tagline: 'Navigation components for React native',
+  tagline: 'Navigation Components for React Native',
   url: 'https://your-docusaurus-test-site.com', // Your website URL
   baseUrl: '/navigation-components/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:

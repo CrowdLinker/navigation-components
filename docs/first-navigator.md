@@ -113,12 +113,12 @@ This simple example showcases the declarative nature of this library - you can r
 
 ## Adding routes
 
-At some point, you'll need to navigate from one screen to another with more than just a Tabbar. We can do this by telling our Navigator what routes to listen for, and then link to them from any component inside of our Navigator:
+At some point, you'll need to navigate from one screen to another with more than just a Tabbar. We can configure our Navigator to listen for routes, and then link to them using the Link component:
 
 ```tsx
 import { Link } from 'navigation-components';
 
-// define the routes that will map to our screens:
+// Define the routes:
 const routes = ['one', 'two', 'three'];
 
 function MyNavigator() {
@@ -130,7 +130,7 @@ function MyNavigator() {
   );
 }
 
-// wrap our text content in a Link tag:
+// Link to them:
 function MyTabs() {
   return (
     <Tabs>
@@ -156,7 +156,7 @@ function MyTabs() {
 }
 ```
 
-Now the Navigator knows which route maps to which screen, so our Links should be able to update the active screen. Yet it still doesn't seem to work. This is because there is one additional component required to keep your routing in sync - **History** is a provider component that (usually) will wrap around your entire application, similar to what you would use in React-Router
+If you tried the above example, you might notice that the links don't seem to do anything. This is because there is one additional component required to keep your routing in sync - **History** is a provider component that wraps around your entire application, similar to what you would use in React Router
 
 ```tsx
 import { History } from 'navigation-components';

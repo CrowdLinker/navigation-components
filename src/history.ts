@@ -113,7 +113,7 @@ function resolveBasepath(basepath: string, location: string) {
 
 // basepath is necessary because it provides context for relative paths
 // e.g a component might have a basepath that is several segments above the
-// current location, but it should resolve from its own basepath, not the current location
+// current location, so it should resolve from its own basepath, not the current location
 function resolve(to: string, from = '/', location: string): string {
   const [toPath, toQuery] = to.split('?');
   const toSegments = segmentize(toPath);

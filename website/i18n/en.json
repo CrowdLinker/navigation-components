@@ -3,7 +3,7 @@
   "localized-strings": {
     "next": "Next",
     "previous": "Previous",
-    "tagline": "Navigation components for React native",
+    "tagline": "Navigation Components for React Native",
     "docs": {
       "deep-linking": {
         "title": "Deep Linking",
@@ -28,6 +28,10 @@
       "multipage-form": {
         "title": "Building a multipage form",
         "sidebar_label": "Building a multipage form"
+      },
+      "navigate-anywhere": {
+        "title": "Navigate anywhere",
+        "sidebar_label": "Navigate anywhere"
       },
       "nesting-navigators": {
         "title": "Nesting Navigators",

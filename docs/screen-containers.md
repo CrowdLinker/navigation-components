@@ -4,7 +4,7 @@ title: Rendering screens
 sidebar_label: Rendering screens
 ---
 
-You might have noticed from the previous example that the Tabs component is where your screens are actually rendered. Tabs is one of a few different containers responsible for wrapping your screens and managing the children / gestures from within. Let's take a look at each of these
+You might have noticed from the previous example that our screens are rendered by the Tabs component. Tabs is one of a few different screen containers responsible for managing the layout and gesture handling in your screens.
 
 ## Tabs
 
@@ -57,11 +57,11 @@ function MyNavigator() {
 }
 ```
 
-Now we have a vertical tabs configuration, which swipes up and down, that is contained within the bounds of a 200x200 square. There are lots of different configuration options available to you here, which will be broken down in detail in the API section of the docs (coming soon).
+Now we have a vertical tabs configuration, which swipes up and down, that is contained within the bounds of a 200x200 square. There are lots of different configuration options for Tabs that will be outlined in the near future.
 
 ## Stack
 
-We're not just restricted to tab components however. Let's take a look at a Stack container:
+We're not just restricted to Tabs to render our screens. Let's take a look at a Stack container:
 
 ```tsx
 import { Navigator, Stack, useStack } from 'navigation-components';
@@ -104,7 +104,7 @@ function PopButton() {
 }
 ```
 
-The stack component will stack children one ontop of the other. Users can't swipe to the next stack child, but can swipe back to the previous. A stack will unmount children when they are swiped / popped off of the stack. We can configure the stack in the same way we did the tabs:
+The stack component will stack children one ontop of the other. Users can't swipe to the next stack child, but can swipe back to the previous. A stack will unmount children when they are swiped / popped off of the stack. We can configure the stack in the same way we did the tabs. Again, there are lots of ways to configure Stack.
 
 ```tsx
 function MyStack() {
@@ -124,9 +124,9 @@ Sometimes you'll want to include a header component that renders with your scree
 
 ```tsx
 import { Navigator, NativeStack, Header } from 'navigation-components';
-
 import { enableScreens } from 'react-native-screens';
 
+// this is required at the top level of your app
 enableScreens();
 
 function MyNavigator() {
@@ -166,23 +166,22 @@ function MyNavigator() {
 }
 ```
 
-The native stack comes with some default behaviour for handling the styles and back button functionality for us, as well as rendering a title and some other goodies. It doesn't have the exact same configuration options that stack and tabs do - this will also be covered in detail in the API section (coming soon).
-
-There's one more important feature that this example illustrates - each `child` of a container (Tabs, Stack, NativeStack, etc) represents a _single screen_ that can be pushed, popped, swiped to, etc.
+NativeStack is a bit different because it uses native iOS and Android components under the hood. This means it comes with some nice default behaviour such as handling transitions and back button functionality.
 
 ## Switch
 
 A switch component can be useful if you want to switch between two screens without any kind of gesture or animation.
 
-Often there are several sibling views that need to be rendered in the same location - for example at paths `/profile/album/1` and `/profile/artist/1` - these might render two totally different components but need to appear in the same part of our app. This is a good use case for using a switch.
+Often there are several sibling views that need to be rendered in the same location - for example at paths `/profile/album/1` and `/profile/artist/1` - these might render two totally different components but need to appear in the same part of the app. This is a good use case for using a switch.
 
-Switch serves an additional purpose of offloading CPU/GPU hungry components by taking advantage of the `react-native-screens` library.
+Switch serves an additional purpose of offloading performance hungry screens when they become inactive by taking advantage of the `react-native-screens` library.
 
 ```tsx
 import { Switch, Navigator, Tabbar, Tab } from 'navigation-components';
 import { Text } from 'react-native';
 import { enableScreens } from 'react-native-screens';
 
+// this is required at the top of your app
 enableScreens();
 
 function MyNavigator() {
@@ -280,8 +279,8 @@ function MyNavigator() {
 
 - The NativeStack container uses native iOS and Android stack components, and can be used in conjunction with a Header component to render headers with your screens. It has different configuration options than the Stack and Tabs components, and requires `enabledScreens()` to be called somewhere at the top of your app to work.
 
-- The Switch component renders only one screen at a time, and can be used to switch between different sibling screens that exist at the same location in your app. Again, it requires the `enableScreens()` function to be called at the top of your app. Inactive screens are removed from the view heirachy by `react-native-screens` and so performance hungry components can be offloading with this component.
+- The Switch container renders only one screen at a time, and can be used to switch between different sibling screens that exist at the same location in your app. Again, it requires the `enableScreens()` function to be called at the top of your app. Inactive screens are removed from the view heirachy by `react-native-screens` and so performance hungry components can be offloaded with this component.
 
-- The Modal component renders one view ontop of another, and can be dismissed with a gesture. It supports the same configurations as Tabs and Stack, but can only receive two child screens. It provides a `useModal()` hook that lets you imperatively toggle the modal, as well as declarative props for modal display.
+- The Modal container renders one view ontop of another, and can be dismissed with a gesture. It supports the same configurations as Tabs and Stack, but can only receive two child screens. It provides a `useModal()` hook that lets you imperatively toggle the modal, as well as declarative props for modal display.
 
-These are the "primitives" that are at your disposal for managing the screens of your app. They all subscribe to the same contract with Navigator and so all of the rules of routing and navigation apply. More in depth details about configuring each of this will be available in the near future!
+These screen containers are the primitives at your disposal for managing the screens of your app. They all subscribe to the same contract with Navigator and so all of the rules of routing and navigation apply. More in depth details about configuring each of this will be available in the near future!
