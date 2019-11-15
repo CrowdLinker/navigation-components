@@ -8,7 +8,7 @@ import {
   resolveBasepath,
   history,
 } from './history';
-import { useLocation, useBasepath } from './history-component';
+import { useLocation, useBasepath, useNavigate } from './history-component';
 import { ViewProps } from 'react-native';
 
 interface iNavigator {
@@ -137,10 +137,10 @@ interface iLink extends ViewProps {
 }
 
 function Link({ to, children, ...rest }: iLink) {
-  const navigator = useNavigator();
+  const navigate = useNavigate();
 
   function handlePress() {
-    navigator.navigate(to);
+    navigate(to);
   }
 
   return (

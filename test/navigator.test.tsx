@@ -46,10 +46,10 @@ test('render()', () => {
   const { getByText } = render(
     <Navigator routes={['uno', 'dos']}>
       <Tabs>
-        <Link to="dos">
+        <Link to="../dos">
           <Text>To dos</Text>
         </Link>
-        <Link to="uno">
+        <Link to="../uno">
           <Text>To uno</Text>
         </Link>
       </Tabs>
@@ -85,11 +85,11 @@ test('params', () => {
   const { getFocused } = render(
     <Navigator routes={['uno/:id', 'dos/:id']}>
       <Tabs>
-        <Link to="dos/2">
+        <Link to="../../dos/2">
           <Text>To dos</Text>
           <Params prop="id">Uno params: </Params>
         </Link>
-        <Link to="uno/3">
+        <Link to="../../uno/3">
           <Text>To uno</Text>
           <Params prop="id">Dos params: </Params>
         </Link>
@@ -145,7 +145,7 @@ test('nested', () => {
           <Tabs>
             <View>
               <Text>root</Text>
-              <Link to="inner/two">
+              <Link to="../inner/two">
                 <Text>Link</Text>
               </Link>
             </View>
@@ -158,7 +158,7 @@ test('nested', () => {
 
   navigate('/root');
 
-  const { getFocused, debug } = render(
+  const { getFocused } = render(
     <Outer>
       <Inner />
     </Outer>
