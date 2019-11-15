@@ -45,7 +45,6 @@ interface iScreenConfig {
 function NativeStack({ children, screenConfig = {}, style }: iNativeStack) {
   const navigator = useNavigator();
   const [activeIndex, onChange] = usePager();
-  const focused = useFocus();
 
   const { pop } = useStack();
 
@@ -66,7 +65,7 @@ function NativeStack({ children, screenConfig = {}, style }: iNativeStack) {
               {...(screenConfig as any)}
             >
               <BasepathProvider value={route}>
-                <FocusProvider focused={focused && index === activeIndex}>
+                <FocusProvider focused={index === activeIndex}>
                   <IndexProvider index={index}>
                     <AccessibleScreen>{child}</AccessibleScreen>
                   </IndexProvider>

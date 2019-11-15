@@ -158,7 +158,7 @@ test('nested', () => {
 
   navigate('/root');
 
-  const { getFocused, debug, container } = render(
+  const { getFocused, debug } = render(
     <Outer>
       <Inner />
     </Outer>
