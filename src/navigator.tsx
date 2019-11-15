@@ -41,6 +41,10 @@ function Navigator({
 
   const cleanRoutes = React.useMemo(() => routes.map(stripSlashes), [routes]);
 
+  const isRouter = routes.length > 0;
+
+  const [routeFocused, setRouteFocused] = React.useState(!isRouter);
+
   const [activeIndex, onChange] = React.useState(() => {
     const matchingRoute = getNextRoute(location, basepath);
 
@@ -48,6 +52,7 @@ function Navigator({
       const nextIndex = pick(cleanRoutes, matchingRoute);
 
       if (nextIndex !== -1) {
+        setRouteFocused(true);
         return nextIndex;
       }
     }
@@ -84,19 +89,23 @@ function Navigator({
 
   React.useEffect(() => {
     // only update if the navigator is currently focused and there was a relevant location change
-    if (focused) {
+    if (focused && isRouter) {
       const matchingRoute = getNextRoute(location, basepath);
 
       if (matchingRoute) {
         const nextIndex = pick(cleanRoutes, matchingRoute);
 
-        if (nextIndex !== activeIndex && nextIndex !== -1) {
+        if (nextIndex !== -1) {
+          setRouteFocused(true);
           onChange(nextIndex);
+
           return;
         }
       }
+
+      setRouteFocused(false);
     }
-  }, [location, focused, cleanRoutes, basepath]);
+  }, [location, focused, cleanRoutes, basepath, isRouter]);
 
   React.useEffect(() => {
     if (activeIndex !== undefined) {
@@ -114,7 +123,9 @@ function Navigator({
   return (
     <PagerProvider activeIndex={activeIndex} onChange={handleGestureChange}>
       <NavigatorContext.Provider value={context}>
-        {children}
+        <RouteFocusContext.Provider value={routeFocused}>
+          {children}
+        </RouteFocusContext.Provider>
       </NavigatorContext.Provider>
     </PagerProvider>
   );
@@ -177,4 +188,12 @@ function stripSlashes(str: string) {
   return str.replace(/(^\/+|\/+$)/g, '');
 }
 
-export { useNavigator, useParams, Navigator, Link };
+const RouteFocusContext = React.createContext(true);
+
+function useRouteFocused() {
+  const routeFocused = React.useContext(RouteFocusContext);
+
+  return routeFocused;
+}
+
+export { useNavigator, useParams, Navigator, Link, useRouteFocused };

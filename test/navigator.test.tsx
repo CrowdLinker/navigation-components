@@ -197,9 +197,9 @@ test('root "/" is the default path', () => {
 test('initialIndex defaults when there is no initial match', () => {
   navigate('/four');
 
-  const { getFocused, getByText } = render(
+  const { getFocused, getByText, debug } = render(
     <Navigator routes={['one', 'two', 'three']} initialIndex={1}>
-      <Tabs style={{ width: 1 }}>
+      <Tabs>
         <Text>1</Text>
         <Text>2</Text>
         <Text>3</Text>
@@ -207,7 +207,12 @@ test('initialIndex defaults when there is no initial match', () => {
     </Navigator>
   );
 
+  // using enabled because these screens are are focused but not active routes
+  // getFocused() will return the parent containing all three screens
+  getFocused().getByText('1');
   getFocused().getByText('2');
+  getFocused().getByText('3');
+
   expect(getByText('2')).toBeEnabled();
   expect(getByText('1')).toBeDisabled();
 });
@@ -217,7 +222,7 @@ test('stack works', () => {
 
   const { getFocused } = render(
     <Navigator routes={['one', 'two', 'three']} initialIndex={0}>
-      <Stack style={{ width: 1 }}>
+      <Stack>
         <Text>1</Text>
         <Text>2</Text>
         <Text>3</Text>
@@ -245,7 +250,7 @@ test('native-stack works', () => {
 });
 
 test('switch works', () => {
-  navigate('/four');
+  navigate('/one');
 
   const { getFocused } = render(
     <Navigator routes={['one', 'two', 'three']}>
