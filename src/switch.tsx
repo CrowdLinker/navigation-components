@@ -26,7 +26,9 @@ function Switch({ children }: iSwitch) {
               <BasepathProvider value={route}>
                 <FocusProvider focused={index === activeIndex}>
                   <IndexProvider index={index}>
-                    <AccessibleScreen>{child}</AccessibleScreen>
+                    <AccessibleScreen routeFocused={navigator.focused}>
+                      {child}
+                    </AccessibleScreen>
                   </IndexProvider>
                 </FocusProvider>
               </BasepathProvider>
@@ -38,7 +40,9 @@ function Switch({ children }: iSwitch) {
           <Screen active={active} style={StyleSheet.absoluteFill}>
             <FocusProvider focused={index === activeIndex}>
               <IndexProvider index={index}>
-                <AccessibleScreen>{child}</AccessibleScreen>
+                <AccessibleScreen routeFocused={navigator.focused}>
+                  {child}
+                </AccessibleScreen>
               </IndexProvider>
             </FocusProvider>
           </Screen>

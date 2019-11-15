@@ -7,6 +7,7 @@ export interface iHistory {
   index: number;
   listen: (listener: Listener) => () => void;
   reset: () => void;
+  resolve: (to: string, basepath: string) => string;
 }
 
 export type Listener = (location: string) => void;
@@ -88,6 +89,10 @@ function createHistory(): iHistory {
 
         notify();
       }
+    },
+
+    resolve: function(to: string, basepath: string) {
+      return resolve(to, basepath, paths[index]);
     },
   };
 }

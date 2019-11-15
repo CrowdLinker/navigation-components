@@ -1,15 +1,7 @@
 import React from 'react';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { PagerProvider, useFocus } from './pager';
-import {
-  getNextRoute,
-  pick,
-  getParams,
-  resolveBasepath,
-  history,
-} from './history';
-import { useLocation, useBasepath, useNavigate } from './history-component';
-import { ViewProps } from 'react-native';
+import { getNextRoute, pick, resolveBasepath } from './history';
+import { useLocation, useBasepath, useHistory } from './history-component';
 
 interface iNavigator {
   children: React.ReactNode;
@@ -19,10 +11,9 @@ interface iNavigator {
 }
 
 interface iNavigatorContext {
-  navigate: (to: string) => void;
-  back: (amount?: number) => void;
   routes: string[];
   activeIndex: number;
+  focused: boolean;
 }
 
 const NavigatorContext = React.createContext<undefined | iNavigatorContext>(
@@ -35,6 +26,7 @@ function Navigator({
   initialIndex = 0,
   onChange: parentOnChange,
 }: iNavigator) {
+  const history = useHistory();
   const basepath = useBasepath();
   const location = useLocation();
   const focused = useFocus();
@@ -67,7 +59,7 @@ function Navigator({
 
     if (nextRoute) {
       if (nextRoute === '/') {
-        navigate(basepath || '/');
+        history.navigate(basepath || '/');
         return;
       }
 
@@ -75,17 +67,9 @@ function Navigator({
         nextRoute = resolveBasepath(nextRoute, history.location);
       }
 
-      navigate(`${basepath}/${nextRoute}`);
+      history.navigate(`${basepath}/${nextRoute}`);
     }
   }
-
-  function navigate(to: string) {
-    history.navigate(to, basepath);
-  }
-
-  const back = function(amount?: number) {
-    history.back(amount);
-  };
 
   React.useEffect(() => {
     // only update if the navigator is currently focused and there was a relevant location change
@@ -114,44 +98,17 @@ function Navigator({
   }, [activeIndex, parentOnChange]);
 
   const context = {
-    navigate,
-    back,
     routes: cleanRoutes,
     activeIndex,
+    focused: routeFocused,
   };
 
   return (
     <PagerProvider activeIndex={activeIndex} onChange={handleGestureChange}>
       <NavigatorContext.Provider value={context}>
-        <RouteFocusContext.Provider value={routeFocused}>
-          {children}
-        </RouteFocusContext.Provider>
+        {children}
       </NavigatorContext.Provider>
     </PagerProvider>
-  );
-}
-
-interface iLink extends ViewProps {
-  to: string;
-  children: React.ReactNode;
-}
-
-function Link({ to, children, ...rest }: iLink) {
-  const navigate = useNavigate();
-
-  function handlePress() {
-    navigate(to);
-  }
-
-  return (
-    <TouchableOpacity
-      onPress={handlePress}
-      accessibilityRole="link"
-      accessibilityHint={`Go to ${to}`}
-      {...rest}
-    >
-      {children}
-    </TouchableOpacity>
   );
 }
 
@@ -165,20 +122,7 @@ function useNavigator(): iNavigatorContext {
   return context;
 }
 
-function useParams<T>() {
-  const location = useLocation();
-  const basepath = useBasepath();
-  const [params, setParams] = React.useState<undefined | T>();
-  const focused = useFocus();
-
-  React.useEffect(() => {
-    if (focused) {
-      setParams(getParams(basepath, location));
-    }
-  }, [focused, basepath, location]);
-
-  return params;
-}
+export { useNavigator, Navigator };
 
 function stripSlashes(str: string) {
   if (str === '/') {
@@ -187,13 +131,3 @@ function stripSlashes(str: string) {
 
   return str.replace(/(^\/+|\/+$)/g, '');
 }
-
-const RouteFocusContext = React.createContext(true);
-
-function useRouteFocused() {
-  const routeFocused = React.useContext(RouteFocusContext);
-
-  return routeFocused;
-}
-
-export { useNavigator, useParams, Navigator, Link, useRouteFocused };

@@ -16,9 +16,9 @@ import {
   Tabs,
   Modal,
   useModal,
-  useNavigate,
   History,
   Link,
+  useNavigate,
 } from 'navigation-components';
 
 interface iFormValues {
@@ -278,7 +278,12 @@ function Container() {
   return (
     <SafeAreaView style={{flex: 1}}>
       <History>
-        <SpotifyApp />
+        <Navigator routes={['library', '/']}>
+          <Tabs>
+            <SpotifyApp />
+            <Text>Hi</Text>
+          </Tabs>
+        </Navigator>
       </History>
     </SafeAreaView>
   );

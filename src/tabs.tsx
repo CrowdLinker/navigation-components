@@ -7,6 +7,7 @@ import {
   ViewProps,
 } from 'react-native';
 import { useNavigator } from './navigator';
+import { useNavigate } from './hooks';
 import { BasepathProvider } from './history-component';
 import {
   Pager,
@@ -51,12 +52,18 @@ function Tabs({ children, ...rest }: iTabs) {
         if (route) {
           return (
             <BasepathProvider value={route}>
-              <AccessibleScreen>{child}</AccessibleScreen>
+              <AccessibleScreen routeFocused={navigator.focused}>
+                {child}
+              </AccessibleScreen>
             </BasepathProvider>
           );
         }
 
-        return <AccessibleScreen>{child}</AccessibleScreen>;
+        return (
+          <AccessibleScreen routeFocused={navigator.focused}>
+            {child}
+          </AccessibleScreen>
+        );
       })}
     </Pager>
   );
@@ -95,12 +102,13 @@ interface iTabContext {
 function useTabs(): iTabContext {
   const [_, onChange] = usePager();
   const navigator = useNavigator();
+  const navigate = useNavigate();
 
   function goTo(index: number) {
     const route = navigator.routes[index];
 
     if (route) {
-      navigator.navigate(route);
+      navigate(route);
       return;
     }
 

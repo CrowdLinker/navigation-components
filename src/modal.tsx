@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pager, iPageInterpolation, usePager, iPager } from './pager';
 import { useNavigator } from './navigator';
+import { useNavigate } from './hooks';
 import { BasepathProvider } from './history-component';
 import { AccessibleScreen } from './accessible-screen';
 
@@ -19,6 +20,8 @@ function Modal({ children, modalIndex = 1, onClose, active, ...rest }: iModal) {
   const [activeIndex, onChange] = usePager();
   const navigator = useNavigator();
 
+  const navigate = useNavigate();
+
   const screenIndex = modalIndex === 1 ? 0 : 1;
 
   if (navigator.routes.length > 2) {
@@ -29,7 +32,7 @@ function Modal({ children, modalIndex = 1, onClose, active, ...rest }: iModal) {
     const route = navigator.routes[modalIndex];
 
     if (route) {
-      navigator.navigate(route);
+      navigate(route);
       return;
     }
 
@@ -40,7 +43,7 @@ function Modal({ children, modalIndex = 1, onClose, active, ...rest }: iModal) {
     const route = navigator.routes[screenIndex];
 
     if (route) {
-      navigator.navigate(route);
+      navigate(route);
       return;
     }
 
@@ -89,7 +92,10 @@ function Modal({ children, modalIndex = 1, onClose, active, ...rest }: iModal) {
           if (route) {
             return (
               <BasepathProvider value={route}>
-                <AccessibleScreen accessibilityViewIsModal={isModal}>
+                <AccessibleScreen
+                  accessibilityViewIsModal={isModal}
+                  routeFocused={navigator.focused}
+                >
                   {child}
                 </AccessibleScreen>
               </BasepathProvider>
@@ -97,7 +103,10 @@ function Modal({ children, modalIndex = 1, onClose, active, ...rest }: iModal) {
           }
 
           return (
-            <AccessibleScreen accessibilityViewIsModal={isModal}>
+            <AccessibleScreen
+              accessibilityViewIsModal={isModal}
+              routeFocused={navigator.focused}
+            >
               {child}
             </AccessibleScreen>
           );

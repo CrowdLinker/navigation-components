@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pager, iPager, usePager } from './pager';
 import { useNavigator } from './navigator';
+import { useNavigate } from './hooks';
 import { BasepathProvider } from './history-component';
 import { AccessibleScreen } from './accessible-screen';
 
@@ -58,12 +59,18 @@ function Stack({ children, unmountOnExit = true, ...rest }: iStack) {
         if (route) {
           return (
             <BasepathProvider value={route}>
-              <AccessibleScreen>{child}</AccessibleScreen>
+              <AccessibleScreen routeFocused={navigator.focused}>
+                {child}
+              </AccessibleScreen>
             </BasepathProvider>
           );
         }
 
-        return <AccessibleScreen>{child}</AccessibleScreen>;
+        return (
+          <AccessibleScreen routeFocused={navigator.focused}>
+            {child}
+          </AccessibleScreen>
+        );
       })}
     </Pager>
   );
@@ -76,6 +83,7 @@ interface iStackContext {
 
 function useStack(): iStackContext {
   const navigator = useNavigator();
+  const navigate = useNavigate();
   const [activeIndex, onChange] = usePager();
 
   function push(amount = 1) {
@@ -84,7 +92,7 @@ function useStack(): iStackContext {
     if (navigator.routes.length > 0) {
       const nextRoute = navigator.routes[nextIndex];
 
-      navigator.navigate(nextRoute);
+      navigate(nextRoute);
       return;
     }
 
@@ -97,7 +105,7 @@ function useStack(): iStackContext {
     if (navigator.routes.length > 0) {
       const nextRoute = navigator.routes[nextIndex];
 
-      navigator.navigate(nextRoute);
+      navigate(nextRoute);
       return;
     }
 

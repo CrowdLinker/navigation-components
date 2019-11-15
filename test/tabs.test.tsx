@@ -56,13 +56,13 @@ test('tabbar navigates to mapped route', () => {
   fireEvent.press(getByText('2'));
 
   // empty  basepath
-  expect(spy).toHaveBeenCalledWith('two', '');
+  expect(spy).toHaveBeenCalledWith('two', '/');
   getFocused().getByText('Second');
 
   fireEvent.press(getByText('1'));
 
   // empty  basepath
-  expect(spy).toHaveBeenCalledWith('one', '');
+  expect(spy).toHaveBeenCalledWith('one', '/');
   getFocused().getByText('First');
 });
 

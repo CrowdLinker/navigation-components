@@ -120,6 +120,8 @@ function MyStack() {
 
 ## NativeStack
 
+**Note:** NativeStack is somewhat unstable at this time
+
 Sometimes you'll want to include a header component that renders with your screens, or take advantage of the native iOS and Android stack components for performance / styling. It's easy to switch to a native stack:
 
 ```tsx

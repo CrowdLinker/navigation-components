@@ -119,7 +119,9 @@ function History({
     <HistoryContext.Provider value={history}>
       <LocationProvider location={location}>
         <FocusProvider focused>
-          <AccessibleScreen>{children}</AccessibleScreen>
+          <Home>
+            <AccessibleScreen>{children}</AccessibleScreen>
+          </Home>
         </FocusProvider>
       </LocationProvider>
     </HistoryContext.Provider>
@@ -169,12 +171,21 @@ function useLocation() {
   return location;
 }
 
-function useNavigate() {
+const HomePathContext = React.createContext('');
+
+function Home({ children }: any) {
   const basepath = useBasepath();
 
-  return function(to: string) {
-    navigate(to, basepath || '/');
-  };
+  return (
+    <HomePathContext.Provider value={basepath}>
+      {children}
+    </HomePathContext.Provider>
+  );
+}
+
+function useHomepath() {
+  const context = React.useContext(HomePathContext);
+  return context;
 }
 
 export {
@@ -182,6 +193,7 @@ export {
   useBasepath,
   BasepathProvider,
   useHistory,
-  useNavigate,
   History,
+  Home,
+  useHomepath,
 };

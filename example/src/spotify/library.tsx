@@ -16,7 +16,7 @@ import {colors, styles, Feed, FeedHeaders, Slide} from '../shared';
 const mainRoutes = ['main', 'profile', 'details'];
 function Library() {
   return (
-    <Navigator routes={mainRoutes}>
+    <Navigator routes={mainRoutes} home>
       <Stack>
         <UserFeeds />
         <Profiles />
@@ -40,7 +40,7 @@ function UserFeeds() {
 
       <Button
         title="Navigate abs"
-        onPress={() => navigate('/main/music/artists')}
+        onPress={() => navigate('/library/main/music/artists')}
       />
     </Navigator>
   );
@@ -59,7 +59,7 @@ function Feeds({routes}: any) {
             items={data[route]}
             row={item => (
               <Link
-                to={`../../profile/${route}/${item.id}/hello`}
+                to={`~/profile/${route}/${item.id}/hello`}
                 style={{borderWidth: 1, height: 40, marginVertical: 5}}>
                 <Text>{item.id}</Text>
               </Link>
@@ -120,7 +120,7 @@ function ArtistProfile() {
   return (
     <Slide index={1}>
       <Text>Artist Profile</Text>
-      <Link to="../details/album">
+      <Link to="~/details/album">
         <Text>Next</Text>
       </Link>
     </Slide>

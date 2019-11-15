@@ -1,22 +1,27 @@
 import React from 'react';
 import { View, ViewProps } from 'react-native';
 import { useFocus } from './pager';
-import { useRouteFocused } from './navigator';
 
 interface iAccessibleScreen extends ViewProps {
   children: React.ReactNode;
+  routeFocused?: boolean;
 }
 
-function AccessibleScreen({ children, ...rest }: iAccessibleScreen) {
+function AccessibleScreen({
+  children,
+  routeFocused,
+  ...rest
+}: iAccessibleScreen) {
   const focused = useFocus(); // parent screen is focused
-
-  const focusDepth = React.useContext(FocusDepthContext);
-  const routeFocused = useRouteFocused(); // parent navigator has active route
   const parentUnfocused = React.useContext(UnfocusedContext); // in an unfocused / disabled subtree
 
+  const focusDepth = React.useContext(FocusDepthContext);
   let depth = focusDepth;
 
-  if (parentUnfocused || !focused || !routeFocused) {
+  const navigatorNotFocused = routeFocused !== undefined && !routeFocused;
+
+  // one or all of the parents is unfocused
+  if (parentUnfocused || !focused || navigatorNotFocused) {
     depth = 0;
   }
 
@@ -34,6 +39,9 @@ function AccessibleScreen({ children, ...rest }: iAccessibleScreen) {
     </View>
   );
 }
+
+// these components are to properly locate the focused screen
+// might be useful in other cases as well, for now its just for getFocused()
 
 // start at 1 so these screens don't have to be wrapped in a provider
 const FocusDepthContext = React.createContext(1);

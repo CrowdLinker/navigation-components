@@ -13,6 +13,7 @@ import {
   History,
   createHistory,
   usePager,
+  useBack,
 } from '../src';
 import { Text, View, Button } from 'react-native';
 import { render, navigate } from './test-utils';
@@ -370,7 +371,8 @@ test('handleOnGesture navigates', () => {
 test('back() works', () => {
   function BackButton({ amount }: any) {
     const navigator = useNavigator();
-    return <Button title="back" onPress={() => navigator.back(amount)} />;
+    const back = useBack();
+    return <Button title="back" onPress={() => back(amount)} />;
   }
 
   const { getFocused } = render(
