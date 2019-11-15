@@ -411,22 +411,19 @@ function Pager({
       }
 
       return (
-        <IndexProvider index={index} key={index}>
-          <FocusProvider focused={index === activeIndex}>
-            <Page
-              index={index}
-              animatedIndex={animatedIndex}
-              minimum={minimum}
-              maximum={maximum}
-              dimension={dimension}
-              targetTransform={targetTransform}
-              targetDimension={targetDimension}
-              pageInterpolation={pageInterpolation}
-            >
-              {child}
-            </Page>
-          </FocusProvider>
-        </IndexProvider>
+        <Page
+          key={index}
+          index={index}
+          animatedIndex={animatedIndex}
+          minimum={minimum}
+          maximum={maximum}
+          dimension={dimension}
+          targetTransform={targetTransform}
+          targetDimension={targetDimension}
+          pageInterpolation={pageInterpolation}
+        >
+          {child}
+        </Page>
       );
     });
   }

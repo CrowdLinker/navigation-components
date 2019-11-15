@@ -5,8 +5,9 @@ import {
   useLocation,
   useHomepath,
 } from './history-component';
-import { useFocus } from './pager';
+import { useFocus, usePager } from './pager';
 import { getParams } from './history';
+import { useNavigator } from './navigator';
 
 function useNavigate() {
   const history = useHistory();
@@ -53,4 +54,62 @@ function useParams<T>() {
   return params;
 }
 
-export { useNavigate, useBack, useParams };
+function useStack() {
+  const navigator = useNavigator();
+  const navigate = useNavigate();
+  const [activeIndex, onChange] = usePager();
+
+  function push(amount = 1) {
+    const nextIndex = activeIndex + amount;
+
+    if (navigator.routes.length > 0) {
+      const nextRoute = navigator.routes[nextIndex];
+
+      navigate(nextRoute);
+      return;
+    }
+
+    onChange(nextIndex);
+  }
+
+  function pop(amount = 1) {
+    const nextIndex = activeIndex - amount;
+
+    if (navigator.routes.length > 0) {
+      const nextRoute = navigator.routes[nextIndex];
+
+      navigate(nextRoute);
+      return;
+    }
+
+    onChange(nextIndex);
+  }
+
+  return {
+    push,
+    pop,
+  };
+}
+
+function useTabs() {
+  const [_, onChange] = usePager();
+  const navigator = useNavigator();
+  const navigate = useNavigate();
+
+  function goTo(index: number) {
+    const route = navigator.routes[index];
+
+    if (route) {
+      navigate(route);
+      return;
+    }
+
+    onChange(index);
+  }
+
+  return {
+    goTo,
+  };
+}
+
+export { useNavigate, useBack, useParams, useStack, useTabs };

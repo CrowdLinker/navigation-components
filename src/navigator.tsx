@@ -10,7 +10,7 @@ interface iNavigator {
   onChange?: (index: number, route: string) => void;
 }
 
-interface iNavigatorContext {
+export interface iNavigatorContext {
   routes: string[];
   activeIndex: number;
   focused: boolean;
@@ -112,6 +112,7 @@ function Navigator({
   );
 }
 
+// important to throw an error here as navigator is required for routing to work
 function useNavigator(): iNavigatorContext {
   const context = React.useContext(NavigatorContext);
 

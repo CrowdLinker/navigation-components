@@ -2,8 +2,7 @@ import React from 'react';
 import { Pager, iPageInterpolation, usePager, iPager } from './pager';
 import { useNavigator } from './navigator';
 import { useNavigate } from './hooks';
-import { BasepathProvider } from './history-component';
-import { AccessibleScreen } from './accessible-screen';
+import { createRoute } from './create-route';
 
 const modalConfig: iPageInterpolation = {
   zIndex: offset => offset,
@@ -86,30 +85,8 @@ function Modal({ children, modalIndex = 1, onClose, active, ...rest }: iModal) {
         {...rest}
       >
         {React.Children.map(children, (child: any, index: number) => {
-          const route = navigator.routes[index];
-          const isModal = index === modalIndex;
-
-          if (route) {
-            return (
-              <BasepathProvider value={route}>
-                <AccessibleScreen
-                  accessibilityViewIsModal={isModal}
-                  routeFocused={navigator.focused}
-                >
-                  {child}
-                </AccessibleScreen>
-              </BasepathProvider>
-            );
-          }
-
-          return (
-            <AccessibleScreen
-              accessibilityViewIsModal={isModal}
-              routeFocused={navigator.focused}
-            >
-              {child}
-            </AccessibleScreen>
-          );
+          const route = createRoute(child, index);
+          return route;
         })}
       </Pager>
     </ModalContext.Provider>
@@ -125,13 +102,13 @@ interface iModalContext {
 const ModalContext = React.createContext<undefined | iModalContext>(undefined);
 
 function useModal(): iModalContext {
-  const display = React.useContext(ModalContext);
+  const modal = React.useContext(ModalContext);
 
-  if (!display) {
+  if (!modal) {
     throw new Error(`useModal() must be used within a <Modal /> container`);
   }
 
-  return display;
+  return modal;
 }
 
 function usePrevious(value: any) {

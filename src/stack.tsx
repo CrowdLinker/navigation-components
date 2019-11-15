@@ -1,9 +1,6 @@
 import React from 'react';
 import { Pager, iPager, usePager } from './pager';
-import { useNavigator } from './navigator';
-import { useNavigate } from './hooks';
-import { BasepathProvider } from './history-component';
-import { AccessibleScreen } from './accessible-screen';
+import { createRoute } from './create-route';
 
 interface iStack extends iPager {
   children: React.ReactNode[];
@@ -11,7 +8,6 @@ interface iStack extends iPager {
 }
 
 function Stack({ children, unmountOnExit = true, ...rest }: iStack) {
-  const navigator = useNavigator();
   const [activeIndex] = usePager();
 
   const lastIndex = React.Children.count(children) - 1;
@@ -50,72 +46,16 @@ function Stack({ children, unmountOnExit = true, ...rest }: iStack) {
       {...rest}
     >
       {React.Children.map(children, (child: any, index: number) => {
+        const route = createRoute(child, index);
+
         if (unmountOnExit && index > popIndex) {
           return null;
         }
 
-        const route = navigator.routes[index];
-
-        if (route) {
-          return (
-            <BasepathProvider value={route}>
-              <AccessibleScreen routeFocused={navigator.focused}>
-                {child}
-              </AccessibleScreen>
-            </BasepathProvider>
-          );
-        }
-
-        return (
-          <AccessibleScreen routeFocused={navigator.focused}>
-            {child}
-          </AccessibleScreen>
-        );
+        return route;
       })}
     </Pager>
   );
-}
-
-interface iStackContext {
-  push: (amount?: number) => void;
-  pop: (amount?: number) => void;
-}
-
-function useStack(): iStackContext {
-  const navigator = useNavigator();
-  const navigate = useNavigate();
-  const [activeIndex, onChange] = usePager();
-
-  function push(amount = 1) {
-    const nextIndex = activeIndex + amount;
-
-    if (navigator.routes.length > 0) {
-      const nextRoute = navigator.routes[nextIndex];
-
-      navigate(nextRoute);
-      return;
-    }
-
-    onChange(nextIndex);
-  }
-
-  function pop(amount = 1) {
-    const nextIndex = activeIndex - amount;
-
-    if (navigator.routes.length > 0) {
-      const nextRoute = navigator.routes[nextIndex];
-
-      navigate(nextRoute);
-      return;
-    }
-
-    onChange(nextIndex);
-  }
-
-  return {
-    push,
-    pop,
-  };
 }
 
 function usePrevious(value: any) {
@@ -132,4 +72,4 @@ function usePrevious(value: any) {
   return ref.current;
 }
 
-export { Stack, useStack };
+export { Stack };

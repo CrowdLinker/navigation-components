@@ -294,7 +294,6 @@ test('modal works', () => {
   navigate('/two');
 
   getFocused().getByText('2');
-  expect(getFocused().container).toHaveProp('accessibilityViewIsModal', true);
 });
 
 test('nested history does nothing', () => {

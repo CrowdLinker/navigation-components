@@ -13,21 +13,11 @@ import {
   // @ts-ignore
   ScreenStackHeaderTitleView,
   Screen,
-  screensEnabled,
 } from 'react-native-screens';
 import { StyleSheet, ViewStyle } from 'react-native';
-import { useNavigator } from './navigator';
-import { BasepathProvider } from './history-component';
-import { useStack } from './stack';
-import {
-  usePager,
-  // @ts-ignore
-  FocusProvider,
-  // @ts-ignore
-  IndexProvider,
-  useFocus,
-} from './pager';
-import { AccessibleScreen } from './accessible-screen';
+import { useStack } from './hooks';
+import { usePager } from './pager';
+import { createRoute } from './create-route';
 
 interface iNativeStack {
   children: React.ReactNode[];
@@ -43,7 +33,6 @@ interface iScreenConfig {
 }
 
 function NativeStack({ children, screenConfig = {}, style }: iNativeStack) {
-  const navigator = useNavigator();
   const [activeIndex] = usePager();
 
   const { pop } = useStack();
@@ -51,30 +40,10 @@ function NativeStack({ children, screenConfig = {}, style }: iNativeStack) {
   return (
     <ScreenStack style={style || { flex: 1 }}>
       {React.Children.map(children, (child: any, index: number) => {
+        const route = createRoute(child, index);
+
         if (index > activeIndex) {
           return null;
-        }
-
-        const route = navigator.routes[index];
-
-        if (route) {
-          return (
-            <Screen
-              onDismissed={() => pop(1)}
-              style={StyleSheet.absoluteFill}
-              {...(screenConfig as any)}
-            >
-              <BasepathProvider value={route}>
-                <FocusProvider focused={index === activeIndex}>
-                  <IndexProvider index={index}>
-                    <AccessibleScreen routeFocused={navigator.focused}>
-                      {child}
-                    </AccessibleScreen>
-                  </IndexProvider>
-                </FocusProvider>
-              </BasepathProvider>
-            </Screen>
-          );
         }
 
         return (
@@ -83,13 +52,7 @@ function NativeStack({ children, screenConfig = {}, style }: iNativeStack) {
             style={StyleSheet.absoluteFill}
             {...(screenConfig as any)}
           >
-            <FocusProvider focused={index === activeIndex}>
-              <IndexProvider index={index}>
-                <AccessibleScreen routeFocused={navigator.focused}>
-                  {child}
-                </AccessibleScreen>
-              </IndexProvider>
-            </FocusProvider>
+            {route}
           </Screen>
         );
       })}

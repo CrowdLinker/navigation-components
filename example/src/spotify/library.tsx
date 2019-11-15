@@ -9,6 +9,7 @@ import {
   useParams,
   navigate,
   Stack,
+  Home,
 } from 'navigation-components';
 import {View, Text, Button} from 'react-native';
 import {colors, styles, Feed, FeedHeaders, Slide} from '../shared';
@@ -16,13 +17,15 @@ import {colors, styles, Feed, FeedHeaders, Slide} from '../shared';
 const mainRoutes = ['main', 'profile', 'details'];
 function Library() {
   return (
-    <Navigator routes={mainRoutes} home>
-      <Stack>
-        <UserFeeds />
-        <Profiles />
-        <Details />
-      </Stack>
-    </Navigator>
+    <Home>
+      <Navigator routes={mainRoutes}>
+        <Stack>
+          <UserFeeds />
+          <Profiles />
+          <Details />
+        </Stack>
+      </Navigator>
+    </Home>
   );
 }
 

@@ -6,9 +6,7 @@ import {
   GestureResponderEvent,
   ViewProps,
 } from 'react-native';
-import { useNavigator } from './navigator';
-import { useNavigate } from './hooks';
-import { BasepathProvider } from './history-component';
+import { useTabs } from './hooks';
 import {
   Pager,
   iPager,
@@ -17,7 +15,7 @@ import {
   useIndex,
   FocusProvider,
 } from './pager';
-import { AccessibleScreen } from './accessible-screen';
+import { createRoute } from './create-route';
 
 const MINIMUM_SWIPE_DISTANCE = 20;
 
@@ -27,7 +25,6 @@ interface iTabs extends iPager {
 
 function Tabs({ children, ...rest }: iTabs) {
   const [activeIndex] = usePager();
-  const navigator = useNavigator();
 
   const lastIndex = React.Children.count(children) - 1;
 
@@ -47,23 +44,8 @@ function Tabs({ children, ...rest }: iTabs) {
       {...rest}
     >
       {React.Children.map(children, (child: any, index: number) => {
-        const route = navigator.routes[index];
-
-        if (route) {
-          return (
-            <BasepathProvider value={route}>
-              <AccessibleScreen routeFocused={navigator.focused}>
-                {child}
-              </AccessibleScreen>
-            </BasepathProvider>
-          );
-        }
-
-        return (
-          <AccessibleScreen routeFocused={navigator.focused}>
-            {child}
-          </AccessibleScreen>
-        );
+        const route = createRoute(child, index);
+        return route;
       })}
     </Pager>
   );
@@ -95,31 +77,6 @@ interface iTab extends TouchableOpacityProps {
   children: React.ReactNode;
 }
 
-interface iTabContext {
-  goTo: (index: number) => void;
-}
-
-function useTabs(): iTabContext {
-  const [_, onChange] = usePager();
-  const navigator = useNavigator();
-  const navigate = useNavigate();
-
-  function goTo(index: number) {
-    const route = navigator.routes[index];
-
-    if (route) {
-      navigate(route);
-      return;
-    }
-
-    onChange(index);
-  }
-
-  return {
-    goTo,
-  };
-}
-
 function Tab({ children, onPress, ...rest }: iTab) {
   const index = useIndex();
   const tabs = useTabs();
@@ -136,4 +93,4 @@ function Tab({ children, onPress, ...rest }: iTab) {
   );
 }
 
-export { Tabs, Tabbar, Tab, useTabs };
+export { Tabs, Tabbar, Tab };
