@@ -7,7 +7,7 @@ import {
   Link,
   Stack,
   Switch,
-  Home,
+  RelativeRoot,
 } from '../src';
 import { View, Text } from 'react-native';
 
@@ -93,7 +93,7 @@ function App() {
                   </Link>
                 </>
 
-                <Home>
+                <RelativeRoot>
                   <Navigator routes={['one/:id', 'two/:id']}>
                     <Text>Three</Text>
                     <Link to="one/1">
@@ -109,7 +109,7 @@ function App() {
                       <Text>Params Route Two</Text>
                     </Switch>
                   </Navigator>
-                </Home>
+                </RelativeRoot>
               </Stack>
             </Navigator>
           </View>

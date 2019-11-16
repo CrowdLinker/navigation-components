@@ -278,12 +278,7 @@ function Container() {
   return (
     <SafeAreaView style={{flex: 1}}>
       <History>
-        <Navigator routes={['library', '/']}>
-          <Tabs>
-            <SpotifyApp />
-            <Text>Hi</Text>
-          </Tabs>
-        </Navigator>
+        <SpotifyApp />
       </History>
     </SafeAreaView>
   );

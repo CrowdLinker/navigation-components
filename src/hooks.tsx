@@ -3,7 +3,7 @@ import {
   useHistory,
   useBasepath,
   useLocation,
-  useHomepath,
+  useRelativeRoot,
 } from './history-component';
 import { useFocus, usePager } from './pager';
 import { getParams } from './history';
@@ -12,12 +12,14 @@ import { useNavigator } from './navigator';
 function useNavigate() {
   const history = useHistory();
   const basepath = useBasepath();
-  const homePath = useHomepath();
+  const relativeRoot = useRelativeRoot();
 
   function navigate(to: string) {
     if (to.startsWith('~')) {
       const path = to.split('~/')[1];
-      const nextPath = path ? history.resolve(path, homePath) : homePath;
+      const nextPath = path
+        ? history.resolve(path, relativeRoot)
+        : relativeRoot;
 
       history.navigate(nextPath, basepath || '/');
       return;

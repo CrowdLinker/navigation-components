@@ -14,7 +14,7 @@ jest.mock('react-native-reanimated', () => {
     React.useEffect(() => {
       props.onLayout &&
         props.onLayout({
-          nativeEvent: { layout: { width: 100, height: 100 } },
+          nativeEvent: {layout: {width: 100, height: 100}},
         });
     }, []);
 

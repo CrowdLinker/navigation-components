@@ -9,6 +9,7 @@ import {
   useParams,
   navigate,
   Stack,
+  Home,
 } from 'navigation-components';
 import {View, Text, Button} from 'react-native';
 import {colors, styles, Feed, FeedHeaders, Slide} from '../shared';
@@ -16,15 +17,15 @@ import {colors, styles, Feed, FeedHeaders, Slide} from '../shared';
 const mainRoutes = ['main', 'profile', 'details'];
 function Library() {
   return (
-    // <Home>
-    <Navigator routes={mainRoutes}>
-      <Stack>
-        <UserFeeds />
-        <Profiles />
-        <Details />
-      </Stack>
-    </Navigator>
-    // </Home>
+    <Home>
+      <Navigator routes={mainRoutes}>
+        <Stack>
+          <UserFeeds />
+          <Profiles />
+          <Details />
+        </Stack>
+      </Navigator>
+    </Home>
   );
 }
 
@@ -62,7 +63,7 @@ function Feeds({routes}: any) {
             items={data[route]}
             row={(item: any) => (
               <Link
-                to={`~/profile/${route}/${item.id}/hello`}
+                to={`~/profile/${route}/${item.id}`}
                 style={{borderWidth: 1, height: 40, marginVertical: 5}}>
                 <Text>{item.id}</Text>
               </Link>
@@ -103,7 +104,7 @@ function Profiles() {
 
 function Details() {
   return (
-    <Navigator routes={['album', 'playlist']}>
+    <Navigator routes={['album', 'artist', 'playlist']}>
       <Switch>
         <Profile type="album">
           <Text>Album</Text>
