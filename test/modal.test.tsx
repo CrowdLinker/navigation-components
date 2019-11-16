@@ -1,8 +1,7 @@
 import React from 'react';
 import { Text, Button } from 'react-native';
-import { render } from './test-utils';
+import { render, fireEvent } from './test-utils';
 import { Navigator, Modal, useModal, history } from '../src';
-import { fireEvent } from '@testing-library/react-native';
 
 test('show() and dismiss toggle modal visibility', () => {
   const { getFocused } = render(

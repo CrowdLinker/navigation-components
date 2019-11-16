@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, Linking, BackHandler, Button } from 'react-native';
-import { render, act, wait, fireEvent } from '@testing-library/react-native';
+import { render as tRender, act, wait, fireEvent } from './test-utils';
 import {
   history,
   History,
@@ -15,6 +15,14 @@ import {
 function Location() {
   const location = useLocation();
   return <Text>{location}</Text>;
+}
+
+function render(ui: any) {
+  return tRender(ui, {
+    historyProps: {
+      noWrap: true,
+    },
+  });
 }
 
 afterEach(() => {
@@ -244,34 +252,21 @@ test('history parses out url scheme prop for deep linking', () => {
     </History>
   );
 
-  act(() => {
-    // @ts-ignore
-    Linking.change({ url: 'test://app/one/two' });
-  });
+  fireEvent.openLink('test://app/one/two');
 
   getByText('/one/two');
 
-  // empty link does nothing
-  act(() => {
-    // @ts-ignore
-    Linking.change({ url: '' });
-  });
+  fireEvent.openLink('');
 
   getByText('/one/two');
 
   // root path link does nothing
-  act(() => {
-    // @ts-ignore
-    Linking.change({ url: 'test://app' });
-  });
+  fireEvent.openLink('test://app');
 
   getByText('/one/two');
 });
 
 test('history fires back() action on android back press', () => {
-  // @ts-ignore
-  jest.spyOn(BackHandler, 'press');
-
   const { getByText } = render(
     <History scheme="test://app">
       <Location />
@@ -285,21 +280,13 @@ test('history fires back() action on android back press', () => {
 
   getByText('/two');
 
-  act(() => {
-    // @ts-ignore
-    BackHandler.press();
-  });
+  fireEvent.androidBackPress();
 
   getByText('/one');
 
-  act(() => {
-    // @ts-ignore
-    BackHandler.press();
-    // @ts-ignore
-    BackHandler.press();
-    // @ts-ignore
-    BackHandler.press();
-  });
+  fireEvent.androidBackPress();
+  fireEvent.androidBackPress();
+  fireEvent.androidBackPress();
 
   getByText('/');
 });

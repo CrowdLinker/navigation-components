@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, navigate } from './test-utils';
-import { fireEvent } from '@testing-library/react-native';
+import { render, fireEvent } from './test-utils';
 import {
   Navigator,
   Tabs,

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Navigator, Stack, useStack, history } from '../src';
-import { render } from './test-utils';
+import { render, fireEvent, act } from './test-utils';
 import { Button, Text } from 'react-native';
-import { fireEvent, act } from '@testing-library/react-native';
 
 afterEach(() => {
   act(() => {

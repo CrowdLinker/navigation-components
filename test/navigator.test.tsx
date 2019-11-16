@@ -16,8 +16,7 @@ import {
   useBack,
 } from '../src';
 import { Text, View, Button } from 'react-native';
-import { render, navigate } from './test-utils';
-import { fireEvent, act } from '@testing-library/react-native';
+import { render, navigate, fireEvent, act } from './test-utils';
 
 import '@testing-library/jest-native/extend-expect';
 

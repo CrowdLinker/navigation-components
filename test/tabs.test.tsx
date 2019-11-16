@@ -1,8 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
-import { render } from './test-utils';
+import { render, fireEvent } from './test-utils';
 import { Navigator, Tabs, Tabbar, Tab, history } from '../src';
-import { fireEvent } from '@testing-library/react-native';
 
 test('tabbar maps links via index', () => {
   const { getByText, getFocused } = render(

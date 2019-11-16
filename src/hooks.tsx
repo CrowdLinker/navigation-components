@@ -54,6 +54,14 @@ function useParams<T>() {
   return params;
 }
 
+function useQuery() {
+  const location = useLocation();
+
+  const [_, query] = location.split('?');
+
+  return query;
+}
+
 function useStack() {
   const navigator = useNavigator();
   const navigate = useNavigate();
@@ -112,4 +120,4 @@ function useTabs() {
   };
 }
 
-export { useNavigate, useBack, useParams, useStack, useTabs };
+export { useNavigate, useBack, useParams, useStack, useTabs, useQuery };
