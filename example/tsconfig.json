@@ -22,8 +22,8 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "*": ["src/*", "node_modules/*", "../src/*"],
-      "navigation-components": ["../src/index"]
+      "*": ["src/*", "node_modules/*"],
+      "navigation-components": ["../src"]
     },
     "jsx": "react",
     "esModuleInterop": true

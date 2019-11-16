@@ -9,7 +9,6 @@ import {
   useParams,
   navigate,
   Stack,
-  Home,
 } from 'navigation-components';
 import {View, Text, Button} from 'react-native';
 import {colors, styles, Feed, FeedHeaders, Slide} from '../shared';
@@ -17,15 +16,15 @@ import {colors, styles, Feed, FeedHeaders, Slide} from '../shared';
 const mainRoutes = ['main', 'profile', 'details'];
 function Library() {
   return (
-    <Home>
-      <Navigator routes={mainRoutes}>
-        <Stack>
-          <UserFeeds />
-          <Profiles />
-          <Details />
-        </Stack>
-      </Navigator>
-    </Home>
+    // <Home>
+    <Navigator routes={mainRoutes}>
+      <Stack>
+        <UserFeeds />
+        <Profiles />
+        <Details />
+      </Stack>
+    </Navigator>
+    // </Home>
   );
 }
 
@@ -57,10 +56,11 @@ function Feeds({routes}: any) {
           // @ts-ignore
           <Feed
             key={route}
+            // @ts-ignore
             type={route}
             // @ts-ignore
             items={data[route]}
-            row={item => (
+            row={(item: any) => (
               <Link
                 to={`~/profile/${route}/${item.id}/hello`}
                 style={{borderWidth: 1, height: 40, marginVertical: 5}}>

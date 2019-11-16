@@ -61,9 +61,10 @@ interface iFeed<T> {
   items: T[];
   row: (item: T, props: any) => any;
   style?: ViewStyle;
+  type: string;
 }
 
-function Feed<T extends iRow>({items = [], row, style, ...rest}: iFeed<T>) {
+function Feed<T extends iRow>({items = [], row, style, ...rest}: any) {
   function renderItem({item}: {item: T}) {
     return row(item, rest);
   }

@@ -27,7 +27,7 @@ function PlayerPreview({title}: {title: string}) {
 
   return (
     <TouchableOpacity
-      onPress={() => modal.show({title})}
+      onPress={() => modal.show()}
       style={{
         height: 60,
         flexDirection: 'row',
@@ -42,12 +42,11 @@ function PlayerPreview({title}: {title: string}) {
 
 function Player({}) {
   const modal = useModal();
-  const title = modal.state ? modal.state.title : '';
 
   return (
     <Slide index={4}>
       <View style={{marginTop: 100}} />
-      <Text style={styles.header}>{`Now playing:\n${title}`}</Text>
+      <Text style={styles.header}>{`Now playing:\n`}</Text>
     </Slide>
   );
 }
