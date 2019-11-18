@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, Linking, BackHandler, Button } from 'react-native';
 import { render as tRender, act, wait, fireEvent } from './test-utils';
+import { Text, Linking, Button } from 'react-native';
 import {
   history,
   History,
@@ -29,29 +29,6 @@ afterEach(() => {
   act(() => {
     history.reset();
   });
-});
-
-jest.mock('Linking', () => {
-  let callbacks: any[] = [];
-
-  return {
-    change: ({ url }: { url: string }) => callbacks.map(cb => cb({ url })),
-    getInitialURL: jest.fn().mockResolvedValue(''),
-    addEventListener: (_: string, cb: Function) => callbacks.push(cb),
-    removeEventListener: (_: string, cb: Function) =>
-      (callbacks = callbacks.filter(c => c !== cb)),
-  };
-});
-
-jest.mock('BackHandler', () => {
-  let callbacks: any[] = [];
-
-  return {
-    press: () => callbacks.map(cb => cb()),
-    addEventListener: (_: string, cb: Function) => callbacks.push(cb),
-    removeEventListener: (_: string, cb: Function) =>
-      (callbacks = callbacks.filter(c => c !== cb)),
-  };
 });
 
 test('history takes an initial path', () => {

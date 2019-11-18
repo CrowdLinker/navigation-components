@@ -64,3 +64,15 @@ jest.mock('react-native-gesture-handler', () => {
     Directions: {},
   };
 });
+
+jest.mock('react-native/Libraries/Linking/Linking', () => {
+  let callbacks = [];
+
+  return {
+    openLink: ({ url }) => callbacks.map(cb => cb({ url })),
+    getInitialURL: jest.fn().mockResolvedValue(''),
+    addEventListener: (_, cb) => callbacks.push(cb),
+    removeEventListener: (_, cb) =>
+      (callbacks = callbacks.filter(c => c !== cb)),
+  };
+});
