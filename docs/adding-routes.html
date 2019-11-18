@@ -1,0 +1,203 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Adding Routes · Navigation Components</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="In the last section, we implemented a basic tab navigator. In this section, we&#x27;ll add some more functionality to it by adding routes. Routes allow us to navigate to a specific screen by its location in the app."/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Adding Routes · Navigation Components"/><meta property="og:type" content="website"/><meta property="og:url" content="https://your-docusaurus-test-site.com/navigation-components/"/><meta property="og:description" content="In the last section, we implemented a basic tab navigator. In this section, we&#x27;ll add some more functionality to it by adding routes. Routes allow us to navigate to a specific screen by its location in the app."/><meta property="og:image" content="https://your-docusaurus-test-site.com/navigation-components/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://your-docusaurus-test-site.com/navigation-components/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/navigation-components/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/navigation-components/js/scrollSpy.js"></script><link rel="stylesheet" href="/navigation-components/css/main.css"/><script src="/navigation-components/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/navigation-components/"><img class="logo" src="/navigation-components/img/favicon.ico" alt="Navigation Components"/><h2 class="headerTitleWithLogo">Navigation Components</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/navigation-components/docs/introduction" target="_self">Docs</a></li><li class=""><a href="https://github.com/Crowdlinker/navigation-components" target="_self">GitHub</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Overview</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Overview</h3><ul class=""><li class="navListItem"><a class="navItem" href="/navigation-components/docs/introduction">Introduction</a></li><li class="navListItem"><a class="navItem" href="/navigation-components/docs/getting-started">Getting started</a></li><li class="navListItem"><a class="navItem" href="/navigation-components/docs/first-navigator">Basic Example</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/navigation-components/docs/adding-routes">Adding Routes</a></li><li class="navListItem"><a class="navItem" href="/navigation-components/docs/screen-containers">Rendering screens</a></li><li class="navListItem"><a class="navItem" href="/navigation-components/docs/nesting-navigators">Nesting Navigators</a></li><li class="navListItem"><a class="navItem" href="/navigation-components/docs/dynamic-vs-static">Build your own Navigator</a></li><li class="navListItem"><a class="navItem" href="/navigation-components/docs/next-steps">Next Steps</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul class=""><li class="navListItem"><a class="navItem" href="/navigation-components/docs/navigate-anywhere">Navigate anywhere</a></li><li class="navListItem"><a class="navItem" href="/navigation-components/docs/multipage-form">Building a multipage form</a></li><li class="navListItem"><a class="navItem" href="/navigation-components/docs/testing">Testing our form</a></li><li class="navListItem"><a class="navItem" href="/navigation-components/docs/deep-linking">Deep Linking</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Adding Routes</h1></header><article><div><span><p>In the last section, we implemented a basic tab navigator. In this section, we'll add some more functionality to it by adding routes. Routes allow us to navigate to a specific screen by its location in the app.</p>
+<h2><a class="anchor" aria-hidden="true" id="using-the-link-component"></a><a href="#using-the-link-component" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Using the Link component</h2>
+<p><code>navigation-components</code> exports a Link component that functions in a similar way to other libraries like Reach Router or Next. Let's add some Links to our screens:</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">import</span> { Link } <span class="hljs-keyword">from</span> <span class="hljs-string">'navigation-components'</span>;
+
+<span class="hljs-comment">// we've move the Tabs component from the previous example back inside our navigator to help illustrate routing</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MyNavigator</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Navigator</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Tabs</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Screen</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.title}</span>&gt;</span>Step 1<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+
+          <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">to</span>=<span class="hljs-string">"../step-2"</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.link}</span>&gt;</span>Go to Step 2<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Screen</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">Screen</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.title}</span>&gt;</span>Step 2<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+
+          <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">to</span>=<span class="hljs-string">"../step-3"</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.link}</span>&gt;</span>Go to Step 3<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Screen</span>&gt;</span>
+
+        <span class="hljs-tag">&lt;<span class="hljs-name">Screen</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.title}</span>&gt;</span>Step 3<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+
+          <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">to</span>=<span class="hljs-string">"../step-1"</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.link}</span>&gt;</span>Back to Step 1<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Screen</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Tabs</span>&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">MyTabbar</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Navigator</span>&gt;</span></span>
+  );
+}
+
+<span class="hljs-keyword">const</span> styles = StyleSheet.create({
+  ...
+
+  link: {
+    <span class="hljs-attr">fontSize</span>: <span class="hljs-number">18</span>,
+    <span class="hljs-attr">color</span>: <span class="hljs-string">'aquamarine'</span>,
+    <span class="hljs-attr">textAlign</span>: <span class="hljs-string">'center'</span>,
+    <span class="hljs-attr">lineHeight</span>: <span class="hljs-number">24</span>,
+  }
+})
+</code></pre>
+<p>The Link component will wrap our text in a button that links to another screen in the app.</p>
+<p>In our example here, we're passing routes that are <em>relative</em> to where the Link lives - try to think of this as you would a <code>cd</code> command in your terminal, to get to a sibling directory you'd use a similar path.</p>
+<h2><a class="anchor" aria-hidden="true" id="configuring-the-navigator"></a><a href="#configuring-the-navigator" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Configuring the navigator</h2>
+<p>Now all we need to do is configure our Navigator with the routes that we plan on linking:</p>
+<pre><code class="hljs css language-tsx">function <span class="hljs-type">MyNavigator</span>() {
+  <span class="hljs-keyword">return</span> (
+    &lt;<span class="hljs-type">Navigator</span> routes={['step-<span class="hljs-number">1</span>', 'step-<span class="hljs-number">2</span>', 'step-<span class="hljs-number">3</span>']}&gt;
+      <span class="hljs-meta">{...}</span>
+    &lt;/<span class="hljs-type">Navigator</span>&gt;
+  );
+}
+</code></pre>
+<p>This tells the navigator which routes to listen for, and when the location changes it will find a match and bring it into focus. These routes correspond to the screens that we are rendering in our Tabs component, and so a link directing the app to <code>/step-1</code> will bring the first tab into focus.</p>
+<p><strong>Note:</strong> Routes can also specify param tokens e.g <code>profile/:id</code></p>
+<h2><a class="anchor" aria-hidden="true" id="adding-a-history-component"></a><a href="#adding-a-history-component" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Adding a history component</h2>
+<p>If you just tried the above example, you might have noticed that nothing seems to happen when you press the Links. This is because we're missing one more component:</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">import</span> { <span class="hljs-type">History</span> } <span class="hljs-keyword">from</span> 'navigation-components'
+
+function <span class="hljs-type">MyNavigator</span>() {
+  <span class="hljs-keyword">return</span> (
+    &lt;<span class="hljs-type">History</span>&gt;
+      &lt;<span class="hljs-type">Navigator</span> routes={['step-<span class="hljs-number">1</span>', 'step-<span class="hljs-number">2</span>', 'step-<span class="hljs-number">3</span>']}&gt;
+        <span class="hljs-meta">{...}</span>
+      &lt;/<span class="hljs-type">Navigator</span>&gt;
+    &lt;/<span class="hljs-type">History</span>&gt;
+  )
+}
+</code></pre>
+<p>The history component provides a location context for all of the navigators in your app. It allows them to respond to location changes and focus on the right screens.</p>
+<p>You'll usually put this at the top level container where your app starts.</p>
+<h2><a class="anchor" aria-hidden="true" id="additional-routing-options"></a><a href="#additional-routing-options" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Additional routing options</h2>
+<h3><a class="anchor" aria-hidden="true" id="absolute-paths"></a><a href="#absolute-paths" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Absolute paths</h3>
+<p>Sometimes you know exactly where a screen will always live in your app. In these cases, you can reach for an absolute path to direct the user to this screen from any other screen.</p>
+<p>The Link component considers any path that begins with a <code>/</code> as an absolute path.</p>
+<p>This might be handy for building reusable components that direct the user to the same screen throughout your app:</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">HomeButton</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">to</span>=<span class="hljs-string">"/home"</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Text</span>&gt;</span>Home<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span></span>
+  );
+}
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="relative-roots"></a><a href="#relative-roots" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Relative roots</h3>
+<p>Our simple example doesn't demonstrate this, but as you build out a feature you might notice that the paths start to get a little long and unintuitive to follow.</p>
+<p>You can wrap any part of your application in a RelativeRoot component to group related screens together, and specify paths relative to this component via the tilde <code>~/...</code>:</p>
+<pre><code class="hljs css language-tsx"><span class="hljs-keyword">import</span> { RelativeRoot } <span class="hljs-keyword">from</span> <span class="hljs-string">'navigation-components'</span>;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MyNavigator</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">History</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">RelativeRoot</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">Navigator</span> <span class="hljs-attr">routes</span>=<span class="hljs-string">{[</span>'<span class="hljs-attr">step-1</span>', '<span class="hljs-attr">step-2</span>', '<span class="hljs-attr">step-3</span>']}&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">Tabs</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">Screen</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.title}</span>&gt;</span>Step 1<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+
+              <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">to</span>=<span class="hljs-string">"~/step-2"</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.link}</span>&gt;</span>Go to Step 2<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">Screen</span>&gt;</span>
+
+            <span class="hljs-tag">&lt;<span class="hljs-name">Screen</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.title}</span>&gt;</span>Step 2<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+
+              <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">to</span>=<span class="hljs-string">"~/step-3"</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.link}</span>&gt;</span>Go to Step 3<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">Screen</span>&gt;</span>
+
+            <span class="hljs-tag">&lt;<span class="hljs-name">Screen</span>&gt;</span>
+              <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.title}</span>&gt;</span>Step 3<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+
+              <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">to</span>=<span class="hljs-string">"~/step-1"</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-name">Text</span> <span class="hljs-attr">style</span>=<span class="hljs-string">{styles.link}</span>&gt;</span>Back to Step 1<span class="hljs-tag">&lt;/<span class="hljs-name">Text</span>&gt;</span>
+              <span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-name">Screen</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">Tabs</span>&gt;</span>
+
+          <span class="hljs-tag">&lt;<span class="hljs-name">MyTabbar</span> /&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">Navigator</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">RelativeRoot</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">History</span>&gt;</span></span>
+  );
+}
+</code></pre>
+<p>In cases where there are lots of nested navigators and screens, this can simplify the paths within them a great deal. It also increases reusability and decreases brittle pathing because moving the Link component to a different part of this navigator won't change it's behaviour.</p>
+<p>RelativeRoot can wrap multiple different parts of your application where you want to group together screens and simplify the paths within them.</p>
+<h2><a class="anchor" aria-hidden="true" id="summary"></a><a href="#summary" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Summary</h2>
+<ul>
+<li><p>The Link component updates the location of the app via a <code>path</code> prop. This path can be relative or absolute depending on your use case. Relative links work similar to how you would navigate your filesystem in the terminal with <code>cd</code>.</p></li>
+<li><p>In order for links to work, the Navigator must be told which routes it is rendering via the <code>routes</code> prop, and then start listening for location changes by wrapping the application in a History component.</p></li>
+<li><p>The History component provides a location context for all navigators in the app to respond to, and should usually be placed as a top level component.</p></li>
+<li><p>Complex navigation structures can make use of the RelativeRoot component which simplifies paths by grouping related screens together. Paths can make use of the tilde token (e.g <code>~/my-route/123</code>) to navigate to different parts of the app relative to the parent relative root. RelativeRoot can used in multiple parts of your app to logically group screens together in this way.</p></li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/navigation-components/docs/first-navigator"><span class="arrow-prev">← </span><span>Basic Example</span></a><a class="docs-next button" href="/navigation-components/docs/screen-containers"><span>Rendering screens</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#using-the-link-component">Using the Link component</a></li><li><a href="#configuring-the-navigator">Configuring the navigator</a></li><li><a href="#adding-a-history-component">Adding a history component</a></li><li><a href="#additional-routing-options">Additional routing options</a><ul class="toc-headings"><li><a href="#absolute-paths">Absolute paths</a></li><li><a href="#relative-roots">Relative roots</a></li></ul></li><li><a href="#summary">Summary</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/navigation-components/" class="nav-home"><img src="/navigation-components/img/favicon.ico" alt="Navigation Components" width="66" height="58"/></a><div><h5>Docs</h5><a href="/navigation-components/docs/en/introduction.html">Overview</a><a href="/navigation-components/docs/en/guides.html">Guides</a><a href="/navigation-components/docs/en/api.html">API Reference</a></div><div></div><div><h5>More</h5><a href="https://github.com/Crowdlinker/navigation-components">GitHub</a><a class="github-button" href="https://github.com/Crowdlinker/navigation-components" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><a href="https://opensource.facebook.com/" target="_blank" rel="noreferrer noopener" class="fbOpenSource"><img src="/navigation-components/img/oss_logo.png" alt="Facebook Open Source" width="170" height="45"/></a><section class="copyright">Copyright © 2019 Your Name or Your Company Name</section></footer></div></body></html>
