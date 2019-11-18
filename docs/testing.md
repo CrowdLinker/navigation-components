@@ -111,7 +111,7 @@ test('render()', () => {
   getFocused().debug()
 
   // navigate to signup screen
-  fireEvent.press(getFocused().getByText(/signup/i))
+  fireEvent.press(getFocused().getByText(/to signup/i))
 
   // outputs signup screen
   getFocused().debug()

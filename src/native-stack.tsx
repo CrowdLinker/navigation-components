@@ -19,10 +19,16 @@ import { useStack } from './hooks';
 import { usePager } from './pager';
 import { createRoute } from './create-route';
 
-interface iNativeStack {
+interface iHeaderConfig extends Partial<iHeader> {
+  component?: React.ReactNode;
+}
+
+export type iHeaders = iHeaderConfig[];
+
+export interface iNativeStack {
   children: React.ReactNode[];
   screenConfig?: Partial<iScreenConfig>;
-  headers?: iHeader[];
+  headers?: iHeaderConfig[];
   style?: ViewStyle;
 }
 
@@ -32,7 +38,16 @@ interface iScreenConfig {
   stackPresentation: 'push' | 'modal' | 'transparentModal';
 }
 
-function NativeStack({ children, screenConfig = {}, style }: iNativeStack) {
+const emptyHeader = {
+  component: null,
+};
+
+function NativeStack({
+  children,
+  screenConfig = {},
+  headers = [],
+  style,
+}: iNativeStack) {
   const [activeIndex] = usePager();
 
   const { pop } = useStack();
@@ -46,12 +61,16 @@ function NativeStack({ children, screenConfig = {}, style }: iNativeStack) {
           return null;
         }
 
+        const header = headers[index] || emptyHeader;
+        const { component = null, ...rest } = header;
+
         return (
           <Screen
             onDismissed={() => pop(1)}
             style={StyleSheet.absoluteFill}
             {...(screenConfig as any)}
           >
+            <Header {...rest}>{component}</Header>
             {route}
           </Screen>
         );

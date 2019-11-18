@@ -19,7 +19,7 @@ import { createRoute } from './create-route';
 
 const MINIMUM_SWIPE_DISTANCE = 20;
 
-interface iTabs extends iPager {
+export interface iTabs extends iPager {
   children: React.ReactNode[];
 }
 

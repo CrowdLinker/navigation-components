@@ -3,7 +3,7 @@ import { PagerProvider, useFocus } from './pager';
 import { getNextRoute, pick, resolveBasepath } from './history';
 import { useLocation, useBasepath, useHistory } from './history-component';
 
-interface iNavigator {
+export interface iNavigator {
   children: React.ReactNode;
   routes?: string[];
   initialIndex?: number;

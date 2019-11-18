@@ -1,6 +1,6 @@
 // this is basically a simplified and worse version of @reach/router in-memory history implementation
 import React from 'react';
-import { history as globalHistory, iHistory, navigate } from './history';
+import { history as globalHistory, iHistory } from './history';
 import { BackHandler, Linking } from 'react-native';
 import { FocusProvider } from './pager';
 import { AccessibleScreen } from './accessible-screen';
@@ -26,7 +26,7 @@ function useHistory() {
   const history = React.useContext(HistoryContext);
 
   if (!history) {
-    throw new Error(`useHistory() must be used within a <History /> subtree`);
+    return globalHistory;
   }
 
   return history;

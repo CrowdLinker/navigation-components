@@ -5,6 +5,10 @@
     "previous": "Previous",
     "tagline": "Navigation Components for React Native",
     "docs": {
+      "adding-routes": {
+        "title": "Adding Routes",
+        "sidebar_label": "Adding Routes"
+      },
       "deep-linking": {
         "title": "Deep Linking",
         "sidebar_label": "Deep Linking"

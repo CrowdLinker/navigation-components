@@ -95,10 +95,32 @@ Now we have a **dynamic** navigator component which lives inside our application
 
 One advantage of this API is that it co-locates the `path` with the `screen` component, which can be a little bit easier to grok, and is definitely less error prone than keeping these separate. In any case, you have the option of trying both methods and seeing what works best for you!
 
+We can even take this one step further and get rid of the config all together:
+
+```tsx
+function MyStackNavigator({ routes = [], children }: IStackNavigatorProps) {
+  return (
+    <Navigator routes={routes}>
+      <Stack>{children}</Stack>
+    </Navigator>
+  );
+}
+
+const App = () => {
+  return (
+    <AppContainer>
+      <MyStackNavigator routes={['one', 'two', 'three']}>
+        <MyScreenComponent>One</MyScreenComponent>
+        <MyScreenComponent>Two</MyScreenComponent>
+        <MyScreenComponent>Three</MyScreenComponent>
+      </MyStackNavigator>
+    </AppContainer>
+  );
+};
+```
+
 ## Summary
 
 - You can easily write your own helper function to build out a static navigator. Even better, you can extend and tailor it to your own app's needs.
 
 - This function can be refactored into a component, giving us a dynamic routing configuration that colocates our routes with their screen components
-
-**Note:** These utility functions / components are intentionally left out of the library to encourage you to develop an API and route configs that will work for your app.

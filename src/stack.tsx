@@ -2,7 +2,7 @@ import React from 'react';
 import { Pager, iPager, usePager } from './pager';
 import { createRoute } from './create-route';
 
-interface iStack extends iPager {
+export interface iStack extends iPager {
   children: React.ReactNode[];
   unmountOnExit?: boolean;
 }

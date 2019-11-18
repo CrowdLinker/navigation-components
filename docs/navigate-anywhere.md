@@ -51,60 +51,9 @@ const steps = ['/home', '/home/profile', '/home/profile/settings'];
 steps.map(navigate);
 ```
 
-You can even use it in your unit tests to quickly navigate to the screen you're trying to test.
+You can even use it in your unit tests to quickly navigate to the screen you're trying to test, or build a navigation service that maps to your particular navigation architecture
 
-## Relative paths
-
-Aside from the global navigate, there are a few other ways to hook into the navigate function.
-
-### Link
-
-We've covered the Link component already, but they can also use relative paths:
-
-```tsx
-import { Link } from 'navigation-components';
-
-function MyScreen() {
-  return (
-    <Link to="../home">
-      <Text>Go back</Text>
-    </Link>
-  );
-}
-```
-
-This will move the location up one directory and update the location to the home route, much like how it works in Reach Router or using `cd` in your terminal.
-
-### useNavigator
-
-Any child component of a Navigator can call `useNavigator().navigate` to resolve paths relative to the _navigator_:
-
-```tsx
-import { useNavigator } from 'navigation-components'
-
-// navigator lives at /app/settings
-// screen lives at /app/settings/profile
-function MyProfileScreen() {
-  const navigator = useNavigator()
-
-  function handleButtonPress() {
-    // will navigate to /app
-    navigator.navigate('../home')
-  }
-
-  return (
-    ...
-  )
-}
-```
-
-This navigate function is different from global one because it can handle paths that are relative to where the navigator lives in your app. For example, if your navigator is living at route `/app/settings`, then this handler function would update the app's location to `/home`. Link components operate in the same way - they resolve to routes relative to the _navigator_.
-
-**Note:** You can also pass in absolute paths and they will function much in the same way as the first example.
-
-Relative routes can be really handy when it comes to building reusable subnavigators because your links will work as an independent unit if you happen to move it to another portion of your app.
-
-### useNavigate
+## useNavigate
 
 You can also use the `useNavigate()` hook which will navigate relative to the _screen_ it's used in.
 
@@ -127,9 +76,7 @@ function MyProfileScreen() {
 }
 ```
 
-#### What is the difference?
-
-`useNavigator()` resolves paths relative to the _navigator_ and `useNavigate()` resolves paths relative to the _screen_. There are some cases where a parent navigator might not be present, for example running a unit test or building an isolated subnavigator, or logically the paths might make more sense.
+This utility might be handy in cases where a navigation is a side-effect of another user action, for example after a user logs in, or after they successfully updated their profile
 
 ## Summary
 
@@ -137,4 +84,4 @@ function MyProfileScreen() {
 
 - Global navigate could be used to improve debugging, unit tests, and perhaps even in automated workflows.
 
-- The routing model of `navigation-components` supports absolute and relative paths, much like Reach Router. The Link component, `useNavigator()`, and `useNavigate()` can be used inside your components to update the location of your app. `useNavigator()` resolves relative paths from the navigator wheras `useNavigate()` resolves paths from the screen.
+- The routing model of `navigation-components` supports absolute and relative paths, much like Reach Router. `useNavigate()` can be used inside your components to imperatively update the location of your app

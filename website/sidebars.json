@@ -4,6 +4,7 @@
       "introduction",
       "getting-started",
       "first-navigator",
+      "adding-routes",
       "screen-containers",
       "nesting-navigators",
       "dynamic-vs-static",

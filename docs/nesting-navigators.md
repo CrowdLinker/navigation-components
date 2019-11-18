@@ -27,6 +27,7 @@ function MyStackNavigator() {
   return null;
 }
 
+// History will be used for routing later on
 function AppContainer({ children }: any) {
   return (
     <History>
@@ -124,7 +125,7 @@ Any component inside of a Stack can use the `useStack()` hook to push and pop vi
 
 ## Adding a modal
 
-Now lets add a Modal that will appear ontop of our Stack. Again, Modal has the same API as what we're already familiar with, but there's one caveat - the _last_ child component is considered the "modal" view that will appear overtop of all others.
+Now lets add a Modal that will appear ontop of our Stack. Modal accepts two child screens, the latter of which will appear overtop of the others.
 
 ```tsx
 import { Modal, useModal, Navigator } from 'navigation-components';
@@ -179,7 +180,7 @@ Now we can toggle the modal, swipe down to dismiss or take advantage of the `use
 
 ## Adding routes
 
-Just like in the previous section, we can add routing to the navigators we've just created. The same rules apply here, we'll need to configure the routes of our Navigator, and use Link components to navigate between them.
+Just like in the previous section, we can add routing to the navigators we've just created. The same rules apply here, we'll need to configure the routes of our Navigator and use Link components to navigate between them.
 
 ```tsx
 import { Link } from 'navigation-components';
@@ -217,7 +218,7 @@ function MyStack() {
 
       <Stack>
         <Screen>
-          <Link to="two">
+          <Link to="../two">
             <Text style={styles.title}>Screen 1 (Link)</Text>
           </Link>
 
@@ -225,7 +226,7 @@ function MyStack() {
         </Screen>
 
         <Screen>
-          <Link to="three">
+          <Link to="../three">
             <Text style={styles.title}>Screen 2 (Link)</Text>
           </Link>
 
@@ -234,7 +235,7 @@ function MyStack() {
         </Screen>
 
         <Screen>
-          <Link to="one">
+          <Link to="../one">
             <Text style={styles.title}>Screen 3 (Link)</Text>
           </Link>
 
@@ -246,172 +247,7 @@ function MyStack() {
 }
 ```
 
-Tap around and note that the links work just like before. We've successfully composed our navigators and wired them up together! You can apply these patterns to any combination of the screen containers provided by this library
-
-Here's the code we wrote:
-
-```tsx
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
-import React from 'react';
-import { StyleSheet, View, Text, SafeAreaView, Button } from 'react-native';
-
-import {
-  Navigator,
-  Link,
-  History,
-  Stack,
-  useStack,
-  Modal,
-  useModal,
-} from 'navigation-components';
-
-const App = () => {
-  return (
-    <AppContainer>
-      <MyModalNavigator>
-        <>
-          <MyStackNavigator />
-          <ShowModalButton />
-        </>
-      </MyModalNavigator>
-    </AppContainer>
-  );
-};
-
-function MyStackNavigator() {
-  const routes = ['one', 'two', 'three'];
-
-  return (
-    <Navigator routes={routes}>
-      <MyStack />
-    </Navigator>
-  );
-}
-
-function MyStack() {
-  return (
-    <>
-      <Link to="/modal">
-        <Text style={styles.title}>Modal Link</Text>
-      </Link>
-
-      <Stack>
-        <Screen>
-          <Link to="two">
-            <Text style={styles.title}>Screen 1 (Link)</Text>
-          </Link>
-
-          <PushButton />
-        </Screen>
-
-        <Screen>
-          <Link to="three">
-            <Text style={styles.title}>Screen 2 (Link)</Text>
-          </Link>
-
-          <PushButton />
-          <PopButton />
-        </Screen>
-
-        <Screen>
-          <Link to="one">
-            <Text style={styles.title}>Screen 3 (Link)</Text>
-          </Link>
-
-          <PopButton />
-        </Screen>
-      </Stack>
-    </>
-  );
-}
-
-function PushButton() {
-  const stack = useStack();
-
-  return <Button title="Push" onPress={() => stack.push()} />;
-}
-
-function PopButton() {
-  const stack = useStack();
-
-  return <Button title="Pop" onPress={() => stack.pop()} />;
-}
-
-function MyModalNavigator({ children }) {
-  const routes = ['/', 'modal'];
-
-  return (
-    <Navigator routes={routes}>
-      <Modal>
-        {children}
-        <MyModal />
-      </Modal>
-    </Navigator>
-  );
-}
-
-// useModal() has show() and hide() methods that will toggle the modal
-function MyModal() {
-  const modal = useModal();
-
-  return (
-    <Screen>
-      <Text style={styles.title}>This is the modal!</Text>
-
-      <Button title="Dismiss" onPress={() => modal.hide()} />
-    </Screen>
-  );
-}
-
-function ShowModalButton() {
-  const modal = useModal();
-
-  return <Button title="Show Modal" onPress={() => modal.show()} />;
-}
-
-function AppContainer({ children }: any) {
-  return (
-    <History>
-      <SafeAreaView style={styles.container}>{children}</SafeAreaView>
-    </History>
-  );
-}
-
-function Screen({ children }: any) {
-  return <View style={styles.screen}>{children}</View>;
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 10,
-    marginHorizontal: 10,
-    backgroundColor: 'white',
-  },
-
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-});
-
-export default App;
-```
+Tap around and note that the links work just like before. We've successfully composed our navigators and wired them up together! Note that you can compose any combination of navigators and screen containers provided by this library to create different navigation patterns
 
 ## Summary
 

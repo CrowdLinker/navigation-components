@@ -264,7 +264,7 @@ function Signup() {
   return (
     <>
       ...
-      <Link to="login">
+      <Link to="../login">
         <Text style={styles.link}>Go to login</Text>
       </Link>
     </>
@@ -275,7 +275,7 @@ function Login() {
   return (
     <>
       ...
-      <Link to="signup">
+      <Link to="../signup">
         <Text style={styles.link}>Go to signup</Text>
       </Link>
     </>
@@ -328,7 +328,7 @@ function LoginForms() {
 
   function handleSubmit(data: iFormValues) {
     // this will navigate similar to how a link would:
-    navigate('success-modal');
+    navigate('./success-modal');
   }
 
   return (
@@ -447,7 +447,7 @@ function Signup() {
       </View>
 
       <Button title="Submit" onPress={handleSubmit} />
-      <Link to="login">
+      <Link to="../login">
         <Text style={styles.link}>Go to login</Text>
       </Link>
     </>
@@ -476,7 +476,7 @@ function Login() {
 
       <Button title="Submit" onPress={handleSubmit} />
 
-      <Link to="signup">
+      <Link to="../signup">
         <Text style={styles.link}>Go to signup</Text>
       </Link>
     </>

@@ -272,13 +272,33 @@ import {enableScreens} from 'react-native-screens';
 
 enableScreens();
 
+function Screen({children}: any) {
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      {children}
+    </View>
+  );
+}
+
 import {SpotifyApp} from './src/spotify';
 
 function Container() {
   return (
     <SafeAreaView style={{flex: 1}}>
       <History>
-        <SpotifyApp />
+        <Navigator>
+          <Tabs>
+            <Screen>
+              <Text style={styles.title}>Screen 1</Text>
+            </Screen>
+            <Screen>
+              <Text style={styles.title}>Screen 2</Text>
+            </Screen>
+            <Screen>
+              <Text style={styles.title}>Screen 3</Text>
+            </Screen>
+          </Tabs>
+        </Navigator>
       </History>
     </SafeAreaView>
   );

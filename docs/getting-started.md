@@ -34,6 +34,10 @@ These dependencies are used to provide better animation and gesture performance.
 cd ios && pod install
 ```
 
+`react-native-gesture-handler` has some additional setup on Android as well:
+
+https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html
+
 ## Verifying it's working
 
 Add the following boilerplate to your entry file and swipe away!

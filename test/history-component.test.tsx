@@ -126,18 +126,23 @@ test('useHistory() gets active history', () => {
   expect(spy).toHaveBeenCalledWith(history);
 });
 
-test('useHistory() throws if no history is available', () => {
+test('useHistory() defaults to global if no history is available', () => {
+  const spy = jest.spyOn(history, 'navigate');
+
   function Consumer() {
     useHistory();
-    return null;
+    return <Button title="navigate" onPress={() => history.navigate('123')} />;
   }
 
-  jest.spyOn(console, 'error').mockImplementation(() => {});
+  const { getByText } = render(<Consumer />);
 
-  expect(() => render(<Consumer />)).toThrow();
+  expect(spy).not.toHaveBeenCalled();
 
-  // @ts-ignore
-  console.error.mockRestore();
+  fireEvent.press(getByText('navigate'));
+
+  expect(spy).toHaveBeenCalled();
+
+  spy.mockRestore();
 });
 
 test('useNavigate() works', () => {

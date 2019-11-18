@@ -14,6 +14,7 @@ import {
   history as globalHistory,
   iHistoryProvider,
   Link,
+  createHistory,
 } from '../src';
 import { Linking, BackHandler } from 'react-native';
 
@@ -52,7 +53,7 @@ function renderWithHistory(
 ) {
   const { options, historyProps = {}, ...rest } = args;
 
-  const { history = globalHistory, noWrap, ...props } = historyProps;
+  const { history = createHistory(), noWrap, ...props } = historyProps;
   const Wrapper = noWrap ? EmptyWrapper : History;
 
   const utils = render(

@@ -8,7 +8,7 @@ const modalConfig: iPageInterpolation = {
   zIndex: offset => offset,
 };
 
-interface iModal extends iPager {
+export interface iModal extends iPager {
   children: [React.ReactNode, React.ReactNode];
   modalIndex?: number;
   active?: boolean;
