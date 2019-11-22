@@ -15,7 +15,8 @@
       "multipage-form",
       "testing",
       "deep-linking",
-      "custom-transitions"
+      "custom-transitions",
+      "sibling-tabs"
     ]
   }
 }

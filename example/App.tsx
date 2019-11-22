@@ -25,6 +25,7 @@ import {
   Extrapolate,
 } from 'navigation-components';
 
+import {SpotifyTabs} from './src/sibling-tabs';
 import Animated from 'react-native-reanimated';
 
 interface iFormValues {
@@ -321,7 +322,8 @@ function Container() {
         <SpotifyApp />
       </History> */}
 
-      <MyTabs />
+      {/* <MyTabs /> */}
+      <SpotifyTabs />
     </SafeAreaView>
   );
 }

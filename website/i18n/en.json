@@ -53,6 +53,10 @@
         "title": "Rendering screens",
         "sidebar_label": "Rendering screens"
       },
+      "sibling-tabs": {
+        "title": "Swipeable feeds",
+        "sidebar_label": "Swipeable feeds"
+      },
       "testing": {
         "title": "Testing our form",
         "sidebar_label": "Testing our form"
