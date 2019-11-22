@@ -14,7 +14,7 @@ In the following sections, we'll cover more specific use cases and configuration
 - setting up deep links and developing with deep links
 - configuring and controlling transitions for individual screens and containers
 - more advanced routing examples: relative paths, queries, and params
-- useFocus() and useOnFocus() hooks for data fetching
+- useFocus() and useOnFocus() hooks for data fetching, tabs
 - end to end testing with `detox`
 - using native stack navigators
 

@@ -6,7 +6,6 @@ module.exports = {
       {
         alias: {
           'navigation-components': '../src/index',
-          // '@crowdlinker/react-native-pager': '../../pager/src/index',
         },
       },
     ],

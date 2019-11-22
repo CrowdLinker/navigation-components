@@ -19,7 +19,13 @@ import {
   History,
   Link,
   useNavigate,
+  Tabbar,
+  Tab,
+  useInterpolation,
+  Extrapolate,
 } from 'navigation-components';
+
+import Animated from 'react-native-reanimated';
 
 interface iFormValues {
   type: 'signup' | 'login' | '';
@@ -268,14 +274,40 @@ function Tester() {
   );
 }
 
-import {enableScreens} from 'react-native-screens';
+import {useScreens, Screen, ScreenContainer} from 'react-native-screens';
 
-enableScreens();
+useScreens();
 
-function Screen({children}: any) {
+function ScreenTest() {
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      {children}
+    <View style={{flex: 1}}>
+      <ScreenContainer style={{height: 300, width: 300}}>
+        <Screen
+          active={activeIndex >= 0 ? 1 : 0}
+          style={{height: 200, width: 200, borderWidth: 1}}>
+          <Text>Active 1</Text>
+        </Screen>
+        <Screen
+          active={activeIndex >= 1 ? 1 : 0}
+          style={{
+            height: 200,
+            width: 200,
+            borderWidth: 1,
+            transform: [{translateX: -100}],
+          }}>
+          <Text>Active 2</Text>
+        </Screen>
+        <Screen
+          active={activeIndex >= 2 ? 1 : 0}
+          style={{height: 200, width: 200, borderWidth: 1}}>
+          <Text>Active 3</Text>
+        </Screen>
+      </ScreenContainer>
+      <Text>activeIndex: {activeIndex}</Text>
+      <Button title="Inc" onPress={() => setActiveIndex(activeIndex + 1)} />
+      <Button title="Dec" onPress={() => setActiveIndex(activeIndex - 1)} />
     </View>
   );
 }
@@ -285,22 +317,147 @@ import {SpotifyApp} from './src/spotify';
 function Container() {
   return (
     <SafeAreaView style={{flex: 1}}>
-      <History>
-        <Navigator>
-          <Tabs>
-            <Screen>
-              <Text style={styles.title}>Screen 1</Text>
-            </Screen>
-            <Screen>
-              <Text style={styles.title}>Screen 2</Text>
-            </Screen>
-            <Screen>
-              <Text style={styles.title}>Screen 3</Text>
-            </Screen>
-          </Tabs>
-        </Navigator>
-      </History>
+      {/* <History>
+        <SpotifyApp />
+      </History> */}
+
+      <MyTabs />
     </SafeAreaView>
+  );
+}
+
+function MyTabs() {
+  return (
+    <Navigator>
+      <Tabs pageInterpolation={tabInterpolation}>
+        <MyScreen index={0}>
+          <Text style={{textAlign: 'center'}}>1</Text>
+        </MyScreen>
+        <MySpecialScreen index={1}>
+          <Text style={{textAlign: 'center'}}>2</Text>
+        </MySpecialScreen>
+        <MyScreen index={2}>
+          <Text style={{textAlign: 'center'}}>3</Text>
+        </MyScreen>
+      </Tabs>
+
+      <MyTabbar />
+    </Navigator>
+  );
+}
+
+const colors = ['aquamarine', 'coral', 'rebeccapurple'];
+
+function MyScreen({children, index}) {
+  return (
+    <View
+      style={{
+        ...screenStyle,
+        backgroundColor: colors[index],
+      }}>
+      {children}
+    </View>
+  );
+}
+
+const screenStyle = {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 10,
+  marginHorizontal: 10,
+};
+
+const tabInterpolation: iPageInterpolation = {
+  transform: [
+    {
+      translateX: {
+        inputRange: [-1, 0, 1],
+        outputRange: [45, 0, -45],
+      },
+    },
+
+    {
+      scale: {
+        inputRange: [-1, 0, 1],
+        outputRange: [0.9, 1, 0.9],
+      },
+    },
+  ],
+
+  zIndex: {
+    inputRange: [-1, 0, 1],
+    outputRange: [-1, 2, -1],
+  },
+};
+
+function MySpecialScreen({children, index}: any) {
+  const styles = useInterpolation({
+    transform: [
+      {
+        translateY: {
+          inputRange: [-1, 0, 1],
+          outputRange: [-100, 0, 100],
+        },
+      },
+    ],
+  });
+
+  return (
+    <Animated.View
+      style={{...screenStyle, ...styles, backgroundColor: colors[index]}}>
+      {children}
+    </Animated.View>
+  );
+}
+
+function MyTabbar() {
+  return (
+    <Tabbar>
+      <MyCustomTab>
+        <Text>1</Text>
+      </MyCustomTab>
+      <MyCustomTab>
+        <Text>2</Text>
+      </MyCustomTab>
+      <MyCustomTab>
+        <Text>3</Text>
+      </MyCustomTab>
+    </Tabbar>
+  );
+}
+
+function MyCustomTab({children}: any) {
+  const styles = useInterpolation({
+    transform: [
+      {
+        scale: {
+          inputRange: [-1, 0, 1],
+          outputRange: [0.7, 1, 0.7],
+          extrapolate: Extrapolate.CLAMP,
+        },
+      },
+    ],
+
+    opacity: {
+      inputRange: [-1, 0, 1],
+      outputRange: [0.9, 1, 0.9],
+      extrapolate: Extrapolate.CLAMP,
+    },
+  });
+
+  return (
+    <Tab
+      style={{
+        height: 50,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        ...styles,
+      }}>
+      {children}
+    </Tab>
   );
 }
 

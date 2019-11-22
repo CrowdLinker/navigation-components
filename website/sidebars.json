@@ -10,6 +10,12 @@
       "dynamic-vs-static",
       "next-steps"
     ],
-    "Guides": ["navigate-anywhere", "multipage-form", "testing", "deep-linking"]
+    "Guides": [
+      "navigate-anywhere",
+      "multipage-form",
+      "testing",
+      "deep-linking",
+      "custom-transitions"
+    ]
   }
 }

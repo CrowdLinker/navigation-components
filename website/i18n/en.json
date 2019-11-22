@@ -9,6 +9,10 @@
         "title": "Adding Routes",
         "sidebar_label": "Adding Routes"
       },
+      "custom-transitions": {
+        "title": "Customized Transitions",
+        "sidebar_label": "Customized Transitions"
+      },
       "deep-linking": {
         "title": "Deep Linking",
         "sidebar_label": "Deep Linking"

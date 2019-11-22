@@ -335,7 +335,7 @@ function LoginForms() {
     <SafeAreaView style={{ flex: 1 }}>
       <Formik initialValues={initialFormValues} onSubmit={handleSubmit}>
         <Navigator routes={['/', 'success-modal']}>
-          <Modal active={status === 'success'} onClose={() => setStatus('')}>
+          <Modal>
             <Forms />
             <SuccessModal />
           </Modal>

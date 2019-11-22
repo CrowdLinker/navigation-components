@@ -8,6 +8,19 @@
     "dist",
     "mock.js"
   ],
+  "keywords": [
+    "react",
+    "react-native",
+    "navigation",
+    "react-navigation",
+    "react-native-navigation"
+  ],
+  "author": "andrew smith",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Crowdlinker/navigation-components"
+  },
+  "license": "ISC",
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",

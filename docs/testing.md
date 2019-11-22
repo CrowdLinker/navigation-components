@@ -201,8 +201,8 @@ function LoginForms({onSubmit}: any) {
   const navigate = useNavigate()
 
   function handleSubmit(data: iFormValues) {
-    navigate('success-modal')
     onSubmit(data)
+    navigate('success-modal')
   }
 
   ...

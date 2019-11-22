@@ -16,6 +16,11 @@ import {
   FocusProvider,
 } from './pager';
 import { createRoute } from './create-route';
+import Animated from 'react-native-reanimated';
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(
+  TouchableOpacity
+);
 
 const MINIMUM_SWIPE_DISTANCE = 20;
 
@@ -87,9 +92,13 @@ function Tab({ children, onPress, ...rest }: iTab) {
   }
 
   return (
-    <TouchableOpacity accessibilityRole="link" {...rest} onPress={handlePress}>
+    <AnimatedTouchableOpacity
+      accessibilityRole="link"
+      {...rest}
+      onPress={handlePress}
+    >
       {children}
-    </TouchableOpacity>
+    </AnimatedTouchableOpacity>
   );
 }
 
